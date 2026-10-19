@@ -15,6 +15,8 @@ data class RingState(
     val snoozes: Int,
     /** For a wake-up check: when it escalates back to a full alarm. */
     val wakeCheckDeadline: Long = 0L,
+    /** Other alarms that fired during this ring; they finish when it does. */
+    val joined: List<Long> = emptyList(),
 ) {
     val snoozesLeft: Int get() = (alarm.snoozeLimit - snoozes).coerceAtLeast(0)
 }

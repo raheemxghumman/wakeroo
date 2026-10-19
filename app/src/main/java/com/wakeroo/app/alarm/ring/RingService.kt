@@ -53,6 +53,7 @@ class RingService : Service() {
             ACTION_ESCAPE -> finish(RingOutcome.Escaped, secondsToWake = null)
             ACTION_WAKE_CHECK_PASSED -> passWakeCheck()
             ACTION_SCREEN_HIDDEN -> repostAlert()
+            ACTION_SCREEN_SHOWN -> RingSession.state.value?.let { goForeground(it, onScreen = true) }
             else -> if (RingSession.state.value == null) stopSelf()
         }
         return START_NOT_STICKY
@@ -67,12 +68,16 @@ class RingService : Service() {
 
         val current = RingSession.state.value
         if (current != null && current.kind != RingKind.WakeCheck) {
-            // Already ringing; a second alarm at the same minute joins this ring.
-            goForeground(current)
+            // Already ringing: a second alarm at the same minute joins this ring and ends with it.
+            store.expectedTriggers = store.expectedTriggers - alarmId
+            if (alarmId != current.alarm.id && kind == RingKind.Alarm) RingSession.publish(current.copy(joined = current.joined + alarmId))
             return
         }
 
         store.expectedTriggers = store.expectedTriggers - alarmId
+        intent.getStringExtra(AlarmScheduler.EXTRA_SLOT)?.let { slot ->
+            runCatching { AlarmScheduler.Slot.valueOf(slot) }.getOrNull()?.let { container.scheduler.consumed(alarmId, it) }
+        }
         val alarm = when (kind) {
             RingKind.Test -> TEST_ALARM
             else -> store.alarm(alarmId) ?: fallbackAlarm(alarmId)
@@ -95,7 +100,7 @@ class RingService : Service() {
         launchScreen()
     }
 
-    private fun goForeground(state: RingState) {
+    private fun goForeground(state: RingState, onScreen: Boolean = false) {
         val time = DateTimeFormatter.ofPattern("h:mm", Locale.getDefault())
             .format(Instant.ofEpochMilli(state.scheduledAt).atZone(ZoneId.systemDefault()))
         val title = when (state.kind) {
@@ -104,8 +109,9 @@ class RingService : Service() {
             RingKind.Alarm -> state.alarm.label.ifBlank { "Wake up, it's $time" }
         }
         val text = if (state.kind == RingKind.WakeCheck) "Tap to confirm you're awake" else "Finish your mission to stop the alarm"
+        val action = if (state.kind == RingKind.WakeCheck) "I'm up" else "Open mission"
         ServiceCompat.startForeground(
-            this, notificationId, Notifications.ringing(this, title, text),
+            this, notificationId, Notifications.ringing(this, title, text, onScreen, action),
             ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK,
         )
     }
@@ -153,7 +159,7 @@ class RingService : Service() {
             app.repository.log(event)
             when (state.kind) {
                 RingKind.Test -> app.settings.update { it.copy(lastTestAlarmAt = now, lastTestAlarmPassed = outcome == RingOutcome.Dismissed) }
-                RingKind.Alarm -> app.repository.onRingFinished(state.alarm.id)
+                RingKind.Alarm -> (listOf(state.alarm.id) + state.joined).forEach { app.repository.onRingFinished(it) }
                 RingKind.WakeCheck -> Unit
             }
         }
@@ -218,6 +224,7 @@ class RingService : Service() {
         const val ACTION_ESCAPE = "com.wakeroo.app.ring.ESCAPE"
         const val ACTION_WAKE_CHECK_PASSED = "com.wakeroo.app.ring.WAKE_CHECK_PASSED"
         const val ACTION_SCREEN_HIDDEN = "com.wakeroo.app.ring.SCREEN_HIDDEN"
+        const val ACTION_SCREEN_SHOWN = "com.wakeroo.app.ring.SCREEN_SHOWN"
         const val EXTRA_SECONDS = "seconds"
 
         const val WAKE_CHECK_WINDOW_MS = 60_000L

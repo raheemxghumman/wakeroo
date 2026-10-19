@@ -9,6 +9,7 @@ import com.wakeroo.app.alarm.ring.RingService
 import com.wakeroo.app.container
 import com.wakeroo.app.data.PendingEvent
 import com.wakeroo.app.data.db.RingOutcome
+import com.wakeroo.app.widget.NextAlarmWidget
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
@@ -51,6 +52,8 @@ class RescheduleReceiver : BroadcastReceiver() {
         val store = app.directBoot
         val now = System.currentTimeMillis()
         val booted = action == Intent.ACTION_BOOT_COMPLETED || action == Intent.ACTION_LOCKED_BOOT_COMPLETED
+        // An update kills the process too, so an alarm that was ringing must ring again.
+        val interrupted = booted || action == Intent.ACTION_MY_PACKAGE_REPLACED
 
         // Anything still "expected" more than a minute ago never fired.
         val alarms = store.readAlarms()
@@ -63,12 +66,14 @@ class RescheduleReceiver : BroadcastReceiver() {
             )
         }
 
-        if (booted) {
+        app.scheduler.restoreExtras(now)
+        if (interrupted) {
             store.activeRing?.let { ring ->
-                app.scheduler.scheduleReRing(ring.alarmId, ring.scheduledAt, ring.snoozes)
+                app.scheduler.scheduleReRing(ring.alarmId, ring.scheduledAt, ring.snoozes, delayMs = if (booted) 60_000 else 5_000)
             }
         }
         app.scheduler.rescheduleAll(alarms, now)
+        runCatching { NextAlarmWidget.refresh(context) }
     }
 
     companion object {

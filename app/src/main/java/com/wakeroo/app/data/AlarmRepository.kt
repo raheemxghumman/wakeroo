@@ -8,6 +8,7 @@ import com.wakeroo.app.data.db.WakerooDatabase
 import com.wakeroo.app.data.db.toEntity
 import com.wakeroo.app.data.db.toModel
 import com.wakeroo.app.data.model.Alarm
+import com.wakeroo.app.widget.NextAlarmWidget
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
@@ -92,6 +93,7 @@ class AlarmRepository(
 
     private suspend fun syncLocked() {
         scheduler.rescheduleAll(db.value.alarms().all().map { it.toModel() })
+        runCatching { NextAlarmWidget.refresh(context) }
     }
 
     private fun isUnlocked() = UserManagerCompat.isUserUnlocked(context)

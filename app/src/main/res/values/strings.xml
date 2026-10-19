@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wakeroo</string>
+    <string name="widget_description">Your next alarm at a glance</string>
 </resources>

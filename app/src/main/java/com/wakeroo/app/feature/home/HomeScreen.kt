@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -64,10 +64,13 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wakeroo.app.BuildConfig
 import com.wakeroo.app.alarm.health.Health
 import com.wakeroo.app.ui.brand.AnimatedWakerooMark
 import com.wakeroo.app.ui.brand.Wordmark
+import com.wakeroo.app.ui.components.EntranceStyle
 import com.wakeroo.app.ui.components.SkyBackground
+import com.wakeroo.app.ui.components.entrance
 import com.wakeroo.app.ui.components.icon
 import com.wakeroo.app.ui.components.press3d
 import com.wakeroo.app.ui.components.rememberDeviceTilt
@@ -121,7 +124,7 @@ fun HomeScreen(
             contentPadding = PaddingValues(start = Space.xl, end = Space.xl, bottom = 120.dp),
         ) {
             item(key = "header") {
-                Row(Modifier.statusBarsPadding().padding(top = Space.lg, bottom = Space.xl), verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.statusBarsPadding().padding(top = Space.lg, bottom = Space.xl).entrance(0), verticalAlignment = Alignment.CenterVertically) {
                     Wordmark(fontSize = MaterialTheme.typography.headlineMedium.fontSize)
                     Spacer(Modifier.weight(1f))
                     RoundIcon(Icons.Rounded.BarChart, "Stats", onStats)
@@ -131,11 +134,13 @@ fun HomeScreen(
             }
             item(key = "hero") {
                 if (state.loaded) {
-                    HeroCard(state, tilt, use24h, onHealth = onHealth, onCreate = onNewAlarm)
+                    Box(Modifier.entrance(1, EntranceStyle.Flip)) {
+                        HeroCard(state, tilt, use24h, onHealth = onHealth, onCreate = onNewAlarm)
+                    }
                 }
             }
             item(key = "quick") {
-                QuickAlarms(onQuick = { minutes ->
+                QuickAlarms(modifier = Modifier.entrance(2), onQuick = { minutes ->
                     vm.quickAlarm(minutes, state.rows.lastOrNull()?.alarm)
                     scope.launch { snackbar.showSnackbar("Alarm set for ${Duration.ofMinutes(minutes.toLong()).formatUntil()} from now") }
                 })
@@ -144,15 +149,15 @@ fun HomeScreen(
                 item(key = "title") {
                     Text(
                         "YOUR ALARMS", style = MaterialTheme.typography.labelSmall, color = PaperMuted,
-                        modifier = Modifier.padding(top = Space.xxl, bottom = Space.md),
+                        modifier = Modifier.padding(top = Space.xxl, bottom = Space.md).entrance(3),
                     )
                 }
             }
-            items(state.rows, key = { it.alarm.id }) { row ->
+            itemsIndexed(state.rows, key = { _, it -> it.alarm.id }) { index, row ->
                 AlarmCard(
                     row = row,
                     use24h = use24h,
-                    modifier = Modifier.animateItem().padding(bottom = Space.md),
+                    modifier = Modifier.animateItem().padding(bottom = Space.md).entrance(4 + index.coerceAtMost(6)),
                     onClick = { onEdit(row.alarm.id) },
                     onToggle = { vm.toggle(row.alarm, it) },
                     onDelete = {
@@ -175,7 +180,7 @@ fun HomeScreen(
                 )
             }
         }
-        NewAlarmButton(Modifier.align(Alignment.BottomEnd).navigationBarsPadding().padding(Space.xl), onNewAlarm)
+        NewAlarmButton(Modifier.align(Alignment.BottomEnd).navigationBarsPadding().padding(Space.xl).entrance(5, EntranceStyle.Pop), onNewAlarm)
         SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(bottom = 96.dp))
     }
 }
@@ -260,13 +265,15 @@ private fun HeroCard(state: HomeState, tilt: Offset, use24h: Boolean, onHealth: 
 }
 
 @Composable
-private fun QuickAlarms(onQuick: (Int) -> Unit) {
+private fun QuickAlarms(modifier: Modifier = Modifier, onQuick: (Int) -> Unit) {
     val haptics = LocalHapticFeedback.current
     Row(
-        Modifier.fillMaxWidth().padding(top = Space.lg).horizontalScroll(rememberScrollState()),
+        modifier.fillMaxWidth().padding(top = Space.lg).horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(Space.sm),
     ) {
-        listOf(10 to "+10 min", 20 to "+20 min", 30 to "+30 min", 60 to "+1 h", 480 to "In 8 h").forEach { (m, label) ->
+        val presets = listOf(10 to "+10 min", 20 to "+20 min", 30 to "+30 min", 60 to "+1 h", 480 to "In 8 h")
+        // Debug builds get a one-minute alarm for testing the full ring flow.
+        (if (BuildConfig.DEBUG) listOf(1 to "+1 min") + presets else presets).forEach { (m, label) ->
             Row(
                 Modifier
                     .press3d()

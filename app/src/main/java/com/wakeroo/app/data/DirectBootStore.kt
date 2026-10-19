@@ -20,6 +20,10 @@ data class ActiveRing(
 @Serializable
 enum class RingKind { Alarm, WakeCheck, Test }
 
+/** A one-off ring (snooze, wake-up check, re-ring) that must survive reboots and app updates. */
+@Serializable
+data class PendingExtra(val alarmId: Long, val slot: String, val at: Long, val kind: RingKind, val scheduledAt: Long, val snoozes: Int)
+
 /** A ring-log entry written while the phone was still locked after boot; moved to Room later. */
 @Serializable
 data class PendingEvent(
@@ -87,7 +91,13 @@ class DirectBootStore(context: Context) {
         get() = prefs.getStringSet(KEY_DISABLES, emptySet())!!.mapNotNull { it.toLongOrNull() }.toSet()
         set(value) = prefs.edit { putStringSet(KEY_DISABLES, value.map { it.toString() }.toSet()) }
 
+    var pendingExtras: List<PendingExtra>
+        get() = prefs.getString(KEY_EXTRAS, null)?.let { runCatching { WakerooJson.decodeFromString<List<PendingExtra>>(it) }.getOrNull() }
+            ?: emptyList()
+        set(value) = prefs.edit { putString(KEY_EXTRAS, WakerooJson.encodeToString(value)) }
+
     private companion object {
+        const val KEY_EXTRAS = "pending_extras"
         const val KEY_ALARMS = "alarms"
         const val KEY_ACTIVE = "active_ring"
         const val KEY_SCHEDULED = "scheduled_ids"

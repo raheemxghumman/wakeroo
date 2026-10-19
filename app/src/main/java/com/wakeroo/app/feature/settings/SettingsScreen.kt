@@ -235,7 +235,7 @@ private fun ProCard(pro: Boolean, onPro: () -> Unit) {
         Column(Modifier.weight(1f)) {
             Text(if (pro) "Wakeroo Pro is yours" else "Wakeroo Pro", style = MaterialTheme.typography.titleMedium, color = Paper)
             Text(
-                if (pro) "Thank you for supporting an indie alarm." else "More missions per alarm, harder mode, themes. Pay once.",
+                if (pro) "Thank you for supporting an indie alarm." else "Up to 5 missions per alarm, full history, no banner. Pay once.",
                 style = MaterialTheme.typography.bodySmall, color = Paper.copy(alpha = 0.8f),
             )
         }

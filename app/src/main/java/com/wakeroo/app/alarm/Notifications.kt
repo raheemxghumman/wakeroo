@@ -18,6 +18,8 @@ import com.wakeroo.app.alarm.ring.RingActivity
 object Notifications {
     const val CHANNEL_RINGING = "ringing"
     const val CHANNEL_ALERTS = "alerts"
+    /** Low-importance twin used while the ring screen is open, so no banner covers it. */
+    const val CHANNEL_ON_SCREEN = "ringing_on_screen"
     const val ID_RINGING = 1
     const val ID_RINGING_ALT = 2
     const val ID_MISSED = 10
@@ -34,18 +36,26 @@ object Notifications {
             },
         )
         nm.createNotificationChannel(
+            NotificationChannel(CHANNEL_ON_SCREEN, "Alarm in progress", NotificationManager.IMPORTANCE_LOW).apply {
+                description = "Shown quietly while you're on the alarm screen"
+                setSound(null, null)
+                enableVibration(false)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            },
+        )
+        nm.createNotificationChannel(
             NotificationChannel(CHANNEL_ALERTS, "Alarm health", NotificationManager.IMPORTANCE_HIGH).apply {
                 description = "Tells you if an alarm was missed and how to fix it"
             },
         )
     }
 
-    fun ringing(context: Context, title: String, text: String): Notification {
+    fun ringing(context: Context, title: String, text: String, onScreen: Boolean = false, action: String = "Open mission"): Notification {
         val fullScreen = PendingIntent.getActivity(
             context, 1, Intent(context, RingActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
-        return NotificationCompat.Builder(context, CHANNEL_RINGING)
+        val builder = NotificationCompat.Builder(context, if (onScreen) CHANNEL_ON_SCREEN else CHANNEL_RINGING)
             .setSmallIcon(R.drawable.ic_stat_wakeroo)
             .setContentTitle(title)
             .setContentText(text)
@@ -54,11 +64,11 @@ object Notifications {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setOngoing(true)
             .setAutoCancel(false)
-            .setOnlyAlertOnce(false)
-            .setFullScreenIntent(fullScreen, true)
+            .setOnlyAlertOnce(onScreen)
             .setContentIntent(fullScreen)
-            .addAction(0, "Open mission", fullScreen)
-            .build()
+            .addAction(0, action, fullScreen)
+        if (!onScreen) builder.setFullScreenIntent(fullScreen, true)
+        return builder.build()
     }
 
     fun missed(context: Context, label: String, whenText: String) {

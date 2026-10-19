@@ -94,6 +94,11 @@ class RingActivity : ComponentActivity() {
         else -> super.onKeyDown(keyCode, event)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (RingSession.state.value != null) RingService.send(this, RingService.ACTION_SCREEN_SHOWN)
+    }
+
     override fun onStop() {
         super.onStop()
         if (!leavingOnPurpose && !isChangingConfigurations && RingSession.state.value != null) {
