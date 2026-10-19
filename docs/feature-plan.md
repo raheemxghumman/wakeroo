@@ -274,3 +274,115 @@ No paywall, no tracking prompt, no account. About 40 seconds in total, ending wi
 | M13 | Regression | Reliability matrix, real device, screenshots | 1.5 |
 
 Total: about 27 working days.
+
+---
+
+# Implementation details for features 14–26
+
+Same format as features 1–13: what the user sees, how it's built, data changes, edge cases, tests.
+
+## 14. Onboarding setup wizard
+
+- **Structure:** `feature/onboarding/` is rewritten as a `HorizontalPager` driven by an `OnboardingViewModel` that holds a draft `Alarm` (time, days, scene, sound, mission) plus permission state. Steps share one `StepScaffold` (progress bar "n of 5", title, content, primary button, Back). Pages turn with the existing cube transition.
+- **Step 1, time:** reuses `DrumWheel`; `Rings in …` uses `NextTriggerCalculator`.
+- **Step 2, scene:** a `LazyRow`/grid of live `SceneThumbnail`s (the same composables as the ring screen at reduced size, 30 fps cap). Tap opens a full-screen `RingScreen` preview in "preview mode" (no service, sound preview at 40% via a short-lived `MediaPlayer` on `USAGE_MEDIA`).
+- **Step 3, sound:** the M4 sound sheet embedded as a page.
+- **Step 4, mission:** the M3 picker list with demo previews; QR/NFC/photo setup offers "Set it up tonight", which saves the mission with `needsSetup = true` (math runs at ring time until done, and Home shows a reminder chip).
+- **Step 5, permissions:** a single screen with three `PermissionRow`s (Notifications → `POST_NOTIFICATIONS`; Full-screen → `ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT`, only shown if `canUseFullScreenIntent()` is false; Battery → OEM guide). Each row re-checks on resume and animates to green with a `Confirm` haptic. An animated mock (a fake dialog with a finger tapping "Allow") plays above the row being requested.
+- **Step 6, building:** a 2.5 s sequence; the alarm is saved through `AlarmRepository.save` in parallel, and the sequence waits for it to finish (it never fakes progress past real work).
+- **Step 7, test:** "Ring in 1 minute" calls `scheduleTest`; "Later" goes Home.
+- **Data:** `Settings.onboardingVersion` (Int) instead of a boolean, so a future onboarding change can re-show only new steps. Existing users (onboarding v1 done) skip the wizard.
+- **Edge cases:** process death mid-wizard restores the step and draft (`SavedStateHandle`); denying notifications keeps the row red with "Open settings"; Back from step 1 exits the app.
+- **Tests:** ViewModel unit tests (draft building, step gating); a Compose UI test that walks the wizard and asserts one alarm exists and is scheduled.
+
+## 15. Bottom navigation
+
+- **What the user sees:** a floating, rounded bar with four tabs: Alarms (clock), Sleep (moon), Morning (sun), You (medal). The selected tab's icon morphs from outline to filled and a glowing pill slides under it with a spring. Settings is a gear on each tab's top bar.
+- **How:** a root `MainScaffold` with a `NavHost` per tab (`saveState`/`restoreState` so each tab keeps its scroll position). Editor, Pro, Settings and mission setup stay full-screen destinations above the tab host, so they keep the shared-element morphs.
+- **Hides** while scrolling down long lists and reappears on scroll up (`nestedScroll` connection), and is always hidden on ring/mission screens.
+- **Tests:** navigation tests for tab switching, back-stack per tab, deep link to Settings › Health.
+
+## 16. Morning tab
+
+Sections, top to bottom, each a card that joins the staggered entrance:
+
+1. **Greeting:** "Good morning, 6:34" (or "Tomorrow's alarm: 7:00" in the evening) over the current scene's sky.
+2. **Weather card:** current temperature, condition glyph (animated sun/cloud/rain drawn in Canvas), high/low, rain chance, and a horizontally scrolling 24-hour strip (temperature and an icon per hour). City chosen once via search; a "Use another city" link. Data from Open-Meteo forecast (`hourly=temperature_2m,precipitation_probability,weather_code`, `daily=temperature_2m_max,temperature_2m_min`), cached in DataStore for 3 hours.
+3. **Quote of the day:** a large typographic card; swipe left for another (a deck of 3D-tilted cards); bookmark to save; share renders the card as an image. Themes: Positivity, Productivity, Calm, Hard times, Health & fitness, Learning (no religion category, to stay neutral). About 150 bundled quotes per language.
+4. **Morning feeling:** five faces (Exhausted, Tired, Okay, Calm, Refreshed) as springy 3D buttons, one tap per day; also offered on the Good-morning screen. History in the You tab correlates with wake time ("You feel refreshed more often on 8 h nights").
+5. **Routine checklist:** 3–5 user-editable habits (defaults: Drink water, Open the curtains, Stretch for 2 minutes). Each tick plays a check animation; completing all gives a small celebration and counts toward an achievement.
+6. **Streak and today's medal progress.**
+
+- **Data:** Room v3 tables `mood_log(date, mood)`, `routine_item(id, title, order)`, `routine_log(date, itemId)`; `saved_quote(id)`. Quotes ship as a JSON asset per locale.
+- **Network:** only Open-Meteo, only when the tab or the briefing needs fresh data; offline hides the weather card.
+- **Tests:** Open-Meteo response parsing (fixture JSON), quote-of-the-day determinism per date, routine completion logic.
+
+## 17. Item Hunt mission (on-device AI)
+
+- **What the user sees:** "Find something like this: a cup ☕." A camera viewfinder with a pulsing target; when the object is recognised, the frame snaps gold and the mission advances. Count 1–3 objects per mission.
+- **How:** bundled ML Kit image labeling (already in the app). A curated list of about 40 objects with their ML Kit label names and a confidence threshold each (e.g. Cup ≥ 0.75, Toothbrush ≥ 0.6, Shoe ≥ 0.7, Book ≥ 0.7, Plant, Bottle, Spoon, Keyboard…). Objects are only picked if they've been recognised reliably in testing.
+- **Anti-cheat:** the target is random each morning; labels must persist across 3 consecutive analysed frames (stops a single lucky frame).
+- **Fallback:** "Skip this object" once per mission (picks another), then the standard backup after 60 s.
+- **Tests:** label-matching logic with recorded label sets; manual device test for each listed object.
+
+## 18. Motion scenes
+
+- **Scenes (all drawn in Compose, no video):**
+  - **Night Sky** (current, free): stars, breathing sun glow.
+  - **Into Space** (free): the intro's planet and sunrise, slowly rotating.
+  - **Minimal Black** (free): OLED black, a thin animated ring.
+  - **Aurora** (Pro): AGSL `RuntimeShader` flowing curtains on Android 13+, animated gradient fallback.
+  - **Ocean Dawn** (Pro): layered parallax waves with tilt.
+  - **Kinetic "WAKE UP"** (Pro): bold typography that slams in, scales and shakes with the beat of the alarm tone.
+  - **Custom photo** (Pro): Photo Picker image with a slow Ken Burns zoom and a dark scrim.
+- **API:** `interface Scene { @Composable fun Background(state: SceneState) }`, where `SceneState` carries time, tilt, ring intensity (escalation level) and reduced-motion. The ring screen, mission screens, onboarding previews and Settings previews all use the same composables.
+- **Performance:** each scene is capped at 60 fps, uses `drawBehind`/`graphicsLayer` only (no recomposition per frame), and is profiled on a low-end emulator profile; battery cost on the ring screen is irrelevant (minutes), but previews pause when off screen.
+- **Data:** `Alarm.theme` (scene id, null = app default) and `Settings.ringTheme`.
+
+## 19. Mission demo previews
+
+- A `MissionDemo(type)` composable per mission: a 3–4 s looping mini animation (a hand shaking a phone, tiles flipping, a phone tapping a sticker, a camera finding a cup, digits being typed). Built from simple vector shapes and the app's motion tokens; no video files.
+- Shown in the mission picker tiles (on focus) and in the mission detail sheet; paused when not visible.
+
+## 20. Mission time limit
+
+- **Setting:** Settings › Advanced › "If I stop during a mission": 10 / 20 (default) / 30 / 60 s.
+- **How:** `MissionFlow` tracks the last interaction (`onActivity`); after the limit, it calls a new `RingService.ACTION_IDLE` that cancels ducking and returns to full volume, and the current mission resets its progress with a shake animation and a "Keep going!" toast.
+- **Edge cases:** camera missions count frame analysis as activity only when the target is partly matched (so pointing at a wall doesn't keep the alarm quiet).
+
+## 21. Sound output
+
+- **Setting:** "Always ring on the phone speaker" (default on) and "Also play on headphones/Bluetooth" (default off).
+- **How:** `MediaPlayer.setPreferredDevice()` with the `AudioDeviceInfo.TYPE_BUILTIN_SPEAKER` from `AudioManager.getDevices(GET_DEVICES_OUTPUTS)`; on API 31+ the stronger `AudioManager.setCommunicationDevice` is not used (it's for calls). If both are on, play two players (speaker + connected device).
+- **Health check row:** warns when a Bluetooth device is connected and "phone speaker" is off.
+- **Tests:** emulator with a virtual Bluetooth headset is limited; real-device test with earbuds is part of M13.
+
+## 22. Evening reminders
+
+- **"No alarm set for tomorrow":** at 8 PM (adjustable), if no enabled alarm rings in the next 24 h, a notification: "No alarm for tomorrow. Set one?" with "Set 7:00" (copies the last alarm) and "Not tomorrow" actions.
+- **Morning weather notification:** at the user's first alarm time on days with notable weather (rain chance ≥ 60%, or temperature below 2 °C / above 35 °C): "Rain likely at 5 PM, take an umbrella."
+- **How:** both use inexact `setAndAllowWhileIdle` (they don't need exact timing), recomputed when alarms change and at boot; a separate "Reminders" notification channel so users can mute them without touching alarm alerts.
+- **Off by default?** "No alarm" reminder on, weather off; both in Settings › Notifications.
+
+## 23. Home Fix banner
+
+- A full-width banner at the top of Home whenever `HealthChecker.overall` is Bad (red) or Warn (amber), e.g. "Battery saver may stop alarms · Fix". "Fix" runs the same intent as the health row; the banner slides away with a spring once fixed (re-checked on resume).
+- Amber banners can be dismissed for 7 days; red ones can't be dismissed.
+- Also shown at the top of the editor when saving an alarm while health is red.
+
+## 24. Wake-up calendar
+
+- **What the user sees:** in the You tab, a month grid; each day shows a small sun (won), a cloud (missed or escaped), a moon (no alarm) or nothing. Swipe between months with a 3D page turn. Tap a day: a sheet with that morning's ring log (rang at, mission time, snoozes, wake-up check, mood).
+- **How:** derived from `RingEventEntity` grouped by local date (same logic as `WakeStatsCalculator`); history beyond 14 days is a Pro feature (free users see the current month).
+
+## 25. App light theme
+
+- Settings › Appearance: Dark (default) / Light / System. Light uses the existing `DawnLight` scheme plus light variants of cards and skies (`Sky.Day` base).
+- Ring, mission, wake-up check and Good-morning screens always stay dark (6 AM eyes).
+- Every screen gets a light-mode screenshot test (Compose preview + Paparazzi-style snapshot later).
+
+## 26. Restore welcome
+
+- **Detect:** on first launch, if Room already contains alarms but `Settings.onboardingVersion` is 0 (Auto Backup restored the database but the device is new), show "Welcome back: we restored your 3 alarms" with the list, then jump to step 5 (permissions don't transfer between phones) and a test alarm.
+- **Why:** Android 14 resets exact-alarm and full-screen permissions after a restore; without this step restored alarms could silently fail.
+- **Backup rules:** confirm `data_extraction_rules.xml` includes Room and DataStore, and excludes the device-protected mirror (rebuilt on first launch) and camera thumbnails (re-taken).
