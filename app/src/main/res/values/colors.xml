@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Brand palette, mirrored in ui/theme/Color.kt -->
     <color name="night">#FF0E1120</color>
+    <color name="night_surface">#FF1A1E33</color>
     <color name="sunrise_coral">#FFFF7A59</color>
+    <color name="dawn_lavender">#FFB9A7FF</color>
     <color name="morning_gold">#FFFFC857</color>
+    <color name="paper">#FFF5F3EE</color>
 </resources>
