@@ -82,7 +82,7 @@ private fun defaultTempUnit(): TempUnit =
 
 private val Context.dataStore by preferencesDataStore("settings")
 
-class SettingsStore(private val context: Context) {
+class SettingsStore(private val context: Context, private val directBoot: DirectBootStore? = null) {
     val settings: Flow<Settings> = context.dataStore.data.map { it.toSettings() }
 
     suspend fun current(): Settings = settings.first()
@@ -120,6 +120,7 @@ class SettingsStore(private val context: Context) {
             prefs[QUOTE_THEMES] = next.quoteThemes
             prefs[SLEEP_SOUNDS] = next.sleepSounds.joinToString(",")
             prefs[SLEEP_TIMER] = next.sleepTimerMinutes
+            directBoot?.ringPrefs = RingPrefs(next.alwaysSpeaker, next.alsoHeadphones, next.missionTimeLimit, next.ringScene)
         }
     }
 

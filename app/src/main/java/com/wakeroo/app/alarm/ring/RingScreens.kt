@@ -115,6 +115,7 @@ fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Uni
                 }
                 Text(label, style = MaterialTheme.typography.headlineMedium, color = Paper, textAlign = TextAlign.Center)
                 MissionSummary(state)
+                EscalationHint(state, now)
             }
             Spacer(Modifier.weight(1f))
             Box(
@@ -154,6 +155,23 @@ fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Uni
             Spacer(Modifier.height(Space.xxl))
         }
     }
+}
+
+/** "Getting louder in 0:42": an Escalate alarm warns before it switches to the loud tone. */
+@Composable
+private fun EscalationHint(state: RingState, now: Long) {
+    val text = when {
+        state.escalated -> "Full volume. Start your mission to quiet it"
+        state.escalateAt > 0 -> {
+            val left = ((state.escalateAt - now) / 1000).coerceAtLeast(0)
+            "Getting louder in %d:%02d".format(left / 60, left % 60)
+        }
+        else -> return
+    }
+    Text(
+        text, style = MaterialTheme.typography.labelLarge, color = if (state.escalated) SunriseCoral else DawnLavender,
+        modifier = Modifier.padding(top = Space.md).clip(CircleShape).background(Night.copy(alpha = 0.4f)).padding(horizontal = Space.lg, vertical = Space.sm),
+    )
 }
 
 @Composable

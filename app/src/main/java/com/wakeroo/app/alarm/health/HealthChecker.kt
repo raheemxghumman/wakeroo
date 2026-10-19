@@ -13,6 +13,7 @@ import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.app.NotificationManagerCompat
 import com.wakeroo.app.alarm.Notifications
+import com.wakeroo.app.alarm.ring.AlarmPlayer
 import com.wakeroo.app.container
 
 enum class Health { Good, Warn, Bad }
@@ -39,6 +40,7 @@ class HealthChecker(private val context: Context) {
         add(battery())
         standby()?.let(::add)
         add(volume())
+        output()?.let(::add)
         dnd()?.let(::add)
         add(test(lastTestAt, lastTestPassed))
     }
@@ -112,6 +114,16 @@ class HealthChecker(private val context: Context) {
         return HealthItem(
             "volume", "Alarm volume", if (level > 0) Health.Good else Health.Warn,
             if (level > 0) "Wakeroo raises it to your alarm's level when ringing." else "At zero. Wakeroo raises it when ringing, but check your phone's settings.",
+        )
+    }
+
+    /** Only shown while headphones or a Bluetooth speaker are connected. */
+    private fun output(): HealthItem? {
+        if (!AlarmPlayer.externalOutputConnected(context)) return null
+        val speaker = context.container.directBoot.ringPrefs.alwaysSpeaker
+        return HealthItem(
+            "output", "Headphones connected", if (speaker) Health.Good else Health.Warn,
+            if (speaker) "Alarms still ring on the phone speaker." else "Alarms may only play in your headphones. Turn on \"Always ring on the phone speaker\" in Settings.",
         )
     }
 

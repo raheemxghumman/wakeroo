@@ -45,6 +45,7 @@ import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.EventRepeat
 import androidx.compose.material.icons.rounded.Flag
+import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Snooze
 import androidx.compose.material.icons.rounded.Verified
@@ -81,6 +82,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wakeroo.app.data.model.Alarm
 import com.wakeroo.app.data.model.MissionConfig
 import com.wakeroo.app.data.model.MissionType
+import com.wakeroo.app.data.model.SoundMode
+import com.wakeroo.app.alarm.sound.Tones
 import com.wakeroo.app.ui.components.Chip
 import com.wakeroo.app.ui.components.ChipRow
 import com.wakeroo.app.ui.components.DrumWheel
@@ -148,7 +151,7 @@ fun EditorScreen(
                     RepeatSection(draft) { vm.update(it) }
                     LabelSection(draft) { vm.update(it) }
                     MissionsSection(draft, state.maxMissions, onEdit = { missionSheet = it }, onRemove = vm::removeMission, onUpgrade = onUpgrade)
-                    SoundSection(draft) { vm.update(it) }
+                    SoundSection(draft, state.pro, onUpgrade) { vm.update(it) }
                     SnoozeSection(draft) { vm.update(it) }
                     WakeCheckSection(draft) { vm.update(it) }
                     Spacer(Modifier.height(110.dp))
@@ -391,39 +394,50 @@ fun MissionConfig.summary(): String = when (type) {
 fun difficultyName(d: Int) = when (d) { 1 -> "Easy"; 2 -> "Medium"; else -> "Hard" }
 
 @Composable
-private fun SoundSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
-    val context = LocalContext.current
-    val ringtonePicker = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode != Activity.RESULT_OK) return@rememberLauncherForActivityResult
-        @Suppress("DEPRECATION")
-        val uri = result.data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) ?: return@rememberLauncherForActivityResult
-        val name = runCatching { RingtoneManager.getRingtone(context, uri).getTitle(context) }.getOrNull() ?: "Phone tone"
-        update { it.copy(soundUri = uri.toString(), soundName = name) }
-    }
-    val filePicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        if (uri == null) return@rememberLauncherForActivityResult
-        runCatching { context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-        val name = context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c ->
-            if (c.moveToFirst()) c.getString(0) else null
-        } ?: "Your song"
-        update { it.copy(soundUri = uri.toString(), soundName = name.substringBeforeLast('.')) }
-    }
+private fun SoundSection(draft: Alarm, pro: Boolean, onUpgrade: () -> Unit, update: ((Alarm) -> Alarm) -> Unit) {
+    var picking by remember { mutableStateOf(false) }
     SectionCard("Sound", icon = Icons.Rounded.MusicNote) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .press3d(maxTilt = 3f, sink = 0.98f)
+                .clip(RoundedCornerShape(20.dp))
+                .background(Night.copy(alpha = 0.4f))
+                .clickable { picking = true }
+                .padding(Space.lg),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                Modifier.size(44.dp).clip(CircleShape).background(Brush.linearGradient(listOf(MorningGold, SunriseCoral))),
+                contentAlignment = Alignment.Center,
+            ) { Icon(Icons.Rounded.GraphicEq, null, tint = Night) }
+            Spacer(Modifier.width(Space.md))
+            Column(Modifier.weight(1f)) {
+                Text(draft.soundTitle(), style = MaterialTheme.typography.titleMedium, color = Paper, maxLines = 1)
+                Text(draft.soundCategoryTitle(), style = MaterialTheme.typography.bodySmall, color = PaperMuted)
+            }
+            Text("Change", style = MaterialTheme.typography.labelLarge, color = DawnLavender)
+        }
+        Spacer(Modifier.height(Space.lg))
+        Text("Each morning", style = MaterialTheme.typography.bodyLarge, color = Paper)
+        Spacer(Modifier.height(Space.sm))
         ChipRow {
-            Chip("Wakeroo Rise", draft.soundUri == null, { update { it.copy(soundUri = null, soundName = null) } })
-            Chip(
-                if (draft.soundUri != null && draft.soundUri.startsWith("content://media")) draft.soundName ?: "Phone tone" else "Phone tone",
-                draft.soundUri?.startsWith("content://media") == true,
-                {
-                    ringtonePicker.launch(
-                        Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-                            .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
-                            .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false),
-                    )
+            Chip("Same sound", draft.soundMode == SoundMode.Single, { update { it.copy(soundMode = SoundMode.Single) } })
+            Chip("Rotate", draft.soundMode == SoundMode.Rotate, {
+                // Rotation draws from Wakeroo's tones, so a custom sound gives way to its category.
+                update { it.copy(soundMode = SoundMode.Rotate, soundUri = null, soundName = null) }
+            })
+            Chip("Escalate", draft.soundMode == SoundMode.Escalate, { update { it.copy(soundMode = SoundMode.Escalate) } })
+        }
+        AnimatedContent(draft.soundMode, transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "soundMode") { mode ->
+            Text(
+                when (mode) {
+                    SoundMode.Single -> "The same sound every time."
+                    SoundMode.Rotate -> "A different ${Tones.byId(draft.tone).category.title.lowercase()} tone each morning, so you never get used to it."
+                    SoundMode.Escalate -> "Starts with this sound. No response in a minute and it switches to an extreme tone at full volume."
                 },
+                style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
             )
-            val isFile = draft.soundUri != null && !draft.soundUri.startsWith("content://media")
-            Chip(if (isFile) draft.soundName ?: "Your music" else "Your music", isFile, { filePicker.launch(arrayOf("audio/*")) })
         }
         Spacer(Modifier.height(Space.lg))
         LabeledSlider("Volume", "${draft.volume}%", draft.volume / 100f, 0.1f..1f) { v -> update { it.copy(volume = (v * 100).toInt()) } }
@@ -434,6 +448,7 @@ private fun SoundSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
         ) { v -> update { it.copy(rampSeconds = rampLabels[(v * (rampLabels.size - 1)).toInt().coerceIn(0, rampLabels.lastIndex)].first) } }
         ToggleRow("Vibrate", null, draft.vibrate) { on -> update { it.copy(vibrate = on) } }
     }
+    if (picking) SoundSheet(draft, pro, onDismiss = { picking = false }, onUpgrade = { picking = false; onUpgrade() }, update = update)
 }
 
 @Composable

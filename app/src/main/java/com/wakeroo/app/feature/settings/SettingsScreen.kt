@@ -115,6 +115,34 @@ fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) 
                     }
                 }
                 ProCard(settings.pro, onPro)
+                SectionCard("Alarm behaviour", icon = Icons.Rounded.Alarm) {
+                    Text("If I stop during a mission", style = MaterialTheme.typography.bodyLarge, color = Paper)
+                    Text(
+                        "After this long without a tap, full volume comes back and the mission starts over.",
+                        style = MaterialTheme.typography.bodySmall, color = PaperMuted,
+                    )
+                    Spacer(Modifier.height(Space.sm))
+                    ChipRow {
+                        listOf(10, 20, 30, 60, 0).forEach { sec ->
+                            Chip(if (sec == 0) "Never" else "$sec s", settings.missionTimeLimit == sec, {
+                                scope.launch { app.settings.update { it.copy(missionTimeLimit = sec) } }
+                            })
+                        }
+                    }
+                    Spacer(Modifier.height(Space.lg))
+                    ToggleRow(
+                        "Always ring on the phone speaker",
+                        "So a dead Bluetooth speaker or forgotten earbuds never silence your alarm.",
+                        settings.alwaysSpeaker,
+                    ) { on -> scope.launch { app.settings.update { it.copy(alwaysSpeaker = on) } } }
+                    AnimatedVisibility(settings.alwaysSpeaker) {
+                        ToggleRow(
+                            "Also play in headphones",
+                            "Ring on the speaker and on whatever is connected.",
+                            settings.alsoHeadphones,
+                        ) { on -> scope.launch { app.settings.update { it.copy(alsoHeadphones = on) } } }
+                    }
+                }
                 SectionCard("Preferences", icon = Icons.Rounded.Tune) {
                     ToggleRow(
                         "Good-morning screen", "A quick celebration after you finish your mission.", settings.showGoodMorning,

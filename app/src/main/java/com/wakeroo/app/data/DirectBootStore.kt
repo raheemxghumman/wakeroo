@@ -24,6 +24,18 @@ enum class RingKind { Alarm, WakeCheck, Test }
 @Serializable
 data class PendingExtra(val alarmId: Long, val slot: String, val at: Long, val kind: RingKind, val scheduledAt: Long, val snoozes: Int)
 
+/**
+ * The settings the ring path needs, mirrored from DataStore so they also apply before the
+ * first unlock after a reboot.
+ */
+@Serializable
+data class RingPrefs(
+    val alwaysSpeaker: Boolean = true,
+    val alsoHeadphones: Boolean = false,
+    val missionTimeLimit: Int = 20,
+    val ringScene: String = "night",
+)
+
 /** A ring-log entry written while the phone was still locked after boot; moved to Room later. */
 @Serializable
 data class PendingEvent(
@@ -96,7 +108,19 @@ class DirectBootStore(context: Context) {
             ?: emptyList()
         set(value) = prefs.edit { putString(KEY_EXTRAS, WakerooJson.encodeToString(value)) }
 
+    var ringPrefs: RingPrefs
+        get() = prefs.getString(KEY_RING_PREFS, null)?.let { runCatching { WakerooJson.decodeFromString<RingPrefs>(it) }.getOrNull() }
+            ?: RingPrefs()
+        set(value) = prefs.edit { putString(KEY_RING_PREFS, WakerooJson.encodeToString(value)) }
+
+    /** The tone each alarm played last time, so rotation never repeats it. */
+    fun lastTone(alarmId: Long): String? = prefs.getString("$KEY_LAST_TONE$alarmId", null)
+
+    fun setLastTone(alarmId: Long, tone: String) = prefs.edit { putString("$KEY_LAST_TONE$alarmId", tone) }
+
     private companion object {
+        const val KEY_RING_PREFS = "ring_prefs"
+        const val KEY_LAST_TONE = "last_tone_"
         const val KEY_EXTRAS = "pending_extras"
         const val KEY_ALARMS = "alarms"
         const val KEY_ACTIVE = "active_ring"

@@ -17,6 +17,9 @@ data class RingState(
     val wakeCheckDeadline: Long = 0L,
     /** Other alarms that fired during this ring; they finish when it does. */
     val joined: List<Long> = emptyList(),
+    /** Escalating sound: when it switches to the loud tone (0 = not pending). */
+    val escalateAt: Long = 0L,
+    val escalated: Boolean = false,
 ) {
     val snoozesLeft: Int get() = (alarm.snoozeLimit - snoozes).coerceAtLeast(0)
 }

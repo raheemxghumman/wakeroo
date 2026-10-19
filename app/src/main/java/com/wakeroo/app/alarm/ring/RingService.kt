@@ -19,6 +19,10 @@ import com.wakeroo.app.data.db.RingOutcome
 import com.wakeroo.app.data.model.Alarm
 import com.wakeroo.app.data.model.MissionConfig
 import com.wakeroo.app.data.model.MissionType
+import com.wakeroo.app.data.model.SoundMode
+import com.wakeroo.app.alarm.sound.Tone
+import com.wakeroo.app.alarm.sound.Tones
+import android.net.Uri
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
@@ -36,6 +40,8 @@ class RingService : Service() {
     private var notificationId = Notifications.ID_RINGING
     private val escalate = Runnable { escalateWakeCheck() }
     private val giveUp = Runnable { finish(RingOutcome.Missed, secondsToWake = null) }
+    private val escalateSound = Runnable { escalateSound() }
+    private var currentTone: Tone? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -48,7 +54,11 @@ class RingService : Service() {
         when (intent?.action) {
             ACTION_START -> start(intent)
             ACTION_SNOOZE -> snooze()
-            ACTION_SOLVING -> player.duckWhileSolving(intent.getLongExtra(EXTRA_HOLD_MS, 20_000L))
+            ACTION_SOLVING -> {
+                cancelEscalation()
+                player.duckWhileSolving(intent.getLongExtra(EXTRA_HOLD_MS, 20_000L))
+            }
+            ACTION_ENGAGED -> cancelEscalation()
             ACTION_IDLE -> player.unduck()
             ACTION_COMPLETE -> finish(RingOutcome.Dismissed, intent.getIntExtra(EXTRA_SECONDS, -1).takeIf { it >= 0 })
             ACTION_ESCAPE -> finish(RingOutcome.Escaped, secondsToWake = null)
@@ -94,11 +104,48 @@ class RingService : Service() {
         acquireWakeLock()
 
         val gentle = kind == RingKind.WakeCheck
-        player.start(alarm.soundUri, alarm.volume, if (gentle) 20 else alarm.rampSeconds, alarm.vibrate && !gentle, gentle)
+        player.start(soundFor(alarm), alarm.volume, if (gentle) 20 else alarm.rampSeconds, alarm.vibrate && !gentle, gentle, route())
         handler.removeCallbacks(escalate)
         handler.removeCallbacks(giveUp)
+        handler.removeCallbacks(escalateSound)
         if (gentle) handler.postDelayed(escalate, WAKE_CHECK_WINDOW_MS) else handler.postDelayed(giveUp, MAX_RING_MS)
+        if (kind == RingKind.Alarm && alarm.soundMode == SoundMode.Escalate) {
+            handler.postDelayed(escalateSound, ESCALATE_AFTER_MS)
+            RingSession.publish(state.copy(escalateAt = now + ESCALATE_AFTER_MS))
+        }
         launchScreen()
+    }
+
+    /** The user's own sound if set; otherwise today's bundled tone (rotation picks a fresh one). */
+    private fun soundFor(alarm: Alarm): Uri {
+        alarm.soundUri?.let { currentTone = null; return Uri.parse(it) }
+        val store = container.directBoot
+        val tone = Tones.forRing(alarm, store.lastTone(alarm.id))
+        store.setLastTone(alarm.id, tone.id)
+        currentTone = tone
+        return Tones.uri(this, tone)
+    }
+
+    private fun route(): SoundRoute {
+        val prefs = container.directBoot.ringPrefs
+        return when {
+            !prefs.alwaysSpeaker -> SoundRoute.FollowPhone
+            prefs.alsoHeadphones -> SoundRoute.SpeakerAndHeadphones
+            else -> SoundRoute.SpeakerOnly
+        }
+    }
+
+    /** A minute with no response: crossfade to an Extreme tone at full volume. */
+    private fun escalateSound() {
+        val state = RingSession.state.value ?: return
+        val loud = currentTone?.let(Tones::escalationFor) ?: Tones.byId("klaxon")
+        player.crossfadeTo(Tones.uri(this, loud))
+        RingSession.publish(state.copy(escalateAt = 0L, escalated = true))
+    }
+
+    private fun cancelEscalation() {
+        handler.removeCallbacks(escalateSound)
+        RingSession.state.value?.takeIf { it.escalateAt > 0 }?.let { RingSession.publish(it.copy(escalateAt = 0L)) }
     }
 
     private fun goForeground(state: RingState, onScreen: Boolean = false) {
@@ -189,7 +236,7 @@ class RingService : Service() {
         RingSession.publish(next)
         container.directBoot.activeRing = ActiveRing(state.alarm.id, state.scheduledAt, next.firedAt, next.snoozes, RingKind.Alarm)
         goForeground(next)
-        player.start(state.alarm.soundUri, state.alarm.volume, 0, state.alarm.vibrate)
+        player.start(soundFor(state.alarm), state.alarm.volume, 0, state.alarm.vibrate, route = route())
         handler.postDelayed(giveUp, MAX_RING_MS)
         launchScreen()
     }
@@ -227,11 +274,13 @@ class RingService : Service() {
         const val ACTION_SCREEN_HIDDEN = "com.wakeroo.app.ring.SCREEN_HIDDEN"
         const val ACTION_SCREEN_SHOWN = "com.wakeroo.app.ring.SCREEN_SHOWN"
         const val ACTION_IDLE = "com.wakeroo.app.ring.IDLE"
+        const val ACTION_ENGAGED = "com.wakeroo.app.ring.ENGAGED"
         const val EXTRA_SECONDS = "seconds"
         const val EXTRA_HOLD_MS = "hold_ms"
 
         const val WAKE_CHECK_WINDOW_MS = 60_000L
         private const val MAX_RING_MS = 60 * 60_000L
+        const val ESCALATE_AFTER_MS = 60_000L
 
         val TEST_ALARM = Alarm(
             id = AlarmScheduler.TEST_ALARM_ID, hour = 0, minute = 0, label = "Test alarm",

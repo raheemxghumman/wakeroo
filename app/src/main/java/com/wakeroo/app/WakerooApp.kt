@@ -21,7 +21,7 @@ class AppContainer(context: Context) {
     val directBoot = DirectBootStore(context)
     val scheduler = AlarmScheduler(context, directBoot)
     val database = lazy { WakerooDatabase.create(context) }
-    val settings by lazy { SettingsStore(context) }
+    val settings by lazy { SettingsStore(context, directBoot) }
     val repository = AlarmRepository(context, database, directBoot, scheduler)
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     val billing by lazy { ProBilling(context, settings, appScope) }

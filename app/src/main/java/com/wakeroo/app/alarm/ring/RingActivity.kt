@@ -44,7 +44,7 @@ class RingActivity : ComponentActivity() {
         // Credential storage may still be locked right after a reboot; defaults are safe then.
         val settings = runCatching { kotlinx.coroutines.runBlocking { container.settings.current() } }.getOrNull()
         val showGoodMorning = settings?.showGoodMorning ?: true
-        val timeLimit = settings?.missionTimeLimit ?: 20
+        val timeLimit = container.directBoot.ringPrefs.missionTimeLimit
 
         setContent {
             WakerooTheme(dark = true) {
@@ -65,7 +65,10 @@ class RingActivity : ComponentActivity() {
                     }
                     phase == RingPhase.Ringing -> RingScreen(
                         state = current,
-                        onStartMission = { phase = RingPhase.Mission },
+                        onStartMission = {
+                            RingService.send(this, RingService.ACTION_ENGAGED)
+                            phase = RingPhase.Mission
+                        },
                         onSnooze = { RingService.send(this, RingService.ACTION_SNOOZE) },
                     )
                     else -> MissionFlow(
