@@ -24,11 +24,13 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val settings = MutableStateFlow<Settings?>(null)
+    /** Null until checked; true when this launch follows a restore onto a new phone. */
+    private val restored = MutableStateFlow<Boolean?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
         super.onCreate(savedInstanceState)
-        splash.setKeepOnScreenCondition { settings.value == null }
+        splash.setKeepOnScreenCondition { settings.value == null || restored.value == null }
         // The UI is dark-first, so keep light status and navigation bar icons.
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
@@ -41,6 +43,11 @@ class MainActivity : ComponentActivity() {
             }
         }
         lifecycleScope.launch {
+            // Restore detection must run before the first sync writes the direct-boot mirror.
+            val store = container.directBoot
+            val known = store.deviceKnown()
+            store.markDeviceKnown()
+            restored.value = !known && (container.settings.current().onboardingDone || container.repository.count() > 0)
             // Bring Room and AlarmManager back in line on every launch, and recheck Pro with Play.
             container.repository.reconcileAfterUnlock()
             container.billing.start()
@@ -51,6 +58,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val current by settings.collectAsStateWithLifecycle()
             val s = current ?: return@setContent
+            val restoreMode by restored.collectAsStateWithLifecycle()
+            val restore = restoreMode ?: return@setContent
             val dark = when (s.appTheme) {
                 AppTheme.Dark -> true
                 AppTheme.Light -> false
@@ -62,7 +71,7 @@ class MainActivity : ComponentActivity() {
                 enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
             }
             WakerooTheme(dark = dark, motion = s.motion) {
-                WakerooNavHost(onboardingDone = s.onboardingDone, openHealth = openHealth, initialTab = initialTab)
+                WakerooNavHost(onboardingDone = s.onboardingDone, restored = restore, openHealth = openHealth, initialTab = initialTab)
             }
             if (!s.pro && s.onboardingDone) LaunchedEffect(Unit) { Ads.start(this@MainActivity) }
         }

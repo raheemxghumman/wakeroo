@@ -210,7 +210,8 @@ object OemGuides {
                 Intent().setComponent(ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.BgStartUpManager")),
             )
             else -> emptyList()
-        } + Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+        } + HealthChecker.appDetails(context) // Wakeroo's own page: Battery is one tap away
+
         return candidates.firstOrNull { it.resolveActivity(context.packageManager) != null } ?: HealthChecker.appDetails(context)
     }
 

@@ -14,6 +14,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,7 +50,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object OnboardingRoute
+data class OnboardingRoute(val restore: Boolean = false)
 @Serializable
 data object MainRoute
 @Serializable
@@ -73,7 +74,7 @@ private val popExit: AnimatedContentTransitionScope<NavBackStackEntry>.() -> Exi
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean, initialTab: MainTab = MainTab.Alarms) {
+fun WakerooNavHost(onboardingDone: Boolean, restored: Boolean, openHealth: Boolean, initialTab: MainTab = MainTab.Alarms) {
     val nav = rememberNavController()
     val context = LocalContext.current
     val app = context.container
@@ -82,7 +83,8 @@ fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean, initialTab: Mai
     // Decided once: finishing onboarding navigates on its own, so the graph must not reset.
     val start: Any = remember {
         when {
-            !onboardingDone -> OnboardingRoute
+            restored -> OnboardingRoute(restore = true)
+            !onboardingDone -> OnboardingRoute()
             openHealth -> SettingsRoute(focusHealth = true)
             else -> MainRoute
         }
@@ -91,6 +93,8 @@ fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean, initialTab: Mai
     // The launch intro plays once per cold start; the app assembles itself as it hands over.
     var introDone by rememberSaveable { mutableStateOf(false) }
     var revealed by rememberSaveable { mutableStateOf(false) }
+    // The alarm onboarding just created glows once on Home.
+    var highlight by rememberSaveable { mutableLongStateOf(0L) }
 
     Box {
         SharedTransitionLayout {
@@ -106,15 +110,13 @@ fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean, initialTab: Mai
                     popEnterTransition = popEnter,
                     popExitTransition = popExit
                 ) {
-                    composable<OnboardingRoute> {
+                    composable<OnboardingRoute> { entry ->
                         CompositionLocalProvider(LocalNavScope provides this) {
-                            OnboardingScreen(onFinished = { createFirst ->
+                            OnboardingScreen(restore = entry.toRoute<OnboardingRoute>().restore, onFinished = { alarmId ->
+                                highlight = alarmId
                                 nav.navigate(MainRoute) {
-                                    popUpTo(OnboardingRoute) {
-                                        inclusive = true
-                                    }
+                                    popUpTo<OnboardingRoute> { inclusive = true }
                                 }
-                                if (createFirst) nav.navigate(EditorRoute())
                             })
                         }
                     }
@@ -130,6 +132,8 @@ fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean, initialTab: Mai
                                         onEdit = { nav.navigate(EditorRoute(it)) },
                                         onSettings = openSettings,
                                         onHealth = { nav.navigate(SettingsRoute(focusHealth = true)) },
+                                        highlightId = highlight,
+                                        onHighlightShown = { highlight = 0L },
                                     )
                                     MainTab.Sleep -> SleepScreen(onSettings = openSettings)
                                     MainTab.Morning -> MorningScreen(onSettings = openSettings)

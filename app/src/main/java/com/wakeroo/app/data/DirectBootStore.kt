@@ -108,6 +108,15 @@ class DirectBootStore(context: Context) {
             ?: emptyList()
         set(value) = prefs.edit { putString(KEY_EXTRAS, WakerooJson.encodeToString(value)) }
 
+    /**
+     * True once Wakeroo's screens have opened on this phone. This storage is never backed up,
+     * so a phone with alarms or settings but no marker got them from a backup restore. Only
+     * the UI sets it: background work (boot, unlock) can't mistake a restore for a known phone.
+     */
+    fun deviceKnown(): Boolean = prefs.contains(KEY_DEVICE)
+
+    fun markDeviceKnown() = prefs.edit { putBoolean(KEY_DEVICE, true) }
+
     var ringPrefs: RingPrefs
         get() = prefs.getString(KEY_RING_PREFS, null)?.let { runCatching { WakerooJson.decodeFromString<RingPrefs>(it) }.getOrNull() }
             ?: RingPrefs()
@@ -120,6 +129,7 @@ class DirectBootStore(context: Context) {
 
     private companion object {
         const val KEY_RING_PREFS = "ring_prefs"
+        const val KEY_DEVICE = "device_known"
         const val KEY_LAST_TONE = "last_tone_"
         const val KEY_EXTRAS = "pending_extras"
         const val KEY_ALARMS = "alarms"

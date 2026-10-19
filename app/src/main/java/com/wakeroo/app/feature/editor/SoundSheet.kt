@@ -166,23 +166,57 @@ fun Alarm.soundCategoryTitle(): String = when {
     else -> Tones.byId(tone).category.title
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+/** Remembers a [TonePreview] for this screen and stops it when the screen goes away. */
 @Composable
-fun SoundSheet(draft: Alarm, pro: Boolean, onDismiss: () -> Unit, onUpgrade: () -> Unit, update: ((Alarm) -> Alarm) -> Unit) {
+fun rememberTonePreview(): Pair<TonePreview, String?> {
     val context = LocalContext.current
-    val haptics = LocalHapticFeedback.current
-    val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var playing by remember { mutableStateOf<String?>(null) }
     val preview = remember { TonePreview(context) }
     DisposableEffect(Unit) {
         preview.onChange = { playing = preview.playingKey }
         onDispose { preview.stop() }
     }
+    return preview to playing
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SoundSheet(draft: Alarm, pro: Boolean, onDismiss: () -> Unit, onUpgrade: () -> Unit, update: ((Alarm) -> Alarm) -> Unit) {
+    val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val (preview, playing) = rememberTonePreview()
+    ModalBottomSheet(onDismissRequest = { preview.stop(); onDismiss() }, sheetState = sheet, containerColor = Night, dragHandle = null) {
+        Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl)) {
+            Text("Alarm sound", style = MaterialTheme.typography.headlineMedium, color = Paper)
+            Text(
+                "Tap to hear it at your alarm's volume.",
+                style = MaterialTheme.typography.bodyMedium, color = PaperMuted, modifier = Modifier.padding(top = Space.xs, bottom = Space.lg),
+            )
+            SoundPicker(draft, pro, preview, playing, onUpgrade = { preview.stop(); onUpgrade() }, update = update)
+            Spacer(Modifier.height(Space.xl))
+            PillButton("Done", Modifier.fillMaxWidth()) { preview.stop(); onDismiss() }
+        }
+    }
+}
+
+/** Category tabs and tone cards; shared by the editor's sound sheet and onboarding. */
+@Composable
+fun SoundPicker(
+    draft: Alarm,
+    pro: Boolean,
+    preview: TonePreview,
+    playing: String?,
+    onUpgrade: () -> Unit,
+    update: ((Alarm) -> Alarm) -> Unit,
+    showOwn: Boolean = true,
+) {
+    val context = LocalContext.current
+    val haptics = LocalHapticFeedback.current
+    val tabs = if (showOwn) SoundTab.entries else SoundTab.entries.filter { it != SoundTab.Own }
     val startTab = when {
-        draft.soundUri != null -> SoundTab.Own
+        draft.soundUri != null && showOwn -> SoundTab.Own
         else -> SoundTab.valueOf(Tones.byId(draft.tone).category.name)
     }
-    var tab by remember { mutableStateOf(startTab) }
+    var tab by remember(startTab) { mutableStateOf(startTab) }
     var lockedPick by remember { mutableStateOf<Tone?>(null) }
 
     val ringtonePicker = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -201,86 +235,77 @@ fun SoundSheet(draft: Alarm, pro: Boolean, onDismiss: () -> Unit, onUpgrade: () 
         update { it.copy(soundUri = uri.toString(), soundName = name.substringBeforeLast('.')) }
     }
 
-    ModalBottomSheet(onDismissRequest = { preview.stop(); onDismiss() }, sheetState = sheet, containerColor = Night, dragHandle = null) {
-        Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl)) {
-            Text("Alarm sound", style = MaterialTheme.typography.headlineMedium, color = Paper)
-            Text(
-                "Tap to hear it at your alarm's volume.",
-                style = MaterialTheme.typography.bodyMedium, color = PaperMuted, modifier = Modifier.padding(top = Space.xs, bottom = Space.lg),
-            )
-            SegmentedTabs(SoundTab.entries.map { it.title }, tab.ordinal) {
-                haptics.performHapticFeedback(HapticFeedbackType.SegmentTick)
-                tab = SoundTab.entries[it]
-            }
-            Spacer(Modifier.height(Space.lg))
-            AnimatedContent(
-                tab,
-                transitionSpec = {
-                    val dir = if (targetState.ordinal > initialState.ordinal) 1 else -1
-                    (slideInHorizontally { dir * it / 3 } + fadeIn()) togetherWith (slideOutHorizontally { -dir * it / 3 } + fadeOut())
-                },
-                label = "soundTab",
-            ) { t ->
-                Column(verticalArrangement = Arrangement.spacedBy(Space.md)) {
-                    if (t == SoundTab.Own) {
-                        OwnSoundRow(Icons.Rounded.PhoneAndroid, "Phone tone", "One of your phone's alarm sounds", draft.soundUri?.startsWith("content://media") == true, draft.soundName) {
-                            preview.stop()
-                            ringtonePicker.launch(
-                                Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-                                    .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
-                                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false),
-                            )
-                        }
-                        val isFile = draft.soundUri != null && !draft.soundUri.startsWith("content://media")
-                        OwnSoundRow(Icons.Rounded.Folder, "Your music", "Any song or audio file", isFile, draft.soundName) {
-                            preview.stop()
-                            filePicker.launch(arrayOf("audio/*"))
-                        }
-                        Text(
-                            "If your file is ever moved or deleted, Wakeroo Rise plays instead. An alarm is never silent.",
-                            style = MaterialTheme.typography.bodySmall, color = PaperMuted,
+    Column {
+        SegmentedTabs(tabs.map { it.title }, tabs.indexOf(tab).coerceAtLeast(0)) {
+            haptics.performHapticFeedback(HapticFeedbackType.SegmentTick)
+            tab = tabs[it]
+        }
+        Spacer(Modifier.height(Space.lg))
+        AnimatedContent(
+            tab,
+            transitionSpec = {
+                val dir = if (targetState.ordinal > initialState.ordinal) 1 else -1
+                (slideInHorizontally { dir * it / 3 } + fadeIn()) togetherWith (slideOutHorizontally { -dir * it / 3 } + fadeOut())
+            },
+            label = "soundTab",
+        ) { t ->
+            Column(verticalArrangement = Arrangement.spacedBy(Space.md)) {
+                if (t == SoundTab.Own) {
+                    OwnSoundRow(Icons.Rounded.PhoneAndroid, "Phone tone", "One of your phone's alarm sounds", draft.soundUri?.startsWith("content://media") == true, draft.soundName) {
+                        preview.stop()
+                        ringtonePicker.launch(
+                            Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+                                .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+                                .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false),
                         )
-                    } else {
-                        val category = ToneCategory.valueOf(t.name)
-                        Text(category.blurb, style = MaterialTheme.typography.labelMedium, color = DawnLavender)
-                        Tones.inCategory(category).chunked(2).forEach { row ->
-                            Row(horizontalArrangement = Arrangement.spacedBy(Space.md)) {
-                                row.forEach { tone ->
-                                    val selected = draft.soundUri == null && Tones.byId(draft.tone).id == tone.id
-                                    ToneCard(
-                                        tone, selected = selected, playing = playing == tone.id, locked = tone.pro && !pro,
-                                        modifier = Modifier.weight(1f),
-                                    ) {
-                                        if (playing == tone.id) preview.stop() else preview.play(tone.id, Tones.uri(context, tone), draft.volume)
-                                        if (tone.pro && !pro) lockedPick = tone
-                                        else {
-                                            lockedPick = null
-                                            update { it.copy(tone = tone.id, soundUri = null, soundName = null) }
-                                        }
+                    }
+                    val isFile = draft.soundUri != null && !draft.soundUri.startsWith("content://media")
+                    OwnSoundRow(Icons.Rounded.Folder, "Your music", "Any song or audio file", isFile, draft.soundName) {
+                        preview.stop()
+                        filePicker.launch(arrayOf("audio/*"))
+                    }
+                    Text(
+                        "If your file is ever moved or deleted, Wakeroo Rise plays instead. An alarm is never silent.",
+                        style = MaterialTheme.typography.bodySmall, color = PaperMuted,
+                    )
+                } else {
+                    val category = ToneCategory.valueOf(t.name)
+                    Text(category.blurb, style = MaterialTheme.typography.labelMedium, color = DawnLavender)
+                    Tones.inCategory(category).chunked(2).forEach { row ->
+                        Row(horizontalArrangement = Arrangement.spacedBy(Space.md)) {
+                            row.forEach { tone ->
+                                val selected = draft.soundUri == null && Tones.byId(draft.tone).id == tone.id
+                                ToneCard(
+                                    tone, selected = selected, playing = playing == tone.id, locked = tone.pro && !pro,
+                                    modifier = Modifier.weight(1f),
+                                ) {
+                                    if (playing == tone.id) preview.stop() else preview.play(tone.id, Tones.uri(context, tone), draft.volume)
+                                    if (tone.pro && !pro) lockedPick = tone
+                                    else {
+                                        lockedPick = null
+                                        update { it.copy(tone = tone.id, soundUri = null, soundName = null) }
                                     }
                                 }
-                                if (row.size == 1) Spacer(Modifier.weight(1f))
                             }
+                            if (row.size == 1) Spacer(Modifier.weight(1f))
                         }
                     }
                 }
             }
-            lockedPick?.let { tone ->
-                Spacer(Modifier.height(Space.lg))
-                Row(
-                    Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp))
-                        .background(Brush.linearGradient(listOf(Color(0xFF3A2B4E), Color(0xFF6B4A78))))
-                        .clickable { preview.stop(); onUpgrade() }
-                        .padding(Space.lg),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(Icons.Rounded.Lock, null, tint = MorningGold)
-                    Spacer(Modifier.width(Space.md))
-                    Text("${tone.name} comes with Pro. Tap to see Pro", style = MaterialTheme.typography.labelLarge, color = Paper, modifier = Modifier.weight(1f))
-                }
+        }
+        lockedPick?.let { tone ->
+            Spacer(Modifier.height(Space.lg))
+            Row(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp))
+                    .background(Brush.linearGradient(listOf(Color(0xFF3A2B4E), Color(0xFF6B4A78))))
+                    .clickable { preview.stop(); onUpgrade() }
+                    .padding(Space.lg),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(Icons.Rounded.Lock, null, tint = MorningGold)
+                Spacer(Modifier.width(Space.md))
+                Text("${tone.name} comes with Pro. Tap to see Pro", style = MaterialTheme.typography.labelLarge, color = Paper, modifier = Modifier.weight(1f))
             }
-            Spacer(Modifier.height(Space.xl))
-            PillButton("Done", Modifier.fillMaxWidth()) { preview.stop(); onDismiss() }
         }
     }
 }

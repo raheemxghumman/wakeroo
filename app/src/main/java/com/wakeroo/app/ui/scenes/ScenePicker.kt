@@ -226,7 +226,7 @@ fun ScenePreviewDialog(
     Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
         WakerooTheme(dark = true) {
             RingScreen(
-                state = state, scene = scene, onStartMission = {}, onSnooze = {},
+                state = state, scene = scene, onStartMission = {}, onSnooze = {}, clock = java.time.LocalTime.of(hour, minute),
                 topBar = {
                     Row(Modifier.fillMaxWidth().padding(top = Space.md), verticalAlignment = Alignment.CenterVertically) {
                         Text("Preview · ${scene.title}", style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.weight(1f))

@@ -78,7 +78,7 @@ import java.time.ZoneId
 
 /** Ringing: one giant action, a breathing sunrise, and nothing else to tap by mistake. */
 @Composable
-fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Unit, scene: Scene = Scene.NightSky, topBar: @Composable () -> Unit = {}, actions: (@Composable () -> Unit)? = null) {
+fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Unit, scene: Scene = Scene.NightSky, topBar: @Composable () -> Unit = {}, actions: (@Composable () -> Unit)? = null, clock: LocalTime? = null) {
     val tilt by rememberDeviceTilt()
     val reduced = LocalReducedMotion.current
     val pulse by rememberInfiniteTransition(label = "ring").animateFloat(
@@ -87,7 +87,7 @@ fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Uni
     )
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) { while (true) { delay(1000); now = System.currentTimeMillis() } }
-    val time = Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalTime()
+    val time = clock ?: Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalTime()
 
     SceneBackground(scene, tilt = tilt, intensity = if (state.escalated) 1f else 0.4f) {
         Column(

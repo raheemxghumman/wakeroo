@@ -33,6 +33,10 @@ class AlarmRepository(
 
     suspend fun get(id: Long): Alarm? = db.value.alarms().byId(id)?.toModel()
 
+    suspend fun all(): List<Alarm> = db.value.alarms().all().map { it.toModel() }
+
+    suspend fun count(): Int = db.value.alarms().count()
+
     suspend fun latest(): Alarm? = db.value.alarms().all().maxByOrNull { it.createdAt }?.toModel()
 
     suspend fun save(alarm: Alarm): Long = lock.withLock {

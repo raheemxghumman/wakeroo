@@ -104,7 +104,13 @@ private val TRYABLE = setOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MissionPickerSheet(existing: MissionConfig?, onDismiss: () -> Unit, onSave: (MissionConfig) -> Unit) {
+fun MissionPickerSheet(
+    existing: MissionConfig?,
+    onDismiss: () -> Unit,
+    onSave: (MissionConfig) -> Unit,
+    allowSetupLater: Boolean = false,
+    saveLabel: String = "Add mission",
+) {
     val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var config by remember { mutableStateOf(existing) }
     var trying by remember { mutableStateOf(false) }
@@ -203,12 +209,20 @@ fun MissionPickerSheet(existing: MissionConfig?, onDismiss: () -> Unit, onSave: 
                                 } else trying = true
                             }
                         }
-                        PillButton(if (ready) "Add mission" else "Set up first", Modifier.weight(1f), enabled = ready) {
+                        if (ready || !allowSetupLater) PillButton(if (ready) saveLabel else "Set up first", Modifier.weight(1f), enabled = ready) {
                             if (c.type == MissionType.Hunt && !cameraOk) {
                                 afterCamera = { onSave(c) }
                                 cameraPermission.launch(Manifest.permission.CAMERA)
                             } else onSave(c)
                         }
+                    }
+                    if (!ready && allowSetupLater && c.type.needsSetupStep) {
+                        Spacer(Modifier.height(Space.md))
+                        PillButton("I'll set it up tonight", Modifier.fillMaxWidth(), outlined = true) { onSave(c.copy(needsSetup = true)) }
+                        Text(
+                            "Until it's set up, this alarm uses math instead.",
+                            style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
+                        )
                     }
                     if (c.type == MissionType.Hunt && !cameraOk) {
                         Text(

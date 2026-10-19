@@ -48,10 +48,10 @@ import kotlin.math.max
 import kotlin.math.sin
 import kotlin.random.Random
 
-/** An animated alarm background. All drawn in code: no video files, nothing to download. */
+/** An animated alarm background, drawn in code: no video files. Suggested tones are free ones. */
 enum class Scene(val id: String, val title: String, val blurb: String, val pro: Boolean, val suggestedTone: String?) {
     NightSky("night", "Night Sky", "Stars and a slow sunrise glow", false, "wakeroo_rise"),
-    IntoSpace("space", "Into Space", "Sunrise over a turning planet", false, "warm_pads"),
+    IntoSpace("space", "Into Space", "Sunrise over a turning planet", false, "dawn_chimes"),
     Minimal("minimal", "Minimal Black", "Pure black. Easy on OLED and eyes", false, "bright_pulse"),
     Aurora("aurora", "Aurora", "Northern lights drifting overhead", true, "dawn_chimes"),
     Ocean("ocean", "Ocean Dawn", "Waves rolling under a peach sky", true, "soft_marimba"),
@@ -159,7 +159,7 @@ private fun SpaceScene(clock: MutableFloatState, tilt: Offset) {
         // The sun just over the planet's edge, its glow wrapping the atmosphere.
         val rise = 0.5f + 0.5f * sin(t * 0.15f)
         val sun = Offset(size.width * 0.5f, rimY - size.height * (0.01f + 0.035f * rise))
-        drawCircle(Brush.radialGradient(listOf(Color(0xFFFFE2A8), Color(0xFFFFC857).copy(alpha = 0.5f), Color.Transparent), sun, size.width * 0.75f), size.width * 0.75f, sun)
+        drawCircle(Brush.radialGradient(listOf(Color(0xFFFFE2A8).copy(alpha = 0.75f), Color(0xFFFFC857).copy(alpha = 0.22f), Color.Transparent), sun, size.width * 0.6f), size.width * 0.6f, sun)
         drawCircle(Color(0xFFFFF4DC), size.width * 0.035f, sun)
         drawCircle(
             Brush.radialGradient(listOf(Color.Transparent, Color(0xFFFF7A59).copy(alpha = 0.55f), Color(0xFFB9A7FF).copy(alpha = 0.25f), Color.Transparent), pc, planetR * 1.08f),
@@ -175,8 +175,8 @@ private fun SpaceScene(clock: MutableFloatState, tilt: Offset) {
                 val w = size.width * (0.5f + 0.3f * (k % 2))
                 val x = -w + drift * (size.width + w * 2)
                 drawRoundRect(
-                    Color(0xFFB9A7FF).copy(alpha = 0.06f + 0.03f * (k % 3)), Offset(x, y), Size(w, planetR * 0.02f + k * 2f),
-                    androidx.compose.ui.geometry.CornerRadius(20f),
+                    Color(0xFFB9A7FF).copy(alpha = 0.035f + 0.02f * (k % 3)), Offset(x, y), Size(w, 3f * density + k),
+                    androidx.compose.ui.geometry.CornerRadius(8f),
                 )
             }
         }

@@ -1,23 +1,20 @@
 package com.wakeroo.app.feature.onboarding
 
-import android.Manifest
-import android.app.NotificationManager
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import android.provider.Settings
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.text.format.DateFormat
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,55 +24,40 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Alarm
-import androidx.compose.material.icons.rounded.BatteryChargingFull
-import androidx.compose.material.icons.rounded.Bathtub
-import androidx.compose.material.icons.rounded.Calculate
-import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.Coffee
-import androidx.compose.material.icons.rounded.Medication
-import androidx.compose.material.icons.rounded.NotificationsActive
-import androidx.compose.material.icons.rounded.Fullscreen
-import androidx.compose.material3.Icon
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LifecycleResumeEffect
-import com.wakeroo.app.alarm.health.OemGuides
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.createSavedStateHandle
 import com.wakeroo.app.container
-import com.wakeroo.app.data.model.MissionType
 import com.wakeroo.app.feature.editor.PillButton
-import com.wakeroo.app.ui.brand.AnimatedWakerooMark
-import com.wakeroo.app.ui.brand.Wordmark
+import com.wakeroo.app.ui.components.RoundIconButton
 import com.wakeroo.app.ui.components.SkyBackground
-import com.wakeroo.app.ui.components.press3d
-import com.wakeroo.app.ui.theme.Calm
-import com.wakeroo.app.ui.theme.DawnLavender
+import com.wakeroo.app.ui.scenes.Scene
+import com.wakeroo.app.ui.scenes.SceneBackground
+import com.wakeroo.app.ui.theme.LocalReducedMotion
 import com.wakeroo.app.ui.theme.MorningGold
 import com.wakeroo.app.ui.theme.Night
-import com.wakeroo.app.ui.theme.NightSurface
 import com.wakeroo.app.ui.theme.Paper
 import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.Sky
@@ -84,58 +66,83 @@ import com.wakeroo.app.ui.theme.SunriseCoral
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
-private enum class Page { Welcome, Spot, Notifications, FullScreen, Battery, Test }
-
+/**
+ * The setup wizard: about forty seconds from install to a real, tested alarm. Time, scene,
+ * sound, mission, permissions, then it builds the alarm and offers a one-minute test.
+ * No paywall, no tracking prompt, no account. [restore] runs the short "welcome back" path.
+ */
 @Composable
-fun OnboardingScreen(onFinished: (createFirstAlarm: Boolean) -> Unit) {
-    val context = LocalContext.current
-    val app = context.container
+fun OnboardingScreen(restore: Boolean, onFinished: (alarmId: Long) -> Unit) {
+    val app = LocalContext.current.container
+    val vm = viewModel(key = "onboarding-$restore") { OnboardingViewModel(app, createSavedStateHandle(), restore) }
+    val state by vm.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
-    val pages = remember {
-        Page.entries.filter { page ->
-            when (page) {
-                Page.Notifications -> Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                Page.FullScreen -> Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE &&
-                    !context.getSystemService(NotificationManager::class.java).canUseFullScreenIntent()
-                else -> true
-            }
+    val pager = rememberPagerState(initialPage = state.index) { state.steps.size }
+    val reduced = LocalReducedMotion.current
+    LaunchedEffect(state.index) {
+        if (pager.currentPage != state.index) {
+            if (reduced) pager.scrollToPage(state.index) else pager.animateScrollToPage(state.index, animationSpec = spring(dampingRatio = 0.86f, stiffness = 260f))
         }
     }
-    val pager = rememberPagerState { pages.size }
-    fun next() {
-        if (pager.currentPage + 1 >= pages.size) {
-            scope.launch {
-                app.settings.update { it.copy(onboardingVersion = com.wakeroo.app.data.ONBOARDING_VERSION) }
-                onFinished(true)
-            }
-        } else scope.launch { pager.animateScrollToPage(pager.currentPage + 1) }
-    }
-    val sky = when (pages[pager.currentPage]) {
-        Page.Welcome -> Sky.Night
-        Page.Spot, Page.Notifications -> Sky.Dawn
-        Page.FullScreen, Page.Battery, Page.Test -> Sky.Sunrise
+    val canGoBack = state.index > 0 && state.step != Step.Building && state.step != Step.Test
+    BackHandler(enabled = canGoBack) { vm.back() }
+
+    fun finish() = scope.launch {
+        vm.finish()
+        onFinished(state.savedId)
     }
 
-    SkyBackground(sky) {
+    val context = LocalContext.current
+    val use24h = DateFormat.is24HourFormat(context)
+
+    // The background follows the story: night while setting the time, your scene while
+    // choosing it, then the sky brightens toward morning as the alarm comes together.
+    Box(Modifier.fillMaxSize()) {
+        AnimatedContent(
+            targetState = when (state.step) {
+                Step.Scene -> Backdrop.Scene(Scene.byId(state.draft.scene))
+                Step.Time, Step.Restored -> Backdrop.Sky(Sky.Night)
+                Step.Sound, Step.Mission -> Backdrop.Sky(Sky.Dawn)
+                Step.Permissions -> Backdrop.Sky(Sky.Sunrise)
+                Step.Building, Step.Test -> Backdrop.Sky(Sky.Morning)
+            },
+            transitionSpec = { fadeIn(spring(stiffness = 120f)) togetherWith fadeOut(spring(stiffness = 120f)) },
+            label = "backdrop",
+        ) { backdrop ->
+            when (backdrop) {
+                is Backdrop.Sky -> SkyBackground(backdrop.sky)
+                is Backdrop.Scene -> SceneBackground(backdrop.scene) {
+                    Box(Modifier.fillMaxSize().background(Night.copy(alpha = 0.55f)))
+                }
+            }
+        }
         Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
-            Dots(pager, pages.size)
-            HorizontalPager(pager, userScrollEnabled = false, modifier = Modifier.weight(1f)) { index ->
-                Box(Modifier.fillMaxSize().cube(pager, index).padding(horizontal = Space.xl)) {
-                    when (pages[index]) {
-                        Page.Welcome -> WelcomePage(::next)
-                        Page.Spot -> SpotPage { type ->
-                            scope.launch { app.settings.update { it.copy(firstMission = type.name) } }
-                            next()
-                        }
-                        Page.Notifications -> NotificationsPage(::next)
-                        Page.FullScreen -> FullScreenPage(::next)
-                        Page.Battery -> BatteryPage(::next)
-                        Page.Test -> TestPage(onDone = ::next)
+            TopRow(state, canGoBack, onBack = vm::back)
+            HorizontalPager(pager, userScrollEnabled = false, modifier = Modifier.weight(1f)) { page ->
+                Box(Modifier.fillMaxSize().cube(pager, page).padding(horizontal = Space.xl)) {
+                    when (state.steps[page]) {
+                        Step.Restored -> RestoredStep(state.restoredAlarms, use24h, onNext = vm::next)
+                        Step.Time -> TimeStep(state, use24h, vm::update, onNext = vm::next)
+                        Step.Scene -> SceneStep(state.draft, vm::update, onNext = vm::next)
+                        Step.Sound -> SoundStep(state.draft, vm::update, onNext = vm::next)
+                        Step.Mission -> MissionStep(state.draft, vm::update, onNext = vm::next)
+                        Step.Permissions -> PermissionsStep(onNext = vm::next)
+                        Step.Building -> BuildingStep(state, use24h, onNext = vm::next)
+                        Step.Test -> TestStep(
+                            restore = restore,
+                            onTest = { vm.scheduleTest(); finish() },
+                            onLater = { finish() },
+                        )
                     }
                 }
             }
         }
     }
+}
+
+private sealed interface Backdrop {
+    data class Sky(val sky: com.wakeroo.app.ui.theme.Sky) : Backdrop
+    data class Scene(val scene: com.wakeroo.app.ui.scenes.Scene) : Backdrop
 }
 
 /** Pages turn like the faces of a cube. */
@@ -148,233 +155,80 @@ private fun Modifier.cube(pager: PagerState, page: Int) = graphicsLayer {
 }
 
 @Composable
-private fun Dots(pager: PagerState, count: Int) {
-    Row(Modifier.fillMaxWidth().padding(Space.xl), horizontalArrangement = Arrangement.Center) {
-        repeat(count) { i ->
-            val active = i == pager.currentPage
-            Box(
-                Modifier
-                    .padding(horizontal = 4.dp)
-                    .height(6.dp)
-                    .width(if (active) 28.dp else 6.dp)
-                    .clip(CircleShape)
-                    .background(if (active) SunriseCoral else Paper.copy(alpha = 0.25f)),
-            )
-        }
-    }
-}
-
-@Composable
-private fun PageLayout(
-    icon: ImageVector?,
-    title: String,
-    body: String,
-    content: @Composable () -> Unit = {},
-    primary: String,
-    onPrimary: () -> Unit,
-    secondary: String? = null,
-    onSecondary: () -> Unit = {},
-    warm: Boolean = false,
-) {
-    Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(Modifier.weight(0.6f))
-        if (icon != null) {
-            Box(Modifier.size(96.dp).clip(CircleShape).background(if (warm) Night.copy(alpha = 0.25f) else Paper.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
-                Icon(icon, null, tint = if (warm) Paper else MorningGold, modifier = Modifier.size(48.dp))
+private fun TopRow(state: OnboardingState, canGoBack: Boolean, onBack: () -> Unit) {
+    val numbered = state.numbered
+    val position = numbered.indexOf(state.step)
+    Row(
+        Modifier.fillMaxWidth().height(64.dp).padding(horizontal = Space.lg),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(Modifier.size(48.dp)) {
+            androidx.compose.animation.AnimatedVisibility(canGoBack, enter = fadeIn(), exit = fadeOut()) {
+                RoundIconButton(Icons.AutoMirrored.Rounded.ArrowBack, "Back", onBack)
             }
-            Spacer(Modifier.height(Space.xl))
         }
-        Text(title, style = MaterialTheme.typography.displaySmall, color = Paper, textAlign = TextAlign.Center)
-        Text(body, style = MaterialTheme.typography.bodyLarge, color = Paper.copy(alpha = 0.8f), textAlign = TextAlign.Center, modifier = Modifier.padding(top = Space.md))
-        Spacer(Modifier.height(Space.xl))
-        content()
-        Spacer(Modifier.weight(1f))
-        PillButton(primary, Modifier.fillMaxWidth(), dark = warm, onClick = onPrimary)
-        if (secondary != null) {
-            Text(
-                secondary, style = MaterialTheme.typography.labelLarge, color = Paper.copy(alpha = 0.75f),
-                modifier = Modifier.padding(top = Space.sm).clip(CircleShape).clickable(onClick = onSecondary).padding(Space.md),
-            )
-        } else Spacer(Modifier.height(Space.xxl + Space.md))
-        Spacer(Modifier.height(Space.lg))
-    }
-}
-
-@Composable
-private fun WelcomePage(onNext: () -> Unit) {
-    Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(Modifier.weight(0.7f))
-        AnimatedWakerooMark(Modifier.size(220.dp))
-        Wordmark(fontSize = MaterialTheme.typography.displayMedium.fontSize)
-        Text(
-            "Wake up for real.", style = MaterialTheme.typography.headlineMedium, color = DawnLavender,
-            modifier = Modifier.padding(top = Space.sm),
-        )
-        Text(
-            "An alarm that keeps ringing until you've done a quick mission, like solving a sum or scanning a code in another room.",
-            style = MaterialTheme.typography.bodyLarge, color = PaperMuted, textAlign = TextAlign.Center, modifier = Modifier.padding(top = Space.lg),
-        )
-        Spacer(Modifier.weight(1f))
-        Row(horizontalArrangement = Arrangement.spacedBy(Space.lg), modifier = Modifier.padding(bottom = Space.xl)) {
-            Promise("No ads on\nyour alarm")
-            Promise("Every mission\nfree")
-            Promise("Pay once,\nif ever")
-        }
-        PillButton("Get started", Modifier.fillMaxWidth(), onClick = onNext)
-        Spacer(Modifier.height(Space.xxl + Space.lg))
-    }
-}
-
-@Composable
-private fun Promise(text: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(Icons.Rounded.CheckCircle, null, tint = Calm, modifier = Modifier.size(16.dp))
-        Spacer(Modifier.width(6.dp))
-        Text(text, style = MaterialTheme.typography.labelSmall, color = Paper)
-    }
-}
-
-@Composable
-private fun SpotPage(onChoose: (MissionType) -> Unit) {
-    val options = listOf(
-        Triple(Icons.Rounded.Bathtub, "Bathroom sink", MissionType.Photo),
-        Triple(Icons.Rounded.Coffee, "Coffee or kettle", MissionType.Scan),
-        Triple(Icons.Rounded.Medication, "Meds shelf", MissionType.Scan),
-        Triple(Icons.Rounded.Calculate, "Just math for now", MissionType.Math),
-    )
-    var chosen by remember { mutableStateOf<Int?>(null) }
-    PageLayout(
-        icon = null,
-        title = "Where should your off-switch live?",
-        body = "The best way to stay up is to get out of bed. Pick a spot; you'll set it up with your first alarm.",
-        content = {
-            Column(verticalArrangement = Arrangement.spacedBy(Space.md)) {
-                options.chunked(2).forEachIndexed { row, pair ->
-                    Row(horizontalArrangement = Arrangement.spacedBy(Space.md)) {
-                        pair.forEachIndexed { col, (icon, label, _) ->
-                            val i = row * 2 + col
-                            val selected = chosen == i
-                            Column(
-                                Modifier
-                                    .weight(1f)
-                                    .height(118.dp)
-                                    .press3d(maxTilt = 12f)
-                                    .clip(RoundedCornerShape(26.dp))
-                                    .background(if (selected) SunriseCoral else NightSurface.copy(alpha = 0.85f))
-                                    .border(1.dp, Color.White.copy(alpha = 0.08f), RoundedCornerShape(26.dp))
-                                    .clickable { chosen = i }
-                                    .padding(Space.lg),
-                            ) {
-                                Icon(icon, null, tint = if (selected) Night else MorningGold)
-                                Spacer(Modifier.weight(1f))
-                                Text(label, style = MaterialTheme.typography.titleSmall, color = if (selected) Night else Paper)
-                            }
+        Spacer(Modifier.size(Space.md))
+        if (position >= 0) {
+            Column(Modifier.weight(1f)) {
+                Text("Step ${position + 1} of ${numbered.size}", style = MaterialTheme.typography.labelMedium, color = Paper.copy(alpha = 0.8f))
+                Spacer(Modifier.height(6.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    numbered.forEachIndexed { i, _ ->
+                        val fill by animateFloatAsState(if (i <= position) 1f else 0f, spring(dampingRatio = 0.7f, stiffness = 200f), label = "seg$i")
+                        Box(Modifier.weight(1f).height(5.dp).clip(CircleShape).background(Paper.copy(alpha = 0.2f))) {
+                            Box(Modifier.fillMaxWidth(fill).height(5.dp).clip(CircleShape).background(if (i == position) SunriseCoral else MorningGold))
                         }
                     }
                 }
-                Text(
-                    "Heads-up: the first two weeks are the hardest. Then it sticks.",
-                    style = MaterialTheme.typography.bodySmall, color = Paper.copy(alpha = 0.7f), textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(top = Space.sm),
-                )
             }
-        },
-        primary = if (chosen == null) "Choose a spot" else "Continue",
-        onPrimary = { chosen?.let { onChoose(options[it].third) } },
-    )
-}
-
-@Composable
-private fun NotificationsPage(onNext: () -> Unit) {
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { onNext() }
-    PageLayout(
-        Icons.Rounded.NotificationsActive,
-        "Let your alarm reach you",
-        "Wakeroo needs notifications to show the alarm screen. We never send marketing notifications.",
-        primary = "Allow notifications",
-        onPrimary = { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) },
-    )
-}
-
-@Composable
-private fun FullScreenPage(onNext: () -> Unit) {
-    val context = LocalContext.current
-    var opened by remember { mutableStateOf(false) }
-    LifecycleResumeEffect(opened) {
-        if (opened && context.getSystemService(NotificationManager::class.java).canUseFullScreenIntent()) onNext()
-        onPauseOrDispose { }
+            Spacer(Modifier.size(48.dp + Space.md))
+        } else Spacer(Modifier.weight(1f))
     }
-    PageLayout(
-        Icons.Rounded.Fullscreen,
-        "Take over the lock screen",
-        "So the alarm fills your screen instead of hiding in a small banner. Turn on \"Allow full screen\" for Wakeroo.",
-        primary = "Open setting",
-        onPrimary = {
-            opened = true
-            OemGuides.open(context, Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, Uri.parse("package:${context.packageName}")))
-        },
-        secondary = "Skip for now", onSecondary = onNext, warm = true,
-    )
 }
 
+/**
+ * The common page layout: a title and line of help, the step's own content (scrollable),
+ * and the main button pinned to the bottom.
+ */
 @Composable
-private fun BatteryPage(onNext: () -> Unit) {
-    val context = LocalContext.current
-    val guide = remember { OemGuides.forThisPhone() }
-    var opened by remember { mutableStateOf(false) }
-    PageLayout(
-        Icons.Rounded.BatteryChargingFull,
-        "Keep ${guide.brand} from pausing Wakeroo",
-        "Phones save battery by putting apps to sleep. That's the #1 reason alarm apps miss alarms.",
-        content = {
-            Column(
-                Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(Night.copy(alpha = 0.45f)).padding(Space.lg),
-                verticalArrangement = Arrangement.spacedBy(Space.sm),
-            ) {
-                guide.steps.forEachIndexed { i, step ->
-                    Row {
-                        Text("${i + 1}", style = MaterialTheme.typography.titleSmall, color = MorningGold, modifier = Modifier.width(24.dp))
-                        Text(step, style = MaterialTheme.typography.bodyMedium, color = Paper)
-                    }
-                }
+fun StepScaffold(
+    title: String,
+    subtitle: String?,
+    primary: String,
+    onPrimary: () -> Unit,
+    primaryEnabled: Boolean = true,
+    warm: Boolean = false,
+    darkButton: Boolean = warm,
+    secondary: String? = null,
+    onSecondary: () -> Unit = {},
+    scroll: Boolean = true,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Column(Modifier.fillMaxSize()) {
+        Column(
+            Modifier.weight(1f).then(if (scroll) Modifier.verticalScroll(rememberScrollState()) else Modifier).padding(top = Space.md),
+        ) {
+            // Warm, bright skies get dark text so it stays readable.
+            val ink = if (warm) Night else Paper
+            Text(title, style = MaterialTheme.typography.displaySmall, color = ink)
+            if (subtitle != null) {
+                Text(subtitle, style = MaterialTheme.typography.bodyLarge, color = ink.copy(alpha = 0.78f), modifier = Modifier.padding(top = Space.sm))
             }
-        },
-        primary = if (opened) "I've done it" else "Open battery settings",
-        onPrimary = {
-            if (opened) onNext() else {
-                opened = true
-                OemGuides.open(context, OemGuides.batteryIntent(context))
-            }
-        },
-        secondary = "Skip for now", onSecondary = onNext, warm = true,
-    )
-}
-
-@Composable
-private fun TestPage(onDone: () -> Unit) {
-    val context = LocalContext.current
-    var scheduled by remember { mutableStateOf(false) }
-    AnimatedContent(scheduled, transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "test") { done ->
-        if (!done) {
-            PageLayout(
-                Icons.Rounded.Alarm,
-                "Let's prove it works",
-                "A test alarm rings in one minute. Lock your phone and wait. If it rings over the lock screen, you're set.",
-                primary = "Ring in 1 minute",
-                onPrimary = {
-                    context.container.scheduler.scheduleTest(System.currentTimeMillis() + 60_000)
-                    scheduled = true
-                },
-                secondary = "Skip, I'll test later", onSecondary = onDone, warm = true,
-            )
-        } else {
-            PageLayout(
-                Icons.Rounded.CheckCircle,
-                "Lock your phone now",
-                "The test rings in a minute. Meanwhile, let's set your first real alarm.",
-                primary = "Set my first alarm",
-                onPrimary = onDone, warm = true,
-            )
+            Spacer(Modifier.height(Space.xl))
+            content()
+            Spacer(Modifier.height(Space.lg))
         }
+        PillButton(primary, Modifier.fillMaxWidth(), enabled = primaryEnabled, dark = darkButton, onClick = onPrimary)
+        if (secondary != null) {
+            Text(
+                secondary, style = MaterialTheme.typography.labelLarge, color = (if (warm) Night else Paper).copy(alpha = 0.8f), textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth().padding(top = Space.xs).clip(CircleShape).clickable(onClick = onSecondary).padding(Space.md),
+            )
+        } else Spacer(Modifier.height(Space.lg))
     }
+}
+
+@Composable
+fun StepHint(text: String) {
+    Text(text, style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm))
 }

@@ -3,6 +3,11 @@ package com.wakeroo.app.feature.home
 import android.text.format.DateFormat
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -108,6 +113,8 @@ fun HomeScreen(
     onEdit: (Long) -> Unit,
     onSettings: () -> Unit,
     onHealth: () -> Unit,
+    highlightId: Long = 0L,
+    onHighlightShown: () -> Unit = {},
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
     val tilt by rememberDeviceTilt()
@@ -117,6 +124,12 @@ fun HomeScreen(
     LifecycleResumeEffect(Unit) {
         vm.refreshHealth()
         onPauseOrDispose { }
+    }
+    LaunchedEffect(highlightId) {
+        if (highlightId != 0L) {
+            kotlinx.coroutines.delay(4000)
+            onHighlightShown()
+        }
     }
     val hour = state.next?.next?.hour ?: Instant.ofEpochMilli(state.now).atZone(ZoneId.systemDefault()).hour
 
@@ -156,6 +169,7 @@ fun HomeScreen(
                 AlarmCard(
                     row = row,
                     use24h = use24h,
+                    glow = row.alarm.id == highlightId,
                     modifier = Modifier.animateItem().padding(bottom = Space.md).entrance(4 + index.coerceAtMost(6)),
                     onClick = { onEdit(row.alarm.id) },
                     onToggle = { vm.toggle(row.alarm, it) },
@@ -290,6 +304,7 @@ private fun QuickAlarms(modifier: Modifier = Modifier, onQuick: (Int) -> Unit) {
 private fun AlarmCard(
     row: AlarmRow,
     use24h: Boolean,
+    glow: Boolean,
     modifier: Modifier,
     onClick: () -> Unit,
     onToggle: (Boolean) -> Unit,
@@ -309,6 +324,12 @@ private fun AlarmCard(
     val on = alarm.enabled
     val contentAlpha by animateFloatAsState(if (on) 1f else 0.45f, WakerooMotion.calm(), label = "alpha")
     val surface by animateColorAsState(if (on) NightSurface.copy(alpha = 0.92f) else NightSurface.copy(alpha = 0.55f), WakerooMotion.calm(), label = "surface")
+    // A freshly created alarm pulses a warm outline a few times so the eye finds it.
+    val pulse by rememberInfiniteTransition(label = "glow").animateFloat(
+        0.2f, 1f, infiniteRepeatable(tween(700), RepeatMode.Reverse), label = "glowPulse",
+    )
+    val glowAlpha by animateFloatAsState(if (glow) 1f else 0f, tween(600), label = "glowAlpha")
+    val outline = if (glowAlpha > 0.01f) SunriseCoral.copy(alpha = pulse * glowAlpha) else Color.White.copy(alpha = 0.06f)
 
     SwipeToDismissBox(
         state = dismiss,
@@ -336,7 +357,7 @@ private fun AlarmCard(
                 .press3d(maxTilt = 4f, sink = 0.98f)
                 .clip(RoundedCornerShape(28.dp))
                 .background(surface)
-                .border(1.dp, Color.White.copy(alpha = 0.06f), RoundedCornerShape(28.dp))
+                .border(if (glowAlpha > 0.01f) 2.dp else 1.dp, outline, RoundedCornerShape(28.dp))
                 .clickable(onClick = onClick)
                 .padding(horizontal = Space.xl, vertical = Space.lg),
         ) {
@@ -362,13 +383,15 @@ private fun AlarmCard(
             }
             Row(Modifier.padding(top = Space.md).graphicsLayer { alpha = contentAlpha }, horizontalArrangement = Arrangement.spacedBy(Space.sm)) {
                 alarm.missions.forEach { m ->
+                    // A mission saved with "I'll set it up tonight" shows up coral until it's done.
+                    val tint = if (m.needsSetup) SunriseCoral else MorningGold
                     Row(
-                        Modifier.clip(CircleShape).background(MorningGold.copy(alpha = 0.14f)).padding(horizontal = Space.md, vertical = 6.dp),
+                        Modifier.clip(CircleShape).background(tint.copy(alpha = 0.14f)).padding(horizontal = Space.md, vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(m.type.icon, null, tint = MorningGold, modifier = Modifier.size(16.dp))
+                        Icon(m.type.icon, null, tint = tint, modifier = Modifier.size(16.dp))
                         Spacer(Modifier.width(6.dp))
-                        Text(m.type.title, style = MaterialTheme.typography.labelSmall, color = MorningGold)
+                        Text(if (m.needsSetup) "${m.type.title} · finish setup" else m.type.title, style = MaterialTheme.typography.labelSmall, color = tint)
                     }
                 }
                 if (alarm.skipDate != null) {
