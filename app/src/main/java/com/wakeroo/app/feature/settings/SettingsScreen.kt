@@ -35,6 +35,8 @@ import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.HealthAndSafety
 import androidx.compose.material.icons.rounded.Tune
+import androidx.compose.material.icons.rounded.Wallpaper
+import com.wakeroo.app.ui.scenes.ScenePicker
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -115,6 +117,17 @@ fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) 
                     }
                 }
                 ProCard(settings.pro, onPro)
+                SectionCard("Wake-up scene", icon = Icons.Rounded.Wallpaper) {
+                    Text(
+                        "The alarm screen for every alarm, unless an alarm picks its own.",
+                        style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(bottom = Space.md),
+                    )
+                    ScenePicker(
+                        selected = settings.ringScene, pro = settings.pro,
+                        onSelect = { id -> scope.launch { app.settings.update { it.copy(ringScene = id ?: "night") } } },
+                        onUpgrade = onPro,
+                    )
+                }
                 SectionCard("Alarm behaviour", icon = Icons.Rounded.Alarm) {
                     Text("If I stop during a mission", style = MaterialTheme.typography.bodyLarge, color = Paper)
                     Text(

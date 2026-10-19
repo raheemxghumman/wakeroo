@@ -46,6 +46,9 @@ import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.EventRepeat
 import androidx.compose.material.icons.rounded.Flag
 import androidx.compose.material.icons.rounded.GraphicEq
+import androidx.compose.material.icons.rounded.Wallpaper
+import com.wakeroo.app.ui.scenes.Scene
+import com.wakeroo.app.ui.scenes.ScenePicker
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Snooze
 import androidx.compose.material.icons.rounded.Verified
@@ -152,6 +155,7 @@ fun EditorScreen(
                     LabelSection(draft) { vm.update(it) }
                     MissionsSection(draft, state.maxMissions, onEdit = { missionSheet = it }, onRemove = vm::removeMission, onUpgrade = onUpgrade)
                     SoundSection(draft, state.pro, onUpgrade) { vm.update(it) }
+                    SceneSection(draft, state, onUpgrade) { vm.update(it) }
                     SnoozeSection(draft) { vm.update(it) }
                     WakeCheckSection(draft) { vm.update(it) }
                     Spacer(Modifier.height(110.dp))
@@ -449,6 +453,37 @@ private fun SoundSection(draft: Alarm, pro: Boolean, onUpgrade: () -> Unit, upda
         ToggleRow("Vibrate", null, draft.vibrate) { on -> update { it.copy(vibrate = on) } }
     }
     if (picking) SoundSheet(draft, pro, onDismiss = { picking = false }, onUpgrade = { picking = false; onUpgrade() }, update = update)
+}
+
+@Composable
+private fun SceneSection(draft: Alarm, state: EditorState, onUpgrade: () -> Unit, update: ((Alarm) -> Alarm) -> Unit) {
+    SectionCard("Wake-up scene", icon = Icons.Rounded.Wallpaper) {
+        Text(
+            "What the alarm screen looks like. Tap one to see it full screen.",
+            style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(bottom = Space.md),
+        )
+        ScenePicker(
+            selected = draft.scene, pro = state.pro, hour = draft.hour, minute = draft.minute,
+            defaultLabel = "App default", defaultScene = state.defaultScene,
+            onSelect = { id -> update { it.copy(scene = id) } }, onUpgrade = onUpgrade,
+        )
+        val scene = Scene.byId(draft.scene ?: state.defaultScene)
+        val suggested = scene.suggestedTone?.let { Tones.byId(it) }
+        AnimatedVisibility(suggested != null && draft.soundUri == null && Tones.byId(draft.tone).id != suggested.id) {
+            if (suggested == null) return@AnimatedVisibility
+            Row(
+                Modifier.padding(top = Space.md).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Night.copy(alpha = 0.4f))
+                    .clickable { if (!suggested.pro || state.pro) update { it.copy(tone = suggested.id, soundUri = null, soundName = null) } else onUpgrade() }
+                    .padding(Space.md),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(Icons.Rounded.GraphicEq, null, tint = MorningGold, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(Space.sm))
+                Text("${scene.title} pairs well with ${suggested.name}", style = MaterialTheme.typography.bodySmall, color = Paper, modifier = Modifier.weight(1f))
+                Text("Use it", style = MaterialTheme.typography.labelLarge, color = SunriseCoral)
+            }
+        }
+    }
 }
 
 @Composable

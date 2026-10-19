@@ -53,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wakeroo.app.data.RingKind
 import com.wakeroo.app.ui.brand.WakerooMark
+import com.wakeroo.app.ui.scenes.Scene
+import com.wakeroo.app.ui.scenes.SceneBackground
 import com.wakeroo.app.ui.components.SkyBackground
 import com.wakeroo.app.ui.components.press3d
 import com.wakeroo.app.ui.components.rememberDeviceTilt
@@ -76,25 +78,23 @@ import java.time.ZoneId
 
 /** Ringing: one giant action, a breathing sunrise, and nothing else to tap by mistake. */
 @Composable
-fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Unit) {
+fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Unit, scene: Scene = Scene.NightSky, topBar: @Composable () -> Unit = {}, actions: (@Composable () -> Unit)? = null) {
     val tilt by rememberDeviceTilt()
     val reduced = LocalReducedMotion.current
     val pulse by rememberInfiniteTransition(label = "ring").animateFloat(
         initialValue = 1f, targetValue = if (reduced) 1f else 1.045f,
         animationSpec = infiniteRepeatable(tween(1100, easing = FastOutSlowInEasing), RepeatMode.Reverse), label = "pulse",
     )
-    val glow by rememberInfiniteTransition(label = "glow").animateFloat(
-        0.75f, 1f, infiniteRepeatable(tween(4000, easing = FastOutSlowInEasing), RepeatMode.Reverse), label = "glow",
-    )
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) { while (true) { delay(1000); now = System.currentTimeMillis() } }
     val time = Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalTime()
 
-    SkyBackground(Sky.Night, tilt = tilt, sunGlow = glow, sunCenter = Offset(0.5f, 0.36f)) {
+    SceneBackground(scene, tilt = tilt, intensity = if (state.escalated) 1f else 0.4f) {
         Column(
             Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(horizontal = Space.xl),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            topBar()
             Spacer(Modifier.weight(0.9f))
             // The clock floats on its own 3D layer, leaning gently with the phone.
             Column(
@@ -118,6 +118,11 @@ fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Uni
                 EscalationHint(state, now)
             }
             Spacer(Modifier.weight(1f))
+            if (actions != null) {
+                actions()
+                Spacer(Modifier.height(Space.xxl))
+                return@Column
+            }
             Box(
                 Modifier
                     .fillMaxWidth()

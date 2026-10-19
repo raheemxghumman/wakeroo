@@ -19,6 +19,8 @@ data class EditorState(
     val isNew: Boolean = true,
     val draft: Alarm = defaultAlarm(),
     val pro: Boolean = false,
+    /** The app-wide scene an alarm without its own uses. */
+    val defaultScene: String = "night",
 ) {
     val maxMissions: Int get() = if (pro) 5 else 2
     val nextRing: ZonedDateTime? get() = NextTriggerCalculator.next(draft.copy(enabled = true), ZonedDateTime.now())
@@ -43,7 +45,7 @@ class EditorViewModel(private val app: AppContainer, private val alarmId: Long) 
                 first != null -> defaultAlarm().copy(missions = listOf(MissionConfig(first)))
                 else -> defaultAlarm()
             }
-            _state.value = EditorState(loaded = true, isNew = existing == null, draft = existing ?: fresh, pro = settings.pro)
+            _state.value = EditorState(loaded = true, isNew = existing == null, draft = existing ?: fresh, pro = settings.pro, defaultScene = settings.ringScene)
         }
     }
 

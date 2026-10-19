@@ -20,6 +20,7 @@ import com.wakeroo.app.container
 import com.wakeroo.app.data.RingKind
 import com.wakeroo.app.missions.MissionFlow
 import com.wakeroo.app.ui.theme.WakerooTheme
+import com.wakeroo.app.ui.scenes.Scene
 import kotlinx.coroutines.launch
 
 /**
@@ -44,7 +45,8 @@ class RingActivity : ComponentActivity() {
         // Credential storage may still be locked right after a reboot; defaults are safe then.
         val settings = runCatching { kotlinx.coroutines.runBlocking { container.settings.current() } }.getOrNull()
         val showGoodMorning = settings?.showGoodMorning ?: true
-        val timeLimit = container.directBoot.ringPrefs.missionTimeLimit
+        val ringPrefs = container.directBoot.ringPrefs
+        val timeLimit = ringPrefs.missionTimeLimit
 
         setContent {
             WakerooTheme(dark = true) {
@@ -65,6 +67,7 @@ class RingActivity : ComponentActivity() {
                     }
                     phase == RingPhase.Ringing -> RingScreen(
                         state = current,
+                        scene = Scene.byId(current.alarm.scene ?: ringPrefs.ringScene),
                         onStartMission = {
                             RingService.send(this, RingService.ACTION_ENGAGED)
                             phase = RingPhase.Mission
