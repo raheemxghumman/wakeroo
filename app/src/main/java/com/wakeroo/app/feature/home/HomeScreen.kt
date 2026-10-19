@@ -68,7 +68,10 @@ import com.wakeroo.app.BuildConfig
 import com.wakeroo.app.alarm.health.Health
 import com.wakeroo.app.ui.brand.AnimatedWakerooMark
 import com.wakeroo.app.ui.brand.Wordmark
+import com.wakeroo.app.feature.main.BottomBarHeight
+import com.wakeroo.app.feature.main.TabContentBottomPadding
 import com.wakeroo.app.ui.components.EntranceStyle
+import com.wakeroo.app.ui.components.TabHeader
 import com.wakeroo.app.ui.components.SkyBackground
 import com.wakeroo.app.ui.components.entrance
 import com.wakeroo.app.ui.components.icon
@@ -104,7 +107,6 @@ fun HomeScreen(
     onNewAlarm: () -> Unit,
     onEdit: (Long) -> Unit,
     onSettings: () -> Unit,
-    onStats: () -> Unit,
     onHealth: () -> Unit,
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
@@ -121,16 +123,13 @@ fun HomeScreen(
     SkyBackground(Sky.forHour(hour), tilt = tilt, sunGlow = if (state.next != null) 0.35f else 0f, sunCenter = Offset(0.85f, 0.12f), intensity = 0.42f) {
         LazyColumn(
             Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(start = Space.xl, end = Space.xl, bottom = 120.dp),
+            contentPadding = PaddingValues(start = Space.xl, end = Space.xl, bottom = TabContentBottomPadding + 72.dp),
         ) {
             item(key = "header") {
-                Row(Modifier.statusBarsPadding().padding(top = Space.lg, bottom = Space.xl).entrance(0), verticalAlignment = Alignment.CenterVertically) {
-                    Wordmark(fontSize = MaterialTheme.typography.headlineMedium.fontSize)
-                    Spacer(Modifier.weight(1f))
-                    RoundIcon(Icons.Rounded.BarChart, "Stats", onStats)
-                    Spacer(Modifier.width(Space.sm))
-                    RoundIcon(Icons.Rounded.Settings, "Settings", onSettings)
-                }
+                TabHeader(
+                    title = "Alarms", onSettings = onSettings, modifier = Modifier.entrance(0),
+                    lead = { Wordmark(fontSize = MaterialTheme.typography.headlineMedium.fontSize) },
+                )
             }
             item(key = "hero") {
                 if (state.loaded) {
@@ -180,22 +179,12 @@ fun HomeScreen(
                 )
             }
         }
-        NewAlarmButton(Modifier.align(Alignment.BottomEnd).navigationBarsPadding().padding(Space.xl).entrance(5, EntranceStyle.Pop), onNewAlarm)
-        SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(bottom = 96.dp))
+        NewAlarmButton(
+            Modifier.align(Alignment.BottomEnd).navigationBarsPadding()
+                .padding(end = Space.xl, bottom = BottomBarHeight + 28.dp).entrance(5, EntranceStyle.Pop),
+            onNewAlarm,
+        )
     }
-}
-
-@Composable
-private fun RoundIcon(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, onClick: () -> Unit) {
-    Box(
-        Modifier
-            .size(48.dp)
-            .press3d()
-            .clip(CircleShape)
-            .background(Paper.copy(alpha = 0.08f))
-            .clickable(role = Role.Button, onClickLabel = label, onClick = onClick),
-        contentAlignment = Alignment.Center,
-    ) { Icon(icon, label, tint = Paper) }
 }
 
 /** The next alarm, on a glass card that leans with the phone like a real object. */

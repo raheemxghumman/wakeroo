@@ -13,22 +13,22 @@ private val DawnDark = darkColorScheme(
     primary = SunriseCoral,
     onPrimary = Night,
     primaryContainer = Color(0xFF3A2530),
-    onPrimaryContainer = Paper,
+    onPrimaryContainer = PaperFixed,
     secondary = DawnLavender,
     onSecondary = Night,
     tertiary = MorningGold,
     onTertiary = Night,
     background = Night,
-    onBackground = Paper,
+    onBackground = PaperFixed,
     surface = Night,
-    onSurface = Paper,
-    surfaceVariant = NightSurface,
-    onSurfaceVariant = PaperMuted,
-    surfaceContainer = NightSurface,
-    surfaceContainerHigh = NightSurfaceHigh,
-    surfaceContainerHighest = NightSurfaceHigh,
-    surfaceContainerLow = NightSurface,
-    inverseSurface = Paper,
+    onSurface = PaperFixed,
+    surfaceVariant = DarkPalette.surface,
+    onSurfaceVariant = DarkPalette.inkMuted,
+    surfaceContainer = DarkPalette.surface,
+    surfaceContainerHigh = DarkPalette.surfaceHigh,
+    surfaceContainerHighest = DarkPalette.surfaceHigh,
+    surfaceContainerLow = DarkPalette.surface,
+    inverseSurface = PaperFixed,
     inverseOnSurface = Night,
     outline = Color(0xFF3A3F5C),
     error = Alert,
@@ -37,7 +37,7 @@ private val DawnDark = darkColorScheme(
 
 private val DawnLight = lightColorScheme(
     primary = SunriseCoralDeep,
-    onPrimary = Paper,
+    onPrimary = PaperFixed,
     secondary = Color(0xFF6B5BD6),
     tertiary = Color(0xFFB7791F),
     background = Day,
@@ -46,6 +46,10 @@ private val DawnLight = lightColorScheme(
     onSurface = Night,
     surfaceVariant = Color(0xFFF3E9DF),
     onSurfaceVariant = Color(0xFF4A4D5E),
+    surfaceContainer = LightPalette.surface,
+    surfaceContainerHigh = LightPalette.surfaceHigh,
+    surfaceContainerHighest = LightPalette.surfaceHigh,
+    surfaceContainerLow = LightPalette.surface,
     error = Color(0xFFD62F4F),
 )
 
@@ -60,7 +64,7 @@ fun WakerooTheme(dark: Boolean = true, motion: MotionPreference = MotionPreferen
         MotionPreference.Reduced -> true
         MotionPreference.System -> systemAnimationsOff(LocalContext.current)
     }
-    CompositionLocalProvider(LocalReducedMotion provides reduced) {
+    CompositionLocalProvider(LocalReducedMotion provides reduced, LocalPalette provides if (dark) DarkPalette else LightPalette) {
         MaterialTheme(
             colorScheme = if (dark) DawnDark else DawnLight,
             typography = WakerooTypography,

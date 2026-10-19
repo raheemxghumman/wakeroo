@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Alarms (Room) and settings (DataStore) move to a new phone. The direct-boot mirror is
+     rebuilt on first launch, and photo-spot thumbnails are re-taken, so neither is copied. -->
 <data-extraction-rules>
-    <cloud-backup />
-    <device-transfer />
+    <cloud-backup>
+        <exclude domain="device_sharedpref" path="." />
+        <exclude domain="file" path="spots/" />
+        <exclude domain="file" path="scene/" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="device_sharedpref" path="." />
+    </device-transfer>
 </data-extraction-rules>

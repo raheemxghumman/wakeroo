@@ -216,6 +216,7 @@ private fun MissionConfigFields(c: MissionConfig, onChange: (MissionConfig) -> U
             Spacer(Modifier.height(Space.sm))
             DifficultyChips(c.difficulty, names = listOf("Relaxed", "Normal", "Strict")) { onChange(c.copy(difficulty = it)) }
         }
+        else -> Unit
     }
 }
 

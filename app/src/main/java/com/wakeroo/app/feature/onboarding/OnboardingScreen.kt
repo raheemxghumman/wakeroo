@@ -105,7 +105,7 @@ fun OnboardingScreen(onFinished: (createFirstAlarm: Boolean) -> Unit) {
     fun next() {
         if (pager.currentPage + 1 >= pages.size) {
             scope.launch {
-                app.settings.update { it.copy(onboardingDone = true) }
+                app.settings.update { it.copy(onboardingVersion = com.wakeroo.app.data.ONBOARDING_VERSION) }
                 onFinished(true)
             }
         } else scope.launch { pager.animateScrollToPage(pager.currentPage + 1) }

@@ -36,7 +36,11 @@ import com.wakeroo.app.feature.home.HomeViewModel
 import com.wakeroo.app.feature.onboarding.OnboardingScreen
 import com.wakeroo.app.feature.pro.ProScreen
 import com.wakeroo.app.feature.settings.SettingsScreen
-import com.wakeroo.app.feature.stats.StatsScreen
+import com.wakeroo.app.feature.main.MainScaffold
+import com.wakeroo.app.feature.main.MainTab
+import com.wakeroo.app.feature.morning.MorningScreen
+import com.wakeroo.app.feature.sleep.SleepScreen
+import com.wakeroo.app.feature.you.YouScreen
 import com.wakeroo.app.ui.components.LocalEntranceGate
 import com.wakeroo.app.ui.components.LocalNavScope
 import com.wakeroo.app.ui.intro.IntroSequence
@@ -47,13 +51,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object OnboardingRoute
 @Serializable
-data object HomeRoute
+data object MainRoute
 @Serializable
 data class EditorRoute(val id: Long = 0)
 @Serializable
 data class SettingsRoute(val focusHealth: Boolean = false)
-@Serializable
-data object StatsRoute
 @Serializable
 data object ProRoute
 
@@ -71,7 +73,7 @@ private val popExit: AnimatedContentTransitionScope<NavBackStackEntry>.() -> Exi
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean) {
+fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean, initialTab: MainTab = MainTab.Alarms) {
     val nav = rememberNavController()
     val context = LocalContext.current
     val app = context.container
@@ -82,7 +84,7 @@ fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean) {
         when {
             !onboardingDone -> OnboardingRoute
             openHealth -> SettingsRoute(focusHealth = true)
-            else -> HomeRoute
+            else -> MainRoute
         }
     }
 
@@ -107,7 +109,7 @@ fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean) {
                     composable<OnboardingRoute> {
                         CompositionLocalProvider(LocalNavScope provides this) {
                             OnboardingScreen(onFinished = { createFirst ->
-                                nav.navigate(HomeRoute) {
+                                nav.navigate(MainRoute) {
                                     popUpTo(OnboardingRoute) {
                                         inclusive = true
                                     }
@@ -116,17 +118,24 @@ fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean) {
                             })
                         }
                     }
-                    composable<HomeRoute> {
+                    composable<MainRoute> {
                         CompositionLocalProvider(LocalNavScope provides this) {
                             val vm = viewModel { HomeViewModel(app, HealthChecker(context)) }
-                            HomeScreen(
-                                vm = vm, snackbar = snackbar,
-                                onNewAlarm = { nav.navigate(EditorRoute()) },
-                                onEdit = { nav.navigate(EditorRoute(it)) },
-                                onSettings = { nav.navigate(SettingsRoute()) },
-                                onStats = { nav.navigate(StatsRoute) },
-                                onHealth = { nav.navigate(SettingsRoute(focusHealth = true)) },
-                            )
+                            MainScaffold(initialTab, snackbar) { tab, _ ->
+                                val openSettings = { nav.navigate(SettingsRoute()) }
+                                when (tab) {
+                                    MainTab.Alarms -> HomeScreen(
+                                        vm = vm, snackbar = snackbar,
+                                        onNewAlarm = { nav.navigate(EditorRoute()) },
+                                        onEdit = { nav.navigate(EditorRoute(it)) },
+                                        onSettings = openSettings,
+                                        onHealth = { nav.navigate(SettingsRoute(focusHealth = true)) },
+                                    )
+                                    MainTab.Sleep -> SleepScreen(onSettings = openSettings)
+                                    MainTab.Morning -> MorningScreen(onSettings = openSettings)
+                                    MainTab.You -> YouScreen(onSettings = openSettings, onPro = { nav.navigate(ProRoute) })
+                                }
+                            }
                         }
                     }
                     composable<EditorRoute> { entry ->
@@ -148,16 +157,9 @@ fun WakerooNavHost(onboardingDone: Boolean, openHealth: Boolean) {
                         CompositionLocalProvider(LocalNavScope provides this) {
                             SettingsScreen(
                                 focusHealth = entry.toRoute<SettingsRoute>().focusHealth,
-                                onBack = { if (!nav.popBackStack()) nav.navigate(HomeRoute) },
+                                onBack = { if (!nav.popBackStack()) nav.navigate(MainRoute) },
                                 onPro = { nav.navigate(ProRoute) },
                             )
-                        }
-                    }
-                    composable<StatsRoute> {
-                        CompositionLocalProvider(LocalNavScope provides this) {
-                            StatsScreen(
-                                onBack = { nav.popBackStack() },
-                                onPro = { nav.navigate(ProRoute) })
                         }
                     }
                     composable<ProRoute> {

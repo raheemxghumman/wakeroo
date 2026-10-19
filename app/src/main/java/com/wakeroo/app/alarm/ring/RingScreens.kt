@@ -187,8 +187,9 @@ fun WakeCheckScreen(state: RingState, onConfirm: () -> Unit) {
                 textAlign = TextAlign.Center, modifier = Modifier.padding(top = Space.sm, bottom = Space.xxl),
             )
             Box(contentAlignment = Alignment.Center, modifier = Modifier.size(260.dp)) {
+                val track = Paper.copy(alpha = 0.18f)
                 Canvas(Modifier.fillMaxSize()) {
-                    drawArc(Paper.copy(alpha = 0.18f), 0f, 360f, false, style = Stroke(14.dp.toPx()))
+                    drawArc(track, 0f, 360f, false, style = Stroke(14.dp.toPx()))
                     drawArc(MorningGold, -90f, 360f * remaining, false, style = Stroke(14.dp.toPx(), cap = StrokeCap.Round))
                 }
                 Box(

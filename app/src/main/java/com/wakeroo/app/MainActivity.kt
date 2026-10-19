@@ -12,7 +12,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.wakeroo.app.billing.Ads
+import com.wakeroo.app.data.AppTheme
 import com.wakeroo.app.data.Settings
+import com.wakeroo.app.feature.main.MainTab
+import androidx.compose.foundation.isSystemInDarkTheme
 import com.wakeroo.app.ui.navigation.WakerooNavHost
 import com.wakeroo.app.ui.theme.WakerooTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,12 +40,23 @@ class MainActivity : ComponentActivity() {
             container.billing.start()
         }
         val openHealth = intent.getBooleanExtra(EXTRA_OPEN_HEALTH, false)
+        val initialTab = intent.getStringExtra(EXTRA_TAB)?.let { runCatching { MainTab.valueOf(it) }.getOrNull() } ?: MainTab.Alarms
 
         setContent {
             val current by settings.collectAsStateWithLifecycle()
             val s = current ?: return@setContent
-            WakerooTheme(motion = s.motion) {
-                WakerooNavHost(onboardingDone = s.onboardingDone, openHealth = openHealth)
+            val dark = when (s.appTheme) {
+                AppTheme.Dark -> true
+                AppTheme.Light -> false
+                AppTheme.System -> isSystemInDarkTheme()
+            }
+            LaunchedEffect(dark) {
+                // Status and navigation bar icons follow the app theme.
+                val style = if (dark) SystemBarStyle.dark(Color.TRANSPARENT) else SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+                enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
+            }
+            WakerooTheme(dark = dark, motion = s.motion) {
+                WakerooNavHost(onboardingDone = s.onboardingDone, openHealth = openHealth, initialTab = initialTab)
             }
             if (!s.pro && s.onboardingDone) LaunchedEffect(Unit) { Ads.start(this@MainActivity) }
         }
@@ -50,5 +64,6 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         const val EXTRA_OPEN_HEALTH = "open_health"
+        const val EXTRA_TAB = "tab"
     }
 }

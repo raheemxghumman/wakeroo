@@ -381,6 +381,7 @@ fun MissionConfig.summary(): String = when (type) {
     MissionType.Shake -> "$count shakes"
     MissionType.Scan -> codeLabel?.let { "Code on your $it" } ?: if (codeValue == null) "Any code" else "Registered code"
     MissionType.Photo -> if (photoHash == null) "Spot not set" else "Your photo spot · ${difficultyName(difficulty)} match"
+    else -> ""
 }
 
 fun difficultyName(d: Int) = when (d) { 1 -> "Easy"; 2 -> "Medium"; else -> "Hard" }

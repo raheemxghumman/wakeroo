@@ -168,6 +168,7 @@ fun MissionFlow(state: RingState, onActivity: () -> Unit, onDone: () -> Unit, on
                         if (failures >= FALLBACK_AFTER_FAILS) offerBackup = true
                     }, onDone = ::advance)
                     MissionType.Photo -> PhotoMission(current, onActivity, ::advance)
+                    else -> MathMission(BACKUP_MISSION, onActivity, onProgress, ::advance)
                 }
             }
             AnimatedVisibility(offerBackup, enter = slideInVertically { it } + fadeIn(), exit = slideOutVertically { it } + fadeOut()) {
@@ -245,8 +246,9 @@ private fun EmergencyExit(onCancel: () -> Unit, onEscape: () -> Unit) {
                         },
                     contentAlignment = Alignment.Center,
                 ) {
+                    val track = Paper.copy(alpha = 0.15f)
                     Canvas(Modifier.fillMaxSize()) {
-                        drawArc(Paper.copy(alpha = 0.15f), 0f, 360f, false, style = Stroke(12.dp.toPx()))
+                        drawArc(track, 0f, 360f, false, style = Stroke(12.dp.toPx()))
                         drawArc(Alert, -90f, 360f * hold.value, false, style = Stroke(12.dp.toPx(), cap = StrokeCap.Round))
                     }
                     Box(Modifier.size(170.dp).clip(CircleShape).background(NightSurface), contentAlignment = Alignment.Center) {
