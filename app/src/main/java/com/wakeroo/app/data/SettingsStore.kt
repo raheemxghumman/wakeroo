@@ -21,6 +21,8 @@ data class Settings(
     val lastTestAlarmAt: Long = 0L,
     val lastTestAlarmPassed: Boolean = false,
     val use24Hour: Boolean? = null,
+    /** Mission chosen during onboarding, used for the first alarm. */
+    val firstMission: String? = null,
 )
 
 private val Context.dataStore by preferencesDataStore("settings")
@@ -40,6 +42,7 @@ class SettingsStore(private val context: Context) {
             prefs[TEST_AT] = next.lastTestAlarmAt
             prefs[TEST_PASSED] = next.lastTestAlarmPassed
             if (next.use24Hour == null) prefs.remove(USE_24H) else prefs[USE_24H] = next.use24Hour
+            if (next.firstMission == null) prefs.remove(FIRST_MISSION) else prefs[FIRST_MISSION] = next.firstMission
         }
     }
 
@@ -51,6 +54,7 @@ class SettingsStore(private val context: Context) {
         lastTestAlarmAt = this[TEST_AT] ?: 0L,
         lastTestAlarmPassed = this[TEST_PASSED] ?: false,
         use24Hour = this[USE_24H],
+        firstMission = this[FIRST_MISSION],
     )
 
     private companion object {
@@ -61,5 +65,6 @@ class SettingsStore(private val context: Context) {
         val TEST_AT = longPreferencesKey("test_at")
         val TEST_PASSED = booleanPreferencesKey("test_passed")
         val USE_24H = booleanPreferencesKey("use_24h")
+        val FIRST_MISSION = stringPreferencesKey("first_mission")
     }
 }

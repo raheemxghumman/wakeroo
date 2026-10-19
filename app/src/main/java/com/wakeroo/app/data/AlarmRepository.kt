@@ -32,6 +32,8 @@ class AlarmRepository(
 
     suspend fun get(id: Long): Alarm? = db.value.alarms().byId(id)?.toModel()
 
+    suspend fun latest(): Alarm? = db.value.alarms().all().maxByOrNull { it.createdAt }?.toModel()
+
     suspend fun save(alarm: Alarm): Long = lock.withLock {
         val id = db.value.alarms().upsert(alarm.toEntity()).let { if (it == -1L) alarm.id else it }
         syncLocked()

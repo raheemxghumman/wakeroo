@@ -34,6 +34,18 @@
         android:theme="@style/Theme.Wakeroo"
         tools:targetApi="36">
 
+        <!-- AdMob: Google's sample app ID until the real one exists. The SDK starts its work
+             off the main thread so it can never delay the alarm screen. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"
+            android:value="true" />
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
+            android:value="true" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

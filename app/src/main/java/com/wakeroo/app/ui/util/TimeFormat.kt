@@ -1,7 +1,10 @@
 package com.wakeroo.app.ui.util
 
+import com.wakeroo.app.data.model.Alarm
+import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 /** 12-hour clock digits without the meridiem, e.g. "6:30". */
 fun LocalTime.formatClock(use24h: Boolean = false): String =
@@ -22,4 +25,17 @@ fun Duration.formatUntil(): String {
         total % 60 == 0L -> "${total / 60} h"
         else -> "${total / 60} h ${total % 60} min"
     }
+}
+
+private val WEEKDAYS = setOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)
+private val WEEKEND = setOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY)
+
+/** "Weekdays", "Every day", "Mon, Wed, Fri", "Once", "Fri 24 Dec". */
+fun Alarm.repeatSummary(): String = when {
+    date != null -> DateTimeFormatter.ofPattern("EEE d MMM").format(date)
+    days.isEmpty() -> "Once"
+    days.size == 7 -> "Every day"
+    days == WEEKDAYS -> "Weekdays"
+    days == WEEKEND -> "Weekends"
+    else -> days.sorted().joinToString(", ") { it.name.take(3).lowercase().replaceFirstChar { c -> c.uppercase() } }
 }

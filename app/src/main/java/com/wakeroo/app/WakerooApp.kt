@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.wakeroo.app.alarm.AlarmScheduler
 import com.wakeroo.app.alarm.Notifications
+import com.wakeroo.app.billing.ProBilling
 import com.wakeroo.app.data.AlarmRepository
 import com.wakeroo.app.data.DirectBootStore
 import com.wakeroo.app.data.SettingsStore
@@ -23,6 +24,7 @@ class AppContainer(context: Context) {
     val settings by lazy { SettingsStore(context) }
     val repository = AlarmRepository(context, database, directBoot, scheduler)
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    val billing by lazy { ProBilling(context, settings, appScope) }
 }
 
 class WakerooApp : Application() {

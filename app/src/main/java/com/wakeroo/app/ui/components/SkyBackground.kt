@@ -39,12 +39,14 @@ fun SkyBackground(
     tilt: Offset = Offset.Zero,
     sunGlow: Float = 0f,
     sunCenter: Offset = Offset(0.5f, 0.42f),
+    /** 1 = the full sky (immersive screens). Lower values tint a deep night base, keeping text readable. */
+    intensity: Float = 1f,
     content: @Composable BoxScope.() -> Unit = {},
 ) {
     val top by animateColorAsState(sky.top, WakerooMotion.calm(), label = "skyTop")
     val bottom by animateColorAsState(sky.bottom, WakerooMotion.calm(), label = "skyBottom")
     val starAlpha by androidx.compose.animation.core.animateFloatAsState(
-        if (sky == Sky.Night || sky == Sky.Dawn) 1f else 0f, WakerooMotion.calm(), label = "stars",
+        if (sky == Sky.Night || sky == Sky.Dawn || intensity < 0.6f) 1f else 0f, WakerooMotion.calm(), label = "stars",
     )
     val reduced = LocalReducedMotion.current
     val time by if (reduced) remember { androidx.compose.runtime.mutableFloatStateOf(0f) } else
@@ -58,7 +60,13 @@ fun SkyBackground(
 
     Box(modifier.fillMaxSize()) {
         Canvas(Modifier.fillMaxSize()) {
-            drawRect(Brush.verticalGradient(listOf(top, bottom)))
+            if (intensity < 1f) {
+                // Content screens: deep night base, with the hour's colours glowing in from the top.
+                drawRect(com.wakeroo.app.ui.theme.Night)
+                drawRect(Brush.verticalGradient(0f to top.copy(alpha = intensity), 0.5f to bottom.copy(alpha = intensity * 0.45f), 1f to Color.Transparent))
+            } else {
+                drawRect(Brush.verticalGradient(listOf(top, bottom)))
+            }
             if (starAlpha > 0.01f) drawStars(stars, time, starAlpha, tilt)
             if (sunGlow > 0.01f) {
                 val c = Offset(size.width * sunCenter.x - tilt.x * 18f, size.height * sunCenter.y - tilt.y * 18f)

@@ -72,6 +72,11 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.mlkit.barcode)
     implementation(libs.mlkit.labeling)
+    implementation(libs.billing.ktx)
+    implementation(libs.play.services.ads)
+    implementation(libs.ump)
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
