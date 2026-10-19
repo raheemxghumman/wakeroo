@@ -1,9 +1,11 @@
 package com.wakeroo.app.missions
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -39,7 +41,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,37 +82,70 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private val BACKUP_MISSION = MissionConfig(MissionType.Math, difficulty = 3, count = 5)
+/** Stands in for a mission that isn't set up yet ("I'll set it up tonight"). */
+private val SETUP_FALLBACK = MissionConfig(MissionType.Math)
 private const val FALLBACK_AFTER_MS = 60_000L
 private const val FALLBACK_AFTER_FAILS = 3
 
-/** Runs an alarm's missions in order, then calls [onDone]. */
+/** Missions you walk somewhere for: they can take a while and always offer the backup. */
+private val AWAY_MISSIONS = setOf(MissionType.Scan, MissionType.Photo, MissionType.Hunt, MissionType.Nfc, MissionType.Steps)
+
+/** Missions whose progress resets when you stop for longer than the time limit. */
+private val RESETTABLE = setOf(MissionType.Math, MissionType.Typing, MissionType.Shake, MissionType.Memory, MissionType.Plan)
+
+/** Swaps any mission that can't work on this phone right now for one that can. */
+fun runnableMission(context: Context, m: MissionConfig): MissionConfig = when {
+    !m.isReady -> SETUP_FALLBACK
+    m.type.usesCamera && !context.hasCameraPermission() -> BACKUP_MISSION
+    m.type == MissionType.Photo && !UserManagerCompat.isUserUnlocked(context) -> BACKUP_MISSION
+    m.type == MissionType.Steps && (!context.hasMotionPermission() || !context.canCountSteps()) -> BACKUP_MISSION
+    m.type == MissionType.Nfc && context.nfcState() == NfcState.Missing && !nfcSimulated -> BACKUP_MISSION
+    else -> m
+}
+
+/**
+ * Runs an alarm's missions in order, then calls [onDone]. If the user stops touching the
+ * mission for [timeLimitSeconds], [onIdle] brings the alarm back to full volume and the
+ * current mission starts over.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun MissionFlow(state: RingState, onActivity: () -> Unit, onDone: () -> Unit, onEscape: () -> Unit) {
+fun MissionFlow(
+    state: RingState,
+    onActivity: () -> Unit,
+    onDone: () -> Unit,
+    onEscape: () -> Unit,
+    timeLimitSeconds: Int = 20,
+    onIdle: () -> Unit = {},
+    onPlan: (String) -> Unit = {},
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val missions = remember {
         mutableStateListOf<MissionConfig>().apply {
-            addAll(
-                state.alarm.missions.ifEmpty { listOf(MissionConfig(MissionType.Math)) }.map { m ->
-                    // A mission that can't work right now is swapped for the backup up front.
-                    val cameraless = m.type in setOf(MissionType.Scan, MissionType.Photo) && !context.hasCameraPermission()
-                    val photoLocked = m.type == MissionType.Photo && (m.photoHash == null || !UserManagerCompat.isUserUnlocked(context))
-                    if (cameraless || photoLocked) BACKUP_MISSION else m
-                },
-            )
+            addAll(state.alarm.missions.ifEmpty { listOf(MissionConfig(MissionType.Math)) }.map { runnableMission(context, it) })
         }
     }
     var index by remember { mutableIntStateOf(0) }
     var shown by remember { mutableIntStateOf(0) }
     var missionProgress by remember { mutableFloatStateOf(0f) }
     var failures by remember { mutableIntStateOf(0) }
-    var startedAt by remember { mutableStateOf(System.currentTimeMillis()) }
     var showEmergency by remember { mutableStateOf(false) }
     var offerBackup by remember { mutableStateOf(false) }
+    var restarts by remember { mutableIntStateOf(0) }
+    var lastActivity by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    var idle by remember { mutableStateOf(false) }
+    var idleReset by remember { mutableStateOf(false) }
     val flip = remember { Animatable(0f) }
+    val nudge = remember { Animatable(0f) }
 
     val overall by animateFloatAsState((index + missionProgress) / missions.size, label = "overall")
+
+    val activity: () -> Unit = {
+        lastActivity = System.currentTimeMillis()
+        idle = false
+        onActivity()
+    }
 
     // A 3D card turn between missions: the old one swings away, the next swings in.
     fun advance() {
@@ -116,17 +153,35 @@ fun MissionFlow(state: RingState, onActivity: () -> Unit, onDone: () -> Unit, on
         scope.launch {
             flip.animateTo(90f, tween(220))
             index++; shown = index; missionProgress = 0f; failures = 0; offerBackup = false
-            startedAt = System.currentTimeMillis()
+            lastActivity = System.currentTimeMillis()
             flip.snapTo(-90f)
             flip.animateTo(0f, tween(260))
         }
     }
 
     val current = missions[shown]
-    LaunchedEffect(shown) {
-        if (current.type in setOf(MissionType.Scan, MissionType.Photo)) {
+    LaunchedEffect(shown, current.type) {
+        if (current.type in AWAY_MISSIONS) {
             delay(FALLBACK_AFTER_MS)
             offerBackup = true
+        }
+    }
+
+    // The time limit: lying there with the mission open doesn't keep the alarm quiet.
+    LaunchedEffect(timeLimitSeconds) {
+        if (timeLimitSeconds <= 0) return@LaunchedEffect
+        while (true) {
+            delay(500)
+            if (!idle && System.currentTimeMillis() - lastActivity > timeLimitSeconds * 1000L) {
+                idle = true
+                onIdle()
+                idleReset = missions[shown].type in RESETTABLE && missionProgress > 0f
+                if (idleReset) {
+                    missionProgress = 0f
+                    restarts++
+                }
+                launch { nudge.snapTo(0f); nudge.animateTo(0f, spring(0.25f, 700f), initialVelocity = 2200f) }
+            }
         }
     }
 
@@ -152,6 +207,23 @@ fun MissionFlow(state: RingState, onActivity: () -> Unit, onDone: () -> Unit, on
                 color = MorningGold,
                 trackColor = Paper.copy(alpha = 0.12f),
             )
+            AnimatedVisibility(idle, enter = slideInVertically { -it } + fadeIn(), exit = slideOutVertically { -it } + fadeOut()) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = Space.md)
+                        .graphicsLayer { translationX = nudge.value * 0.2f }
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(SunriseCoral)
+                        .padding(horizontal = Space.lg, vertical = Space.md),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        if (idleReset) "Too quiet! Full volume's back. Start again" else "Too quiet! Full volume's back. Keep going",
+                        style = MaterialTheme.typography.labelLarge, color = Night,
+                    )
+                }
+            }
             Box(
                 Modifier
                     .weight(1f)
@@ -159,16 +231,24 @@ fun MissionFlow(state: RingState, onActivity: () -> Unit, onDone: () -> Unit, on
                     .graphicsLayer { rotationY = flip.value; cameraDistance = 16f * density },
             ) {
                 val onProgress: (Float) -> Unit = { missionProgress = it }
-                when (current.type) {
-                    MissionType.Math -> MathMission(current, onActivity, onProgress, ::advance)
-                    MissionType.Typing -> TypingMission(current, onActivity, onProgress, ::advance)
-                    MissionType.Shake -> ShakeMission(current, onActivity, onProgress, ::advance)
-                    MissionType.Scan -> ScanMission(current, onActivity, onFailedAttempt = {
-                        failures++
-                        if (failures >= FALLBACK_AFTER_FAILS) offerBackup = true
-                    }, onDone = ::advance)
-                    MissionType.Photo -> PhotoMission(current, onActivity, ::advance)
-                    else -> MathMission(BACKUP_MISSION, onActivity, onProgress, ::advance)
+                val onFailed: () -> Unit = {
+                    failures++
+                    if (failures >= FALLBACK_AFTER_FAILS) offerBackup = true
+                }
+                // A new key restarts the mission from scratch after the time limit.
+                key(shown, restarts, current) {
+                    when (current.type) {
+                        MissionType.Math -> MathMission(current, activity, onProgress, ::advance)
+                        MissionType.Typing -> TypingMission(current, activity, onProgress, ::advance)
+                        MissionType.Shake -> ShakeMission(current, activity, onProgress, ::advance)
+                        MissionType.Scan -> ScanMission(current, activity, onFailedAttempt = onFailed, onDone = ::advance)
+                        MissionType.Photo -> PhotoMission(current, activity, ::advance)
+                        MissionType.Steps -> StepsMission(current, activity, onProgress, ::advance)
+                        MissionType.Memory -> MemoryMission(current, activity, onProgress, ::advance)
+                        MissionType.Nfc -> NfcMission(current, activity, onFailedAttempt = onFailed, onDone = ::advance)
+                        MissionType.Plan -> PlanMission(current, activity, onProgress, ::advance, onPlan)
+                        MissionType.Hunt -> HuntMission(current, activity, onProgress, ::advance)
+                    }
                 }
             }
             AnimatedVisibility(offerBackup, enter = slideInVertically { it } + fadeIn(), exit = slideOutVertically { it } + fadeOut()) {
@@ -183,6 +263,7 @@ fun MissionFlow(state: RingState, onActivity: () -> Unit, onDone: () -> Unit, on
                         .clickable {
                             missions[shown] = BACKUP_MISSION
                             offerBackup = false
+                            missionProgress = 0f
                         },
                     contentAlignment = Alignment.Center,
                 ) {
@@ -191,16 +272,22 @@ fun MissionFlow(state: RingState, onActivity: () -> Unit, onDone: () -> Unit, on
             }
             Spacer(Modifier.height(Space.lg))
         }
-        if (showEmergency) EmergencyExit(onCancel = { showEmergency = false }, onEscape = onEscape)
+        if (showEmergency) {
+            EmergencyExit(
+                holdSeconds = if (state.alarm.hardMode) 60 else 15,
+                onCancel = { showEmergency = false },
+                onEscape = onEscape,
+            )
+        }
     }
 }
 
 /**
- * The humane way out for real emergencies: hold for 15 seconds while the alarm keeps ringing,
+ * The humane way out for real emergencies: hold for 15 seconds (60 in Harder Mode) while the alarm keeps ringing,
  * then type "i am awake". It works, but it's never quicker than the mission.
  */
 @Composable
-private fun EmergencyExit(onCancel: () -> Unit, onEscape: () -> Unit) {
+private fun EmergencyExit(holdSeconds: Int, onCancel: () -> Unit, onEscape: () -> Unit) {
     val haptics = LocalHapticFeedback.current
     val scope = rememberCoroutineScope()
     val hold = remember { Animatable(0f) }
@@ -233,7 +320,7 @@ private fun EmergencyExit(onCancel: () -> Unit, onEscape: () -> Unit) {
                             awaitEachGesture {
                                 awaitFirstDown()
                                 val job = scope.launch {
-                                    hold.animateTo(1f, tween(((1 - hold.value) * 15_000).toInt(), easing = LinearEasing))
+                                    hold.animateTo(1f, tween(((1 - hold.value) * holdSeconds * 1000).toInt(), easing = LinearEasing))
                                     haptics.performHapticFeedback(HapticFeedbackType.Confirm)
                                     unlocked = true
                                 }
@@ -253,7 +340,7 @@ private fun EmergencyExit(onCancel: () -> Unit, onEscape: () -> Unit) {
                     }
                     Box(Modifier.size(170.dp).clip(CircleShape).background(NightSurface), contentAlignment = Alignment.Center) {
                         Text(
-                            if (hold.value > 0f) "${(15 - hold.value * 15).toInt() + 1}s" else "Hold",
+                            if (hold.value > 0f) "${(holdSeconds - hold.value * holdSeconds).toInt() + 1}s" else "Hold",
                             style = MaterialTheme.typography.displaySmall, color = Paper,
                         )
                     }

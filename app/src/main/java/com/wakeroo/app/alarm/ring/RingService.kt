@@ -48,7 +48,8 @@ class RingService : Service() {
         when (intent?.action) {
             ACTION_START -> start(intent)
             ACTION_SNOOZE -> snooze()
-            ACTION_SOLVING -> player.duckWhileSolving()
+            ACTION_SOLVING -> player.duckWhileSolving(intent.getLongExtra(EXTRA_HOLD_MS, 20_000L))
+            ACTION_IDLE -> player.unduck()
             ACTION_COMPLETE -> finish(RingOutcome.Dismissed, intent.getIntExtra(EXTRA_SECONDS, -1).takeIf { it >= 0 })
             ACTION_ESCAPE -> finish(RingOutcome.Escaped, secondsToWake = null)
             ACTION_WAKE_CHECK_PASSED -> passWakeCheck()
@@ -225,7 +226,9 @@ class RingService : Service() {
         const val ACTION_WAKE_CHECK_PASSED = "com.wakeroo.app.ring.WAKE_CHECK_PASSED"
         const val ACTION_SCREEN_HIDDEN = "com.wakeroo.app.ring.SCREEN_HIDDEN"
         const val ACTION_SCREEN_SHOWN = "com.wakeroo.app.ring.SCREEN_SHOWN"
+        const val ACTION_IDLE = "com.wakeroo.app.ring.IDLE"
         const val EXTRA_SECONDS = "seconds"
+        const val EXTRA_HOLD_MS = "hold_ms"
 
         const val WAKE_CHECK_WINDOW_MS = 60_000L
         private const val MAX_RING_MS = 60 * 60_000L

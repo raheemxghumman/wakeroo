@@ -42,7 +42,17 @@ import com.wakeroo.app.camera.BarcodeReader
 import com.wakeroo.app.camera.SceneReader
 import com.wakeroo.app.camera.saveThumbnail
 import com.wakeroo.app.data.model.MissionType
+import com.wakeroo.app.missions.NfcListener
+import com.wakeroo.app.missions.NfcState
+import com.wakeroo.app.missions.NfcWaves
 import com.wakeroo.app.missions.Viewfinder
+import com.wakeroo.app.missions.nfcSimulated
+import com.wakeroo.app.missions.nfcState
+import com.wakeroo.app.ui.theme.MorningGold
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import android.content.Intent
+import android.provider.Settings
+import androidx.compose.foundation.layout.padding
 import com.wakeroo.app.ui.components.Chip
 import com.wakeroo.app.ui.components.ChipRow
 import com.wakeroo.app.ui.components.SkyBackground
@@ -62,19 +72,24 @@ fun SpotSetupDialog(
     onDismiss: () -> Unit,
     onCode: (value: String, label: String) -> Unit,
     onPhoto: (hash: Long, labels: List<String>, path: String) -> Unit,
+    onNfc: (tagId: String, label: String) -> Unit = { _, _ -> },
 ) {
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
         SkyBackground(Sky.Night) {
             Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(Space.xl)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        if (type == MissionType.Scan) "Register your code" else "Save your photo spot",
+                        when (type) { MissionType.Scan -> "Register your code"; MissionType.Nfc -> "Register your sticker"; else -> "Save your photo spot" },
                         style = MaterialTheme.typography.headlineSmall, color = Paper, modifier = Modifier.weight(1f),
                     )
                     Icon(Icons.Rounded.Close, "Close", tint = Paper, modifier = Modifier.clip(CircleShape).clickable(onClick = onDismiss).padding(Space.sm))
                 }
                 Spacer(Modifier.height(Space.lg))
-                if (type == MissionType.Scan) CodeSetup(onCode) else PhotoSetup(onPhoto)
+                when (type) {
+                    MissionType.Scan -> CodeSetup(onCode)
+                    MissionType.Nfc -> NfcSetup(onNfc)
+                    else -> PhotoSetup(onPhoto)
+                }
             }
         }
     }
@@ -148,5 +163,55 @@ private fun PhotoSetup(onPhoto: (Long, List<String>, String) -> Unit) {
             }
         }
         PillButton(if (busy) "Saving…" else "Use this view", Modifier.fillMaxWidth(), enabled = !busy) { capture = true }
+    }
+}
+
+private val STICKER_PLACES = listOf("bathroom mirror", "kettle", "coffee machine", "front door", "fridge", "desk", "toothbrush")
+
+@Composable
+private fun NfcSetup(onNfc: (String, String) -> Unit) {
+    val context = LocalContext.current
+    val haptics = LocalHapticFeedback.current
+    var found by remember { mutableStateOf<String?>(null) }
+    var state by remember { mutableStateOf(context.nfcState()) }
+    LifecycleResumeEffect(Unit) {
+        state = context.nfcState()
+        onPauseOrDispose { }
+    }
+    NfcListener { id ->
+        if (found == null) {
+            haptics.performHapticFeedback(HapticFeedbackType.Confirm)
+            found = id
+        }
+    }
+    AnimatedContent(found, transitionSpec = { (slideInVertically { it / 3 } + fadeIn()) togetherWith fadeOut() }, label = "nfc") { value ->
+        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            if (value == null) {
+                Text(
+                    "Hold the top of your phone against the sticker. Put it somewhere you can't reach from bed.",
+                    style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center,
+                )
+                Spacer(Modifier.height(Space.xl))
+                NfcWaves(
+                    matched = false,
+                    onSimulate = if (nfcSimulated && state != NfcState.Ready) { { found = "SIM" + System.currentTimeMillis() % 10000 } } else null,
+                )
+                Spacer(Modifier.height(Space.xl))
+                if (state == NfcState.Off) {
+                    Text("NFC is switched off", style = MaterialTheme.typography.titleMedium, color = MorningGold)
+                    Spacer(Modifier.height(Space.sm))
+                    PillButton("Turn on NFC", Modifier.fillMaxWidth()) {
+                        runCatching { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                    }
+                } else if (nfcSimulated && state != NfcState.Ready) {
+                    Text("No NFC here. Tap the sticker to simulate it (debug build).", style = MaterialTheme.typography.bodySmall, color = PaperMuted)
+                }
+            } else {
+                NfcWaves(matched = true)
+                Text("Sticker locked in", style = MaterialTheme.typography.headlineSmall, color = Paper, modifier = Modifier.padding(top = Space.lg))
+                Text("Where is it?", style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.padding(vertical = Space.lg))
+                ChipRow { STICKER_PLACES.forEach { place -> Chip(place, false, { onNfc(value, place) }) } }
+            }
+        }
     }
 }

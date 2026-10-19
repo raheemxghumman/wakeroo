@@ -20,6 +20,7 @@ import com.wakeroo.app.container
 import com.wakeroo.app.data.RingKind
 import com.wakeroo.app.missions.MissionFlow
 import com.wakeroo.app.ui.theme.WakerooTheme
+import kotlinx.coroutines.launch
 
 /**
  * The alarm screen. Shows over the lock screen, turns the screen on, swallows Back and the
@@ -40,7 +41,10 @@ class RingActivity : ComponentActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         enableEdgeToEdge(SystemBarStyle.dark(Color.TRANSPARENT), SystemBarStyle.dark(Color.TRANSPARENT))
 
-        val showGoodMorning = runCatching { kotlinx.coroutines.runBlocking { container.settings.current().showGoodMorning } }.getOrDefault(true)
+        // Credential storage may still be locked right after a reboot; defaults are safe then.
+        val settings = runCatching { kotlinx.coroutines.runBlocking { container.settings.current() } }.getOrNull()
+        val showGoodMorning = settings?.showGoodMorning ?: true
+        val timeLimit = settings?.missionTimeLimit ?: 20
 
         setContent {
             WakerooTheme(dark = true) {
@@ -66,7 +70,17 @@ class RingActivity : ComponentActivity() {
                     )
                     else -> MissionFlow(
                         state = current,
-                        onActivity = { RingService.send(this, RingService.ACTION_SOLVING) },
+                        onActivity = {
+                            RingService.send(this, RingService.ACTION_SOLVING) { putExtra(RingService.EXTRA_HOLD_MS, (if (timeLimit > 0) timeLimit else 20) * 1000L) }
+                        },
+                        timeLimitSeconds = timeLimit,
+                        onIdle = { RingService.send(this, RingService.ACTION_IDLE) },
+                        onPlan = { plan ->
+                            val today = java.time.LocalDate.now().toString()
+                            container.appScope.launch {
+                                runCatching { container.settings.update { it.copy(plan = plan, planDate = today) } }
+                            }
+                        },
                         onDone = {
                             val seconds = ((System.currentTimeMillis() - current.firedAt) / 1000).toInt()
                             RingService.send(this, RingService.ACTION_COMPLETE) { putExtra(RingService.EXTRA_SECONDS, seconds) }

@@ -18,8 +18,19 @@
     <!-- QR and photo missions; used only while the alarm screen is visible. -->
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- Steps mission: requested only when the user picks it. -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <!-- NFC sticker mission. Normal permission, no prompt; phones without NFC can still install. -->
+    <uses-permission android:name="android.permission.NFC" />
+
     <uses-feature
         android:name="android.hardware.camera.any"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.sensor.stepdetector"
         android:required="false" />
 
     <application

@@ -140,3 +140,22 @@ fun saveThumbnail(context: Context, bitmap: Bitmap, name: String): String {
     file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.JPEG, 82, it) }
     return file.absolutePath
 }
+
+/** On-device object labels with their confidence, for the item-hunt mission. */
+class LabelReader {
+    private val labeler = ImageLabeling.getClient(ImageLabelerOptions.Builder().setConfidenceThreshold(0.35f).build())
+
+    @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
+    suspend fun read(image: ImageProxy): List<Pair<String, Float>> {
+        val media = image.image ?: return emptyList<Pair<String, Float>>().also { image.close() }
+        val labels = suspendCancellableCoroutine { cont ->
+            labeler.process(InputImage.fromMediaImage(media, image.imageInfo.rotationDegrees))
+                .addOnSuccessListener { list -> cont.resume(list.map { it.text to it.confidence }) }
+                .addOnFailureListener { cont.resume(emptyList()) }
+        }
+        image.close()
+        return labels
+    }
+
+    fun close() = labeler.close()
+}

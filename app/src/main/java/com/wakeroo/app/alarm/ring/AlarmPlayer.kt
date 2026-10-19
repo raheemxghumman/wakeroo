@@ -60,9 +60,15 @@ class AlarmPlayer(private val context: Context) {
         }
     }
 
-    /** Drop to 20% while the user works on a mission; full volume returns after 15 s idle. */
-    fun duckWhileSolving() {
-        duckUntil = System.currentTimeMillis() + 15_000
+    /** Drop to 20% while the user works on a mission; full volume returns after [holdMs] idle. */
+    fun duckWhileSolving(holdMs: Long = 20_000) {
+        duckUntil = System.currentTimeMillis() + holdMs
+        applyVolume()
+    }
+
+    /** The mission time limit ran out: back to full volume straight away. */
+    fun unduck() {
+        duckUntil = 0L
         applyVolume()
     }
 

@@ -41,3 +41,14 @@ val MissionType.blurb: String
         MissionType.Plan -> "Type the first thing you'll do today."
         MissionType.Hunt -> "Find an everyday object, like a cup."
     }
+
+/** A few words for the small mission tiles. */
+val MissionType.tagline: String
+    get() = when (this) {
+        MissionType.Math -> "Quick sums"
+        MissionType.Typing -> "Type a phrase"
+        MissionType.Shake -> "Shake to fill"
+        MissionType.Memory -> "Remember the tiles"
+        MissionType.Plan -> "Write today's plan"
+        else -> "Gets you out of bed"
+    }

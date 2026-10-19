@@ -381,8 +381,12 @@ fun MissionConfig.summary(): String = when (type) {
     MissionType.Shake -> "$count shakes"
     MissionType.Scan -> codeLabel?.let { "Code on your $it" } ?: if (codeValue == null) "Any code" else "Registered code"
     MissionType.Photo -> if (photoHash == null) "Spot not set" else "Your photo spot · ${difficultyName(difficulty)} match"
-    else -> ""
-}
+    MissionType.Steps -> "$count steps"
+    MissionType.Memory -> "$count rounds · ${gridSize}×$gridSize"
+    MissionType.Nfc -> nfcLabel?.let { "Sticker by the $it" } ?: "Sticker not registered"
+    MissionType.Plan -> "Three words about your day"
+    MissionType.Hunt -> "$count object${if (count > 1) "s" else ""} · ${listOf("Everyday", "Varied", "Strict")[(difficulty - 1).coerceIn(0, 2)]}"
+}.let { if (needsSetup) "Set up tonight · math until then" else it }
 
 fun difficultyName(d: Int) = when (d) { 1 -> "Easy"; 2 -> "Medium"; else -> "Hard" }
 

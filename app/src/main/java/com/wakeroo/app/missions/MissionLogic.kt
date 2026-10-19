@@ -82,3 +82,42 @@ object ImageHash {
 
     fun distance(a: Long, b: Long): Int = java.lang.Long.bitCount(a xor b)
 }
+
+/** Patterns for the memory-tiles mission. Each round lights one more tile than the last. */
+object MemoryPatterns {
+    fun lengthFor(round: Int, gridSize: Int): Int = (if (gridSize >= 4) 4 else 3) + round
+
+    /** Distinct tile indices on a [gridSize]×[gridSize] board. */
+    fun generate(gridSize: Int, length: Int, random: Random = Random.Default): List<Int> =
+        (0 until gridSize * gridSize).shuffled(random).take(length.coerceIn(1, gridSize * gridSize))
+}
+
+/**
+ * Checks a typed morning plan reads like a real intention ("make coffee and stretch"), not
+ * thumb-mashing ("asdfgh jkl"). Simple rules, generous for real words in any Latin script.
+ */
+object PlanValidator {
+    const val MIN_WORDS = 3
+    const val MIN_LETTERS = 12
+    private val ROWS = listOf("qwertyuiop", "asdfghjkl", "zxcvbnm")
+
+    enum class Problem { TooShort, NotWords }
+
+    fun check(text: String): Problem? {
+        val words = TypingPhrases.normalize(text).split(' ').filter { it.isNotEmpty() }
+        val letters = words.sumOf { w -> w.count { it.isLetter() } }
+        if (words.size < MIN_WORDS || letters < MIN_LETTERS) return Problem.TooShort
+        val joined = words.joinToString("")
+        val vowels = joined.count { it in "aeiouyáéíóúàèìòùâêîôûäëïöüãõ" }
+        val ratio = vowels / joined.length.toFloat()
+        if (ratio < 0.18f || ratio > 0.75f) return Problem.NotWords
+        if (Regex("""(.)\1\1\1""").containsMatchIn(joined)) return Problem.NotWords
+        if (words.distinct().size < 2) return Problem.NotWords
+        // Runs of four or more neighbouring keys, like "asdf" or "wert".
+        val mashed = words.count { w -> w.length >= 4 && ROWS.any { row -> (0..w.length - 4).any { i -> w.substring(i, i + 4) in row } } }
+        if (mashed * 2 >= words.size) return Problem.NotWords
+        val realWords = words.count { w -> w.length >= 2 && w.any { it in "aeiouy" } }
+        if (realWords < MIN_WORDS) return Problem.NotWords
+        return null
+    }
+}
