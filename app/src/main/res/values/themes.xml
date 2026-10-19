@@ -2,5 +2,13 @@
 <resources>
     <style name="Theme.Wakeroo" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/night</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.Wakeroo.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/night</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Wakeroo</item>
     </style>
 </resources>

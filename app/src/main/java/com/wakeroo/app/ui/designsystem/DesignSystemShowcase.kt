@@ -68,7 +68,7 @@ import com.wakeroo.app.ui.theme.WakerooTheme
  * Temporary first screen until the alarm list exists; keep it as a debug-only screen later.
  */
 @Composable
-fun DesignSystemShowcase(modifier: Modifier = Modifier) {
+fun DesignSystemShowcase(modifier: Modifier = Modifier, onTestAlarm: () -> Unit = {}) {
     Column(
         modifier
             .fillMaxSize()
@@ -79,6 +79,11 @@ fun DesignSystemShowcase(modifier: Modifier = Modifier) {
             .padding(horizontal = Space.xl),
     ) {
         BrandIntro()
+        Button(
+            onClick = onTestAlarm,
+            modifier = Modifier.fillMaxWidth().height(Space.ringTouch),
+            colors = ButtonDefaults.buttonColors(containerColor = DawnLavender, contentColor = Night),
+        ) { Text("Ring a test alarm in 10 seconds", style = MaterialTheme.typography.labelLarge) }
         Section("Colour") { Palette() }
         Section("Skies") { Skies() }
         Section("Type") { TypeScale() }
