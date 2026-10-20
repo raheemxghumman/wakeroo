@@ -46,6 +46,21 @@ class RingService : Service() {
     private val escalate = Runnable { escalateWakeCheck() }
     private val giveUp = Runnable { finish(RingOutcome.Missed, secondsToWake = null) }
     private val escalateSound = Runnable { escalateSound() }
+
+    /**
+     * The dead-man's switch. While a ring is live, a backup ring sits [BACKUP_MS] ahead in
+     * AlarmManager and this pushes it forward every [HEARTBEAT_MS]. If the process is killed
+     * mid-ring (OEM task killer, low memory, a crash), the heartbeat stops, the backup fires and
+     * the alarm starts over. A backup that fires while we're still ringing joins the live ring.
+     */
+    private val heartbeat = object : Runnable {
+        override fun run() {
+            val state = RingSession.state.value ?: return
+            val kind = if (state.kind == RingKind.Test) RingKind.Test else RingKind.Alarm
+            container.scheduler.scheduleReRing(state.alarm.id, state.scheduledAt, state.snoozes, BACKUP_MS, kind)
+            handler.postDelayed(this, HEARTBEAT_MS)
+        }
+    }
     private var currentTone: Tone? = null
 
     override fun onCreate() {
@@ -120,6 +135,8 @@ class RingService : Service() {
             handler.postDelayed(escalateSound, ESCALATE_AFTER_MS)
             RingSession.publish(state.copy(escalateAt = now + ESCALATE_AFTER_MS))
         }
+        handler.removeCallbacks(heartbeat)
+        heartbeat.run()
         launchScreen()
     }
 
@@ -256,6 +273,7 @@ class RingService : Service() {
     private fun stopRinging() {
         PowerNapTileService.requestRefresh(this)
         handler.removeCallbacksAndMessages(null)
+        RingSession.state.value?.let { container.scheduler.cancelReRing(it.alarm.id) }
         player.stop()
         RingSession.publish(null)
         wakeLock?.takeIf { it.isHeld }?.release()
@@ -294,6 +312,8 @@ class RingService : Service() {
         const val WAKE_CHECK_WINDOW_MS = 60_000L
         private const val MAX_RING_MS = 60 * 60_000L
         const val ESCALATE_AFTER_MS = 60_000L
+        private const val HEARTBEAT_MS = 10_000L
+        private const val BACKUP_MS = 30_000L
 
         val TEST_ALARM = Alarm(
             id = AlarmScheduler.TEST_ALARM_ID, hour = 0, minute = 0, label = tr("Test alarm"),

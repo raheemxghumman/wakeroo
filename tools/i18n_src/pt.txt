@@ -804,3 +804,7 @@
 803|+1 h
 804|em {0}
 805|Escolher data
+806|Ativado. A tela do alarme abre mesmo enquanto você usa o celular.
+807|Sobrepor a outros apps
+808|Opcional. Enquanto você usa o celular, os alarmes tocam com um aviso. Ative para ver a tela de alarme completa.
+809|Ativar

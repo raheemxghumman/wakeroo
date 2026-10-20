@@ -804,3 +804,7 @@
 803|+1 h
 804|dans {0}
 805|Choisir une date
+806|Activé. L'écran d'alarme s'ouvre même pendant que vous utilisez votre téléphone.
+807|Afficher par-dessus les autres applis
+808|Facultatif. Quand vous utilisez votre téléphone, les alarmes sonnent avec une bannière. Activez ceci pour avoir l'écran d'alarme complet.
+809|Activer

@@ -98,6 +98,8 @@ import com.wakeroo.app.ui.theme.Sky
 import com.wakeroo.app.ui.theme.Space
 import com.wakeroo.app.ui.theme.WakerooMotion
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
 
 @Composable
 fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) {
@@ -112,6 +114,13 @@ fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) 
         onPauseOrDispose { }
     }
     var testScheduled by remember { mutableStateOf(false) }
+    // The screen often outlives the test ring (the user comes back here after it), so re-arm the button.
+    LaunchedEffect(testScheduled) {
+        if (testScheduled) {
+            delay(75_000)
+            testScheduled = false
+        }
+    }
 
     SkyBackground(Sky.Night, intensity = 0.6f) {
         Column(Modifier.fillMaxSize()) {
@@ -311,7 +320,7 @@ private fun HealthRow(item: HealthItem, onFix: (Intent) -> Unit) {
         }
         item.fix?.let { fix ->
             Text(
-                tr("Fix"), style = MaterialTheme.typography.labelLarge, color = Night,
+                item.fixLabel ?: tr("Fix"), style = MaterialTheme.typography.labelLarge, color = Night,
                 modifier = Modifier.clip(CircleShape).background(item.status.color).clickable { onFix(fix()) }.padding(horizontal = Space.lg, vertical = Space.sm),
             )
         }

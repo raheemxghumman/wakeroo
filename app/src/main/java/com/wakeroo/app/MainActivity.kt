@@ -24,6 +24,9 @@ import com.wakeroo.app.ui.navigation.WakerooNavHost
 import com.wakeroo.app.ui.theme.WakerooTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import android.content.Intent
+import com.wakeroo.app.alarm.ring.RingActivity
+import com.wakeroo.app.alarm.ring.RingSession
 
 class MainActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) = super.attachBaseContext(AppLocale.wrap(newBase))
@@ -86,6 +89,15 @@ class MainActivity : ComponentActivity() {
                 WakerooNavHost(onboardingDone = s.onboardingDone, restored = restore, openHealth = openHealth, initialTab = initialTab)
             }
             if (!s.pro && s.onboardingDone) LaunchedEffect(Unit) { Ads.start(this@MainActivity) }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Opening Wakeroo while an alarm rings goes straight back to the mission, like the
+        // notification does. Otherwise Home could sit over a ringing alarm.
+        if (RingSession.state.value != null) {
+            startActivity(Intent(this, RingActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
     }
 

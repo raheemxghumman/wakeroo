@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import com.wakeroo.app.data.RingKind
 
 /** Receives every exact alarm and hands it to the foreground ringing service. */
 class AlarmReceiver : BroadcastReceiver() {
@@ -69,7 +70,10 @@ class RescheduleReceiver : BroadcastReceiver() {
         app.scheduler.restoreExtras(now)
         if (interrupted) {
             store.activeRing?.let { ring ->
-                app.scheduler.scheduleReRing(ring.alarmId, ring.scheduledAt, ring.snoozes, delayMs = if (booted) 60_000 else 5_000)
+                app.scheduler.scheduleReRing(
+                    ring.alarmId, ring.scheduledAt, ring.snoozes, delayMs = if (booted) 60_000 else 5_000,
+                    kind = if (ring.kind == RingKind.Test) RingKind.Test else RingKind.Alarm,
+                )
             }
         }
         app.scheduler.rescheduleAll(alarms, now)

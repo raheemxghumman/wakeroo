@@ -26,6 +26,8 @@ data class HealthItem(
     val detail: String,
     /** What tapping "Fix" opens; null when there is nothing to fix. */
     val fix: (() -> Intent)? = null,
+    /** The button text when it isn't a fix, like "Turn on" for an optional extra. */
+    val fixLabel: String? = null,
 )
 
 /**
@@ -43,6 +45,7 @@ class HealthChecker(private val context: Context) {
         add(volume())
         output()?.let(::add)
         dnd()?.let(::add)
+        add(overlay())
         add(test(lastTestAt, lastTestPassed))
     }
 
@@ -137,6 +140,22 @@ class HealthChecker(private val context: Context) {
             "dnd", tr("Do Not Disturb"), if (alarmsAllowed) Health.Good else Health.Bad,
             if (alarmsAllowed) tr("On, and alarms are allowed through.") else tr("On, and it blocks alarms. Allow alarms in Do Not Disturb."),
             fix = if (alarmsAllowed) null else { { Intent(Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS) } },
+        )
+    }
+
+    /**
+     * Optional, so never amber. Android only lets an alarm open its screen over another app when
+     * the app may draw over apps; without it, an alarm that rings while the phone is in use shows
+     * as a heads-up banner (as Google Clock does) and the full screen opens with one tap.
+     */
+    private fun overlay(): HealthItem {
+        val ok = Settings.canDrawOverlays(context)
+        return HealthItem(
+            "overlay", tr("Open over other apps"), Health.Good,
+            if (ok) tr("On. The alarm screen opens even while you're using your phone.")
+            else tr("Optional. While you use your phone, alarms ring with a banner. Turn this on to get the full alarm screen."),
+            fix = if (ok) null else { { Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}")) } },
+            fixLabel = tr("Turn on"),
         )
     }
 

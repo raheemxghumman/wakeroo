@@ -804,3 +804,7 @@
 803|+1 sa
 804|{0} sonra
 805|Tarih seç
+806|Açık. Telefonunu kullanırken bile alarm ekranı açılır.
+807|Diğer uygulamaların üzerinde aç
+808|İsteğe bağlı. Telefonu kullanırken alarmlar bir bildirimle çalar. Tam alarm ekranı için bunu aç.
+809|Aç

@@ -804,3 +804,7 @@
 803|+1 jam
 804|{0} lagi
 805|Pilih tanggal
+806|Nyala. Layar alarm terbuka meski kamu sedang memakai ponsel.
+807|Tampil di atas aplikasi lain
+808|Opsional. Saat kamu memakai ponsel, alarm berbunyi dengan banner. Nyalakan ini untuk layar alarm penuh.
+809|Nyalakan

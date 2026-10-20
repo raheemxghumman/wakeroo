@@ -804,5 +804,9 @@
 "Minute": "منٹ",
 "+1 h": "+1 گھنٹہ",
 "in {0}": "{0} میں",
-"Pick a date": "تاریخ چنیں"
+"Pick a date": "تاریخ چنیں",
+"On. The alarm screen opens even while you're using your phone.": "آن۔ فون استعمال کرتے وقت بھی الارم اسکرین کھلتی ہے۔",
+"Open over other apps": "دوسری ایپس کے اوپر کھولیں",
+"Optional. While you use your phone, alarms ring with a banner. Turn this on to get the full alarm screen.": "اختیاری۔ فون استعمال کرتے وقت الارم ایک بینر کے ساتھ بجتے ہیں۔ پوری الارم اسکرین کے لیے اسے آن کریں۔",
+"Turn on": "آن کریں"
 }

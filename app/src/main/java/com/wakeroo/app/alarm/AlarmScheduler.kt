@@ -53,9 +53,14 @@ class AlarmScheduler(private val context: Context, private val store: DirectBoot
     fun scheduleWakeCheck(alarmId: Long, at: Long, scheduledAt: Long) =
         set(at, alarmId, Slot.WakeCheck, RingKind.WakeCheck, scheduledAt)
 
-    /** After a reboot during a ring, ring again shortly through the normal exact-alarm path. */
-    fun scheduleReRing(alarmId: Long, scheduledAt: Long, snoozes: Int, delayMs: Long = 60_000) =
-        set(System.currentTimeMillis() + delayMs, alarmId, Slot.ReRing, RingKind.Alarm, scheduledAt, snoozes)
+    /**
+     * Ring again shortly through the normal exact-alarm path: after a reboot during a ring, and
+     * as the ringing service's dead-man's switch while it's alive (see RingService.heartbeat).
+     */
+    fun scheduleReRing(alarmId: Long, scheduledAt: Long, snoozes: Int, delayMs: Long = 60_000, kind: RingKind = RingKind.Alarm) =
+        set(System.currentTimeMillis() + delayMs, alarmId, Slot.ReRing, kind, scheduledAt, snoozes)
+
+    fun cancelReRing(alarmId: Long) = cancel(alarmId, Slot.ReRing)
 
     fun scheduleTest(at: Long) = set(at, TEST_ALARM_ID, Slot.Main, RingKind.Test, at)
 

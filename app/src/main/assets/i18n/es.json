@@ -804,5 +804,9 @@
 "Minute": "Minuto",
 "+1 h": "+1 h",
 "in {0}": "en {0}",
-"Pick a date": "Elegir fecha"
+"Pick a date": "Elegir fecha",
+"On. The alarm screen opens even while you're using your phone.": "Activado. La pantalla de alarma se abre aunque estés usando el teléfono.",
+"Open over other apps": "Mostrar sobre otras apps",
+"Optional. While you use your phone, alarms ring with a banner. Turn this on to get the full alarm screen.": "Opcional. Mientras usas el teléfono, las alarmas suenan con un aviso. Actívalo para ver la pantalla de alarma completa.",
+"Turn on": "Activar"
 }
