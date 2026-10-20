@@ -1,9 +1,15 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
+
+val supportEmail: String = providers.gradleProperty("wakeroo.supportEmail").orElse("").get()
+val uploadKey: Properties? = rootProject.file("keystore.properties").takeIf { it.exists() }
+    ?.let { f -> Properties().apply { f.inputStream().use(::load) } }
 
 android {
     namespace = "com.wakeroo.app"
@@ -14,13 +20,27 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Shown in Settings › Send feedback and the privacy policy. Set it in gradle.properties.
+        buildConfigField("String", "SUPPORT_EMAIL", "\"$supportEmail\"")
+    }
+
+    signingConfigs {
+        // The Play upload key lives outside the repo; keystore.properties (gitignored) points to it.
+        if (uploadKey != null) create("upload") {
+            storeFile = file(uploadKey.getProperty("storeFile"))
+            storePassword = uploadKey.getProperty("storePassword")
+            keyAlias = uploadKey.getProperty("keyAlias")
+            keyPassword = uploadKey.getProperty("keyPassword")
+        }
     }
 
     buildTypes {
         release {
+            // Without the upload key, release builds are debug-signed so they can still be tested.
+            signingConfig = signingConfigs.findByName("upload") ?: signingConfigs.getByName("debug")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -39,6 +59,16 @@ android {
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
+    }
+}
+
+// The bundle that goes to Google Play must carry a real support email and the upload key.
+tasks.matching { it.name == "bundleRelease" }.configureEach {
+    val email = supportEmail
+    val signed = uploadKey != null
+    doFirst {
+        if (email.isBlank()) throw GradleException("Set wakeroo.supportEmail in gradle.properties before building for Play.")
+        if (!signed) throw GradleException("Add keystore.properties with the upload key before building for Play.")
     }
 }
 
@@ -73,6 +103,7 @@ dependencies {
     implementation(libs.mlkit.barcode)
     implementation(libs.mlkit.labeling)
     implementation(libs.billing.ktx)
+    implementation(libs.play.review.ktx)
     implementation(libs.play.services.ads)
     implementation(libs.ump)
     implementation(libs.androidx.glance.appwidget)

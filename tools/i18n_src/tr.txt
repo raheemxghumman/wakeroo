@@ -808,3 +808,12 @@
 807|Diğer uygulamaların üzerinde aç
 808|İsteğe bağlı. Telefonu kullanırken alarmlar bir bildirimle çalar. Tam alarm ekranı için bunu aç.
 809|Aç
+810|{0} tarafından yapıldı
+811|Açık kaynak lisansları
+812|İsteğe bağlı: telefonu kullanırken bile tam alarm ekranı
+813|Gizlilik politikası
+814|Wakeroo'yu puanla
+815|Geri bildirim gönder
+816|Hava durumu: Open-Meteo
+817|Şehri değiştir
+818|Şehir seç

@@ -100,9 +100,19 @@ import com.wakeroo.app.ui.theme.WakerooMotion
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.delay
+import com.wakeroo.app.feature.about.LegalDoc
+import com.wakeroo.app.feature.about.DEVELOPER_NAME
+import com.wakeroo.app.feature.about.sendFeedback
+import com.wakeroo.app.feature.about.openStoreListing
+import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.StarRate
+import androidx.compose.material.icons.rounded.PrivacyTip
+import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
-fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) {
+fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit, onLegal: (LegalDoc) -> Unit) {
     val context = LocalContext.current
     val app = context.container
     val scope = rememberCoroutineScope()
@@ -240,6 +250,7 @@ fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) 
                 }
                 SectionCard(tr("About"), icon = Icons.Rounded.FavoriteBorder) {
                     Text(tr("Wakeroo {0}", BuildConfig.VERSION_NAME), style = MaterialTheme.typography.bodyLarge, color = Paper)
+                    Text(tr("Made by {0}", DEVELOPER_NAME), style = MaterialTheme.typography.bodySmall, color = PaperMuted)
                     if (BuildConfig.DEBUG) {
                         // Debug builds only: try Pro features without a Play purchase.
                         ToggleRow(tr("Pretend Pro (debug)"), null, settings.pro) { on -> scope.launch { app.settings.update { it.copy(pro = on) } } }
@@ -248,6 +259,11 @@ fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) 
                         tr("Alarms, missions and photos stay on your phone. No account, no tracking on the alarm path."),
                         style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.xs),
                     )
+                    Spacer(Modifier.height(Space.sm))
+                    if (BuildConfig.SUPPORT_EMAIL.isNotBlank()) LinkRow(Icons.Rounded.Email, tr("Send feedback")) { sendFeedback(context) }
+                    LinkRow(Icons.Rounded.StarRate, tr("Rate Wakeroo")) { openStoreListing(context) }
+                    LinkRow(Icons.Rounded.PrivacyTip, tr("Privacy policy")) { onLegal(LegalDoc.Privacy) }
+                    LinkRow(Icons.Rounded.Description, tr("Open-source licenses")) { onLegal(LegalDoc.Licenses) }
                 }
                 if (Ads.privacyOptionsRequired(context)) {
                     Text(
@@ -259,6 +275,19 @@ fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) 
             }
             if (!settings.pro) AdBanner(Modifier.fillMaxWidth().navigationBarsPadding())
         }
+    }
+}
+
+@Composable
+private fun LinkRow(icon: ImageVector, label: String, onClick: () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(onClick = onClick).padding(vertical = Space.md, horizontal = Space.xs),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(icon, null, tint = DawnLavender, modifier = Modifier.size(22.dp))
+        Spacer(Modifier.width(Space.md))
+        Text(label, style = MaterialTheme.typography.bodyLarge, color = Paper, modifier = Modifier.weight(1f))
+        Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, null, tint = PaperMuted)
     }
 }
 

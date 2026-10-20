@@ -11,7 +11,10 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.wakeroo.app.data.model.WakerooJson
+import androidx.core.os.UserManagerCompat
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.Serializable
@@ -75,6 +78,9 @@ data class Settings(
     val sleepTimerMinutes: Int = 30,
     /** Completed missions by type, for the medals. */
     val missionCounts: Map<String, Int> = emptyMap(),
+    /** How many times the Play rating prompt has been requested, and when last. */
+    val reviewPrompts: Int = 0,
+    val lastReviewPromptAt: Long = 0L,
 ) {
     val onboardingDone: Boolean get() = onboardingVersion > 0
 }
@@ -85,11 +91,33 @@ private fun defaultTempUnit(): TempUnit =
 private val Context.dataStore by preferencesDataStore("settings")
 
 class SettingsStore(private val context: Context, private val directBoot: DirectBootStore? = null) {
-    val settings: Flow<Settings> = context.dataStore.data.map { it.toSettings() }
+    /**
+     * Settings live in credential-encrypted storage, which is sealed after a reboot until the
+     * first unlock. An alarm can ring before that, and touching DataStore then would cache an
+     * empty file for the life of the process and later write it back over the real settings.
+     * So while locked, reads come from the direct-boot mirror and writes are skipped.
+     */
+    val settings: Flow<Settings> = flow {
+        if (!unlocked()) emit(lockedSettings())
+        else emitAll(context.dataStore.data.map { it.toSettings() })
+    }
 
     suspend fun current(): Settings = settings.first()
 
+    private fun unlocked() = UserManagerCompat.isUserUnlocked(context)
+
+    /** What the ring path needs before the first unlock, from device-protected storage. */
+    private fun lockedSettings(): Settings {
+        val ring = directBoot?.ringPrefs ?: RingPrefs()
+        return Settings(
+            onboardingVersion = ONBOARDING_VERSION,
+            alwaysSpeaker = ring.alwaysSpeaker, alsoHeadphones = ring.alsoHeadphones,
+            missionTimeLimit = ring.missionTimeLimit, ringScene = ring.ringScene,
+        )
+    }
+
     suspend fun update(block: (Settings) -> Settings) {
+        if (!unlocked()) return
         context.dataStore.edit { prefs ->
             val next = block(prefs.toSettings())
             prefs[ONBOARDING_V] = next.onboardingVersion
@@ -123,6 +151,8 @@ class SettingsStore(private val context: Context, private val directBoot: Direct
             prefs[SLEEP_SOUNDS] = next.sleepSounds.joinToString(",")
             prefs[SLEEP_TIMER] = next.sleepTimerMinutes
             prefs[MISSION_COUNTS] = WakerooJson.encodeToString(next.missionCounts)
+            prefs[REVIEW_PROMPTS] = next.reviewPrompts
+            prefs[REVIEW_AT] = next.lastReviewPromptAt
             directBoot?.ringPrefs = RingPrefs(next.alwaysSpeaker, next.alsoHeadphones, next.missionTimeLimit, next.ringScene)
         }
     }
@@ -164,6 +194,8 @@ class SettingsStore(private val context: Context, private val directBoot: Direct
         sleepSounds = this[SLEEP_SOUNDS]?.split(',')?.filter { it.isNotBlank() } ?: listOf("rain"),
         sleepTimerMinutes = this[SLEEP_TIMER] ?: 30,
         missionCounts = this[MISSION_COUNTS]?.let { runCatching { WakerooJson.decodeFromString<Map<String, Int>>(it) }.getOrNull() } ?: emptyMap(),
+        reviewPrompts = this[REVIEW_PROMPTS] ?: 0,
+        lastReviewPromptAt = this[REVIEW_AT] ?: 0L,
     )
 
     private inline fun <reified E : Enum<E>> enumOr(name: String?, fallback: E): E =
@@ -171,6 +203,8 @@ class SettingsStore(private val context: Context, private val directBoot: Direct
 
     private companion object {
         val ONBOARDING_LEGACY = booleanPreferencesKey("onboarding_done")
+        val REVIEW_PROMPTS = intPreferencesKey("review_prompts")
+        val REVIEW_AT = longPreferencesKey("review_at")
         val ONBOARDING_V = intPreferencesKey("onboarding_version")
         val MOTION = stringPreferencesKey("motion")
         val THEME = stringPreferencesKey("app_theme")

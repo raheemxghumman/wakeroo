@@ -234,21 +234,24 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
                         )
                     }
                 }
-                Spacer(Modifier.height(Space.lg))
-                Text(tr("How do you feel?"), style = MaterialTheme.typography.labelLarge, color = ink.copy(alpha = 0.75f))
-                Spacer(Modifier.height(Space.sm))
-                MoodPicker(
-                    briefing.mood, size = 44, showLabels = false,
-                    onPick = { m ->
-                        held = true
-                        briefing = briefing.copy(mood = m)
-                        scope.launch {
-                            app.morning.setMood(today, m)
-                            delay(900)
-                            onDone()
-                        }
-                    },
-                )
+                // Before the first unlock after a reboot the mood log can't be written, so don't ask.
+                if (UserManagerCompat.isUserUnlocked(context)) {
+                    Spacer(Modifier.height(Space.lg))
+                    Text(tr("How do you feel?"), style = MaterialTheme.typography.labelLarge, color = ink.copy(alpha = 0.75f))
+                    Spacer(Modifier.height(Space.sm))
+                    MoodPicker(
+                        briefing.mood, size = 44, showLabels = false,
+                        onPick = { m ->
+                            held = true
+                            briefing = briefing.copy(mood = m)
+                            scope.launch {
+                                app.morning.setMood(today, m)
+                                delay(900)
+                                onDone()
+                            }
+                        },
+                    )
+                }
                 briefing.quote?.let { q ->
                     Text(
                         "“${q.text}”",

@@ -83,11 +83,13 @@ import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.Space
 import com.wakeroo.app.ui.theme.SunriseCoral
 import kotlin.math.abs
+import androidx.compose.material.icons.rounded.Layers
 
-enum class Permission(private val titleEn: String, private val whyEn: String, private val actionEn: String, val icon: ImageVector) {
+enum class Permission(private val titleEn: String, private val whyEn: String, private val actionEn: String, val icon: ImageVector, val optional: Boolean = false) {
     Notifications(n("Alarm alerts"), n("So the alarm screen can appear"), n("Allow alarm alerts"), Icons.Rounded.NotificationsActive),
     FullScreen(n("Full-screen alarm"), n("Takes over the lock screen instead of a small banner"), n("Turn on full screen"), Icons.Rounded.Fullscreen),
-    Battery(n("No battery limits"), n("The #1 reason alarm apps miss alarms"), n("Remove battery limits"), Icons.Rounded.BatteryChargingFull);
+    Battery(n("No battery limits"), n("The #1 reason alarm apps miss alarms"), n("Remove battery limits"), Icons.Rounded.BatteryChargingFull),
+    Overlay(n("Open over other apps"), n("Optional: the full alarm screen even while you're using your phone"), n("Turn on"), Icons.Rounded.Layers, optional = true);
 
     val title: String get() = tr(titleEn)
     val why: String get() = tr(whyEn)
@@ -99,12 +101,14 @@ fun neededPermissions(context: Context): List<Permission> = buildList {
     add(Permission.Notifications)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && !context.getSystemService(NotificationManager::class.java).canUseFullScreenIntent()) add(Permission.FullScreen)
     add(Permission.Battery)
+    if (!Settings.canDrawOverlays(context)) add(Permission.Overlay)
 }
 
 fun isGranted(context: Context, p: Permission): Boolean = when (p) {
     Permission.Notifications -> NotificationManagerCompat.from(context).areNotificationsEnabled()
     Permission.FullScreen -> Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE || context.getSystemService(NotificationManager::class.java).canUseFullScreenIntent()
     Permission.Battery -> context.getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(context.packageName)
+    Permission.Overlay -> Settings.canDrawOverlays(context)
 }
 
 /**
@@ -133,7 +137,8 @@ fun PermissionsStep(onNext: () -> Unit) {
         if (now > lastGranted) haptics.performHapticFeedback(HapticFeedbackType.Confirm)
         lastGranted = now
     }
-    val nextMissing = needed.firstOrNull { granted[it] != true }
+    // Optional rows never hold up "Continue"; they're one tap away in the list.
+    val nextMissing = needed.firstOrNull { !it.optional && granted[it] != true }
     val notificationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { tick++ }
 
     fun request(p: Permission) {
@@ -148,6 +153,7 @@ fun PermissionsStep(onNext: () -> Unit) {
                     OemGuides.open(context, OemGuides.batteryIntent(context))
                 }
             }
+            Permission.Overlay -> OemGuides.open(context, Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}")))
         }
     }
 
@@ -170,7 +176,7 @@ fun PermissionsStep(onNext: () -> Unit) {
                     Permission.Notifications -> PermissionMock(MockKind.Dialog)
                     Permission.FullScreen -> PermissionMock(MockKind.Toggle)
                     Permission.Battery -> PermissionMock(MockKind.Radio)
-                    null -> AllSet()
+                    Permission.Overlay, null -> AllSet()
                 }
             }
         }

@@ -34,11 +34,12 @@ An Android alarm clock for heavy sleepers and serial snoozers. To turn it off, y
 
 | | |
 |---|---|
-| **Version** | 0.1.0 (pre-release, not yet on Google Play) |
+| **Version** | 1.0.0 (launch candidate, not yet on Google Play) |
+| **Developer** | Qubiq Studios |
 | **Package** | `com.wakeroo.app` |
 | **SDK levels** | min 26 · target 36 · compile 37 |
-| **Progress** | Milestones M1 to M12 are done. M13 (regression and launch readiness) is in progress; see [`docs/m13-progress.md`](docs/m13-progress.md). |
-| **Deferred until after the build** | Play Console listing, AdMob account, domain, social accounts |
+| **Progress** | All milestones (M1–M13) are done and the release build is tested. What's left is account setup and Play's closed test; see [`docs/play-console.md`](docs/play-console.md). |
+| **Deferred** | Real AdMob banner ID and a website (after launch); support email to be created |
 
 ---
 
@@ -106,7 +107,7 @@ Each scene suggests a matching sound. You can preview any scene full-screen befo
 |---|---|
 | **Alarms** | Orbit clock hero (tap to flip it in 3D), streak strip, quick alarms, alarm cards, a Fix banner when something could block an alarm, and a Monday weekly recap |
 | **Sleep** | 7 synthesised sleep sounds (mix two with Pro), a timer that always fades out a minute before your alarm, and a bedtime calculated from your next alarm and sleep goal |
-| **Morning** | Weather with an hourly strip (Open-Meteo), quote of the day (150 quotes, themes, save, share as an image), mood log, a routine checklist of up to 5 habits, and today's plan |
+| **Morning** | Weather with an hourly strip (Open-Meteo) and a one-tap "Change" city chip, quote of the day (150 quotes, themes, save, share as an image), mood log, a routine checklist of up to 5 habits, and today's plan |
 | **You** | Streak, on-time rate, average time to get up, a wake-up calendar, 14 spinning 3D medals, and a shareable streak card |
 
 ### Good morning briefing
@@ -141,6 +142,12 @@ A guided setup that takes about 40 seconds:
 6. Finish with an optional one-minute test alarm.
 
 There's no paywall, no tracking prompt and no account. On a new phone, Wakeroo spots restored alarms and opens with "Welcome back".
+
+### Settings and about
+
+- Alarm health check with a test alarm (see [Reliability](#reliability)).
+- Send feedback by email (pre-filled with app version, phone and Android version), Rate Wakeroo, the privacy policy and open-source licenses, all inside the app.
+- A Play in-app rating prompt after a 3-morning streak, at most three times and at least 60 days apart. Never on alarm screens.
 
 ### Appearance and languages
 
@@ -248,8 +255,11 @@ Most "my alarm didn't ring" reviews come down to the phone getting in the way. W
 # Install on a connected device or emulator
 ./gradlew installDebug
 
-# Release build (minified and resource-shrunk)
+# Release APK for testing (minified and resource-shrunk)
 ./gradlew assembleRelease
+
+# Play upload bundle (needs the support email and the upload key, see below)
+./gradlew bundleRelease
 ```
 
 Or open the project folder in Android Studio and run the `app` configuration.
@@ -260,6 +270,14 @@ Or open the project folder in Android Studio and run the `app` configuration.
 > - simulated NFC on devices without NFC
 >
 > None of these ship in release builds.
+
+### Release signing
+
+Release builds are signed with the Play **upload key**, which lives outside the repo:
+
+- `keystore.properties` in the project root (gitignored) holds `storeFile`, `storePassword`, `keyAlias` and `keyPassword`.
+- Without it, release builds fall back to debug signing so they can still be tested.
+- `bundleRelease` refuses to build without the upload key and `wakeroo.supportEmail`.
 
 ### Emulator notes
 
@@ -372,7 +390,7 @@ python docs/brand/build_brand.py docs/brand app/src/main/res
 ./gradlew testDebugUnitTest
 ```
 
-62 unit tests cover:
+67 unit tests cover:
 
 - next-trigger calculation
 - math problems and typing phrases, including accent-insensitive matching
@@ -381,6 +399,7 @@ python docs/brand/build_brand.py docs/brand app/src/main/res
 - bedtime calculation
 - weather parsing
 - stats, achievements and the weekly recap
+- when to ask for a rating
 
 The reliability matrix (Doze, standby buckets, reboot before unlock, process kill mid-ring, app update mid-ring, phone in use, time-zone change, Do Not Disturb, volume 0 and more) is run on an emulator and on real phones. Results and the remaining rows are in [`docs/m13-progress.md`](docs/m13-progress.md).
 
@@ -392,7 +411,9 @@ The reliability matrix (Doze, standby buckets, reboot before unlock, process kil
 |---|---|
 | [`docs/build-plan.md`](docs/build-plan.md) | Original v1.0 build plan and reliability matrix |
 | [`docs/feature-plan.md`](docs/feature-plan.md) | The 26 pre-launch features, milestones M1–M13, and the Alarmy comparison |
-| [`docs/m13-progress.md`](docs/m13-progress.md) | Regression progress and the restart point |
+| [`docs/m13-progress.md`](docs/m13-progress.md) | Regression results (reliability matrix) |
+| [`docs/play-console.md`](docs/play-console.md) | Step-by-step Play Console guide: declarations, data safety answers, store listing, Pro product, testing |
+| [`docs/privacy-policy.md`](docs/privacy-policy.md) | The privacy policy, ready to publish (the app bundles the same text) |
 | [`docs/brand/README.md`](docs/brand/README.md) | Logo, colour, type, shape, motion and haptics |
 
 ---
@@ -413,14 +434,17 @@ The reliability matrix (Doze, standby buckets, reboot before unlock, process kil
 | M10 | Home upgrade, Fix banner, light theme | ✅ |
 | M11 | Power nap Quick Settings tile | ✅ |
 | M12 | 8 more languages, right-to-left layouts | ✅ |
-| M13 | Regression, real-device pass, launch readiness | 🚧 |
+| M13 | Regression, release build, launch readiness | ✅ |
 
 ### Before launch
 
 - [ ] Finish the reliability matrix on the emulator and a real Samsung or Xiaomi phone. Real devices are needed for camera missions, NFC, Bluetooth and OEM battery killers.
 - [ ] Native-speaker review of the translations, at least Hindi, Urdu, Spanish and Portuguese.
-- [ ] Play Console listing: data safety form, `ACTIVITY_RECOGNITION` justification, store listing in every language.
-- [ ] AdMob and billing product setup (`wakeroo_pro`).
+- [ ] Create the support email and set `wakeroo.supportEmail` in `gradle.properties`.
+- [ ] Publish the privacy policy at a public URL (a Google Doc is fine).
+- [ ] Play Console: developer account, declarations and data safety (answers in [`docs/play-console.md`](docs/play-console.md)), store listing, `wakeroo_pro` product.
+- [ ] Closed test with 12 testers for 14 days.
+- [ ] After launch: real AdMob banner ID, website.
 
 ### Later (v2)
 

@@ -808,3 +808,12 @@
 807|Tampil di atas aplikasi lain
 808|Opsional. Saat kamu memakai ponsel, alarm berbunyi dengan banner. Nyalakan ini untuk layar alarm penuh.
 809|Nyalakan
+810|Dibuat oleh {0}
+811|Lisensi sumber terbuka
+812|Opsional: layar alarm penuh meski kamu sedang memakai ponsel
+813|Kebijakan privasi
+814|Beri nilai Wakeroo
+815|Kirim masukan
+816|Cuaca dari Open-Meteo
+817|Ganti kota
+818|Pilih kota

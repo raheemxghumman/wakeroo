@@ -808,5 +808,14 @@
 "On. The alarm screen opens even while you're using your phone.": "Açık. Telefonunu kullanırken bile alarm ekranı açılır.",
 "Open over other apps": "Diğer uygulamaların üzerinde aç",
 "Optional. While you use your phone, alarms ring with a banner. Turn this on to get the full alarm screen.": "İsteğe bağlı. Telefonu kullanırken alarmlar bir bildirimle çalar. Tam alarm ekranı için bunu aç.",
-"Turn on": "Aç"
+"Turn on": "Aç",
+"Made by {0}": "{0} tarafından yapıldı",
+"Open-source licenses": "Açık kaynak lisansları",
+"Optional: the full alarm screen even while you're using your phone": "İsteğe bağlı: telefonu kullanırken bile tam alarm ekranı",
+"Privacy policy": "Gizlilik politikası",
+"Rate Wakeroo": "Wakeroo'yu puanla",
+"Send feedback": "Geri bildirim gönder",
+"Weather by Open-Meteo": "Hava durumu: Open-Meteo",
+"Change city": "Şehri değiştir",
+"Choose a city": "Şehir seç"
 }

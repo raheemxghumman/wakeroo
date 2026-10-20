@@ -52,5 +52,8 @@ object AppLocale {
         return base.createConfigurationContext(config)
     }
 
-    private fun prefs(context: Context) = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+    // Device-protected: the process can start before the first unlock after a reboot (an alarm
+    // ringing), and credential-encrypted preferences would throw then.
+    private fun prefs(context: Context) =
+        context.applicationContext.createDeviceProtectedStorageContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 }

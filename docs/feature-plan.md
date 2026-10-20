@@ -386,3 +386,22 @@ Sections, top to bottom, each a card that joins the staggered entrance:
 - **Detect:** on first launch, if Room already contains alarms but `Settings.onboardingVersion` is 0 (Auto Backup restored the database but the device is new), show "Welcome back: we restored your 3 alarms" with the list, then jump to step 5 (permissions don't transfer between phones) and a test alarm.
 - **Why:** Android 14 resets exact-alarm and full-screen permissions after a restore; without this step restored alarms could silently fail.
 - **Backup rules:** confirm `data_extraction_rules.xml` includes Room and DataStore, and excludes the device-protected mirror (rebuilt on first launch) and camera thumbnails (re-taken).
+
+---
+
+# As built: deviations from this plan (updated 20 October 2026)
+
+All 26 features shipped. Where the build differs from the plan above:
+
+| Area | Plan | As built | Why |
+|---|---|---|---|
+| Strings | Extract to `strings.xml` in M1 | English-key catalogue: `tr("…")` in code, `assets/i18n/<lang>.json`, built from `tools/i18n_src` by `tools/i18n_build.py` (append-only `keys.json`) | One pass at the end, readable code, and nothing is ever missing (it falls back to English) |
+| Languages | `android:localeConfig` | Same, plus an in-app picker that also works on Android 12 and below | Per-app language everywhere |
+| Typing missions | English phrases | Phrases in the app language, matched accent-insensitively on the Latin keypad; Hindi and Urdu use romanised phrases, Arabic uses English | The keypad is a-z |
+| Mission limits | Not specified | Free: 2 missions per alarm, Pro: 5 | Pro value |
+| Emergency exit | Hold to exit | 15 s hold (60 s in Harder Mode), then type a phrase | Hard to do half-asleep |
+| Ringing while the phone is in use | Full-screen | Android blocks background activity starts from alarms, so you get a heads-up. An optional "Open over other apps" permission (onboarding and Health) restores the full screen | Platform rule (`BAL_BLOCK`) |
+| Process killed mid-ring | Not planned | Dead-man's switch: a backup ring 30 s ahead, refreshed every 10 s | Found in the M13 regression |
+| Opening the app during a ring | Not planned | `MainActivity` jumps to the ring screen | Found in M13 |
+| Launch extras | Not planned | In-app review prompt (3-morning streak, at most 3 asks, 60 days apart), privacy policy and open-source licenses screens, feedback email, "Made by Qubiq Studios", Open-Meteo credit, a clear "Change" city chip on the weather card | Launch readiness |
+| Release | Not specified | R8 with resource shrinking; upload key outside the repo; `bundleRelease` refuses to build without the support email and the upload key | Safe Play uploads |

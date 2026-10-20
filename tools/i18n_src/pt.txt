@@ -808,3 +808,12 @@
 807|Sobrepor a outros apps
 808|Opcional. Enquanto você usa o celular, os alarmes tocam com um aviso. Ative para ver a tela de alarme completa.
 809|Ativar
+810|Feito por {0}
+811|Licenças de código aberto
+812|Opcional: a tela de alarme completa mesmo enquanto você usa o celular
+813|Política de privacidade
+814|Avaliar o Wakeroo
+815|Enviar feedback
+816|Tempo por Open-Meteo
+817|Trocar cidade
+818|Escolher uma cidade

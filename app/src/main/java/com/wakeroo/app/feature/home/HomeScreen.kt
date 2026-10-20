@@ -129,6 +129,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
 import com.wakeroo.app.ui.util.formatHours
+import com.wakeroo.app.feature.review.ReviewPromptEffect
 
 @Composable
 fun HomeScreen(
@@ -249,6 +250,8 @@ fun HomeScreen(
                         onClick = { onTab(MainTab.You) },
                         modifier = Modifier.padding(top = Space.md).entrance(3),
                     )
+                    // A run of won mornings is the moment to ask for a rating.
+                    ReviewPromptEffect(stats.streak, state.settings)
                 }
             }
             mondayRecap(state)?.let { (week, recap) ->

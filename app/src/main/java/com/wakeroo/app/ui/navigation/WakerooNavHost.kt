@@ -48,6 +48,8 @@ import com.wakeroo.app.ui.intro.IntroSequence
 import com.wakeroo.app.ui.components.LocalSharedScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import com.wakeroo.app.feature.about.LegalDoc
+import com.wakeroo.app.feature.about.LegalScreen
 
 @Serializable
 data class OnboardingRoute(val restore: Boolean = false)
@@ -59,6 +61,8 @@ data class EditorRoute(val id: Long = 0)
 data class SettingsRoute(val focusHealth: Boolean = false)
 @Serializable
 data object ProRoute
+@Serializable
+data class LegalRoute(val doc: String)
 
 private val springy = spring<Float>(dampingRatio = 0.85f, stiffness = 380f)
 
@@ -164,7 +168,13 @@ fun WakerooNavHost(onboardingDone: Boolean, restored: Boolean, openHealth: Boole
                                 focusHealth = entry.toRoute<SettingsRoute>().focusHealth,
                                 onBack = { if (!nav.popBackStack()) nav.navigate(MainRoute) },
                                 onPro = { nav.navigate(ProRoute) },
+                                onLegal = { doc -> nav.navigate(LegalRoute(doc.id)) },
                             )
+                        }
+                    }
+                    composable<LegalRoute> { entry ->
+                        CompositionLocalProvider(LocalNavScope provides this) {
+                            LegalScreen(LegalDoc.byId(entry.toRoute<LegalRoute>().doc), onBack = { nav.popBackStack() })
                         }
                     }
                     composable<ProRoute> {

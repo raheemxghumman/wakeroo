@@ -83,6 +83,8 @@ import kotlinx.coroutines.delay
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.material.icons.rounded.LocationOn
 
 /** A little animated picture of the weather: turning sun rays, drifting clouds, falling rain. */
 @Composable
@@ -162,6 +164,25 @@ private fun DrawScope.cloud(c: Offset, w: Float, color: Color) {
 
 private fun Double.deg() = "${Math.round(this)}°"
 
+/** The weather's city as a tappable pill, so changing location is obvious. */
+@Composable
+private fun CityChip(name: String, onClick: () -> Unit) {
+    Row(
+        Modifier
+            .clip(CircleShape)
+            .background(Paper.copy(alpha = 0.1f))
+            .clickable(onClickLabel = tr("Change city"), onClick = onClick)
+            .padding(start = Space.sm, end = Space.md, top = 6.dp, bottom = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(Icons.Rounded.LocationOn, null, tint = DawnLavender, modifier = Modifier.size(16.dp))
+        Spacer(Modifier.width(4.dp))
+        Text(name, style = MaterialTheme.typography.labelLarge, color = Paper, maxLines = 1)
+        Spacer(Modifier.width(Space.sm))
+        Text(tr("Change"), style = MaterialTheme.typography.labelMedium, color = DawnLavender)
+    }
+}
+
 @Composable
 fun WeatherCard(
     forecast: Forecast?,
@@ -189,7 +210,7 @@ fun WeatherCard(
                     }
                 }
                 Spacer(Modifier.height(Space.md))
-                PillButton("Choose a city", Modifier.fillMaxWidth(), icon = Icons.Rounded.LocationCity, onClick = onPickCity)
+                PillButton(tr("Choose a city"), Modifier.fillMaxWidth(), icon = Icons.Rounded.LocationCity, onClick = onPickCity)
             }
             forecast == null -> {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -200,14 +221,13 @@ fun WeatherCard(
                         style = MaterialTheme.typography.bodyMedium, color = PaperMuted, modifier = Modifier.weight(1f),
                     )
                 }
+                Spacer(Modifier.height(Space.md))
+                CityChip(city.name, onPickCity)
             }
             else -> {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
-                        Text(
-                            forecast.city, style = MaterialTheme.typography.labelMedium, color = DawnLavender,
-                            modifier = Modifier.clip(CircleShape).clickable(onClick = onPickCity).padding(vertical = 2.dp),
-                        )
+                        CityChip(forecast.city, onPickCity)
                         Text(forecast.currentTemp.deg(), style = MaterialTheme.typography.displayMedium, color = Paper)
                         Text(
                             "${forecast.condition.label} · " + tr("High {0}°, low {1}°", Math.round(forecast.high), Math.round(forecast.low)),
@@ -239,6 +259,11 @@ fun WeatherCard(
                         }
                     }
                 }
+                // Open-Meteo's data licence (CC BY 4.0) asks for this credit.
+                Text(
+                    tr("Weather by Open-Meteo"), style = MaterialTheme.typography.labelSmall, color = PaperMuted.copy(alpha = 0.7f),
+                    modifier = Modifier.fillMaxWidth().padding(top = Space.sm), textAlign = TextAlign.End,
+                )
             }
         }
     }

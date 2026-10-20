@@ -808,3 +808,12 @@
 807|Mostrar sobre otras apps
 808|Opcional. Mientras usas el teléfono, las alarmas suenan con un aviso. Actívalo para ver la pantalla de alarma completa.
 809|Activar
+810|Hecho por {0}
+811|Licencias de código abierto
+812|Opcional: la pantalla de alarma completa aunque estés usando el teléfono
+813|Política de privacidad
+814|Valorar Wakeroo
+815|Enviar comentarios
+816|Tiempo de Open-Meteo
+817|Cambiar ciudad
+818|Elegir una ciudad
