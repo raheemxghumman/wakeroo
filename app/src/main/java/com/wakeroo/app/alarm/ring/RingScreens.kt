@@ -1,5 +1,6 @@
 package com.wakeroo.app.alarm.ring
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -216,7 +217,7 @@ fun WakeCheckScreen(state: RingState, onConfirm: () -> Unit) {
                 val track = Paper.copy(alpha = 0.18f)
                 Canvas(Modifier.fillMaxSize()) {
                     drawArc(track, 0f, 360f, false, style = Stroke(14.dp.toPx()))
-                    drawArc(MorningGold, -90f, 360f * remaining, false, style = Stroke(14.dp.toPx(), cap = StrokeCap.Round))
+                    drawArc(MorningGoldFixed, -90f, 360f * remaining, false, style = Stroke(14.dp.toPx(), cap = StrokeCap.Round))
                 }
                 Box(
                     Modifier

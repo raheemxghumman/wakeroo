@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
@@ -139,7 +140,7 @@ fun NfcWaves(matched: Boolean, modifier: Modifier = Modifier, onSimulate: (() ->
             val s = r * 0.62f
             val tl = Offset(center.x - s / 2, center.y - s / 2)
             drawRoundRect(
-                Brush.linearGradient(if (matched) listOf(Calm, Color(0xFF2E9C77)) else listOf(MorningGold, SunriseCoral), tl, tl + Offset(s, s)),
+                Brush.linearGradient(if (matched) listOf(Calm, Color(0xFF2E9C77)) else listOf(MorningGoldFixed, SunriseCoral), tl, tl + Offset(s, s)),
                 tl, Size(s, s), CornerRadius(s * 0.22f),
             )
             for (k in 1..3) {

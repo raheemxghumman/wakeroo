@@ -1,5 +1,6 @@
 package com.wakeroo.app.alarm.ring
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -159,7 +160,7 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
         Canvas(Modifier.fillMaxSize()) {
             val r = size.maxDimension * 1.2f * splash.value
             val c = Offset(size.width / 2, size.height * 0.85f)
-            drawCircle(Brush.radialGradient(listOf(MorningGold, SunriseCoral), center = c, radius = r.coerceAtLeast(1f)), radius = r, center = c)
+            drawCircle(Brush.radialGradient(listOf(MorningGoldFixed, SunriseCoral), center = c, radius = r.coerceAtLeast(1f)), radius = r, center = c)
         }
         Column(
             Modifier

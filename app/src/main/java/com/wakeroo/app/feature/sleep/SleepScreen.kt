@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.sleep
 
+import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import android.text.format.DateFormat
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -100,7 +101,9 @@ import com.wakeroo.app.ui.components.ToggleRow
 import com.wakeroo.app.ui.components.entrance
 import com.wakeroo.app.ui.components.press3d
 import com.wakeroo.app.ui.components.rememberDeviceTilt
+import com.wakeroo.app.ui.theme.AlwaysDark
 import com.wakeroo.app.ui.theme.DawnLavender
+import com.wakeroo.app.ui.theme.PaperFixed
 import com.wakeroo.app.ui.theme.Hairline
 import com.wakeroo.app.ui.theme.MorningGold
 import com.wakeroo.app.ui.theme.Night
@@ -274,7 +277,7 @@ private fun MoonHero(
     goalMinutes: Int,
     playing: Boolean,
     onNewAlarm: () -> Unit,
-) {
+) = AlwaysDark {
     val tilt by rememberDeviceTilt()
     val breathe by rememberInfiniteTransition(label = "moon").animateFloat(
         0f, 1f, infiniteRepeatable(tween(if (playing) 4200 else 7000, easing = FastOutSlowInEasing), RepeatMode.Reverse), label = "b",
@@ -378,14 +381,14 @@ private fun SoundTile(sound: SleepSound, selected: Boolean, playing: Boolean, lo
                 Canvas(Modifier.size(52.dp)) {
                     for (k in 0..1) {
                         val p = (wave + k * 0.5f) % 1f
-                        drawCircle(DawnLavender.copy(alpha = (1 - p) * 0.5f), size.minDimension / 2 * (0.5f + 0.5f * p), style = androidx.compose.ui.graphics.drawscope.Stroke(2.dp.toPx()))
+                        drawCircle(DawnLavenderFixed.copy(alpha = (1 - p) * 0.5f), size.minDimension / 2 * (0.5f + 0.5f * p), style = androidx.compose.ui.graphics.drawscope.Stroke(2.dp.toPx()))
                     }
                 }
             }
-            Icon(sound.icon, null, tint = if (selected) DawnLavender else Paper.copy(alpha = 0.85f), modifier = Modifier.size(28.dp))
+            Icon(sound.icon, null, tint = if (selected) DawnLavenderFixed else Paper.copy(alpha = 0.85f), modifier = Modifier.size(28.dp))
         }
         Spacer(Modifier.height(Space.sm))
-        Text(sound.title, style = MaterialTheme.typography.labelMedium, color = Paper, maxLines = 1, textAlign = TextAlign.Center)
+        Text(sound.title, style = MaterialTheme.typography.labelMedium, color = if (selected) PaperFixed else Paper, maxLines = 1, textAlign = TextAlign.Center)
     }
     if (locked) {
         Box(
@@ -416,7 +419,7 @@ private fun PlayControl(playing: Boolean, paused: Boolean, endsAt: Long, forAlar
                 Canvas(Modifier.fillMaxSize()) {
                     for (k in 0..2) {
                         val p = (ring + k / 3f) % 1f
-                        drawCircle(DawnLavender.copy(alpha = (1 - p) * 0.4f), size.minDimension / 2 * (0.7f + 0.3f * p), style = androidx.compose.ui.graphics.drawscope.Stroke(2.dp.toPx()))
+                        drawCircle(DawnLavenderFixed.copy(alpha = (1 - p) * 0.4f), size.minDimension / 2 * (0.7f + 0.3f * p), style = androidx.compose.ui.graphics.drawscope.Stroke(2.dp.toPx()))
                     }
                 }
             }

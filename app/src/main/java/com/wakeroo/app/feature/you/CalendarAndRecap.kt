@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.you
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
+import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -69,6 +71,7 @@ import com.wakeroo.app.ui.brand.Wordmark
 import com.wakeroo.app.ui.theme.Alert
 import com.wakeroo.app.ui.theme.Calm
 import com.wakeroo.app.ui.theme.ClockType
+import com.wakeroo.app.ui.theme.Base
 import com.wakeroo.app.ui.theme.DawnLavender
 import com.wakeroo.app.ui.theme.MorningGold
 import com.wakeroo.app.ui.theme.Night
@@ -212,10 +215,10 @@ private fun DayCell(day: LocalDate, mark: DayMark, isToday: Boolean, modifier: M
             val r = size.minDimension / 2
             when (mark) {
                 DayMark.Won -> {
-                    drawCircle(Brush.radialGradient(listOf(Color(0xFFFFE08A), MorningGold), center, r * 0.55f), r * 0.5f)
+                    drawCircle(Brush.radialGradient(listOf(Color(0xFFFFE08A), MorningGoldFixed), center, r * 0.55f), r * 0.5f)
                     for (k in 0 until 8) {
                         val a = k * 0.785f
-                        drawLine(MorningGold, center + Offset(cos(a), sin(a)) * (r * 0.68f), center + Offset(cos(a), sin(a)) * (r * 0.95f), r * 0.12f)
+                        drawLine(MorningGoldFixed, center + Offset(cos(a), sin(a)) * (r * 0.68f), center + Offset(cos(a), sin(a)) * (r * 0.95f), r * 0.12f)
                     }
                 }
                 DayMark.Missed -> {
@@ -224,7 +227,7 @@ private fun DayCell(day: LocalDate, mark: DayMark, isToday: Boolean, modifier: M
                     drawRoundRect(Color(0xFF8C8FB0), center + Offset(-r * 0.6f, 0f), androidx.compose.ui.geometry.Size(r * 1.2f, r * 0.4f), androidx.compose.ui.geometry.CornerRadius(r * 0.2f))
                 }
                 DayMark.NoAlarm -> {
-                    drawCircle(DawnLavender.copy(alpha = 0.35f), r * 0.32f)
+                    drawCircle(DawnLavenderFixed.copy(alpha = 0.35f), r * 0.32f)
                     drawCircle(Color(0xFF1A1E33), r * 0.3f, center + Offset(r * 0.16f, -r * 0.1f))
                 }
                 DayMark.None -> Unit
@@ -245,7 +248,7 @@ fun DaySheet(day: LocalDate, events: List<RingEventEntity>, mood: MoodEntity?, o
     val zone = ZoneId.systemDefault()
     val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val dayEvents = events.filter { !it.isTest && Instant.ofEpochMilli(it.scheduledAt).atZone(zone).toLocalDate() == day }.sortedBy { it.scheduledAt }
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Night, dragHandle = null) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Base, dragHandle = null) {
         Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl), verticalArrangement = Arrangement.spacedBy(Space.md)) {
             Text(DateTimeFormatter.ofPattern("EEEE d MMMM").format(day), style = MaterialTheme.typography.headlineSmall, color = Paper)
             if (dayEvents.isEmpty()) Text("No alarm rang this day.", style = MaterialTheme.typography.bodyMedium, color = PaperMuted)
@@ -287,18 +290,24 @@ fun DaySheet(day: LocalDate, events: List<RingEventEntity>, mood: MoodEntity?, o
 data class WeekRecap(val won: Int, val days: Int, val averageWake: String?, val fastest: Int?, val medal: AchievementDef?)
 
 object Recap {
-    fun thisWeek(events: List<RingEventEntity>, unlocked: Map<String, Long>, today: LocalDate = LocalDate.now(), zone: ZoneId = ZoneId.systemDefault()): WeekRecap {
-        val start = today.with(DayOfWeek.MONDAY)
-        val mark = CalendarMarks.forDays(events, zone, today)
+    fun thisWeek(events: List<RingEventEntity>, unlocked: Map<String, Long>, today: LocalDate = LocalDate.now(), zone: ZoneId = ZoneId.systemDefault()): WeekRecap =
+        forWeek(events, unlocked, today, today, zone)
+
+    /** The week (Monday to Sunday) containing [anyDay], counted up to [today]. */
+    fun forWeek(events: List<RingEventEntity>, unlocked: Map<String, Long>, anyDay: LocalDate, today: LocalDate = LocalDate.now(), zone: ZoneId = ZoneId.systemDefault()): WeekRecap {
+        val start = anyDay.with(DayOfWeek.MONDAY)
+        val end = start.plusDays(6)
+        val mark = CalendarMarks.forDays(events, zone, today.plusDays(1))
         val days = (0..6).map { start.plusDays(it.toLong()) }.filter { it <= today }
         val wins = events.filter {
-            !it.isTest && it.outcome == RingOutcome.Dismissed && it.wakeCheckPassed != true &&
-                Instant.ofEpochMilli(it.scheduledAt).atZone(zone).toLocalDate() >= start
+            val d = Instant.ofEpochMilli(it.scheduledAt).atZone(zone).toLocalDate()
+            !it.isTest && it.outcome == RingOutcome.Dismissed && it.wakeCheckPassed != true && d >= start && d <= end
         }
         val wakes = wins.mapNotNull { it.endedAt }.map { Instant.ofEpochMilli(it).atZone(zone).toLocalTime().let { t -> t.hour * 60 + t.minute } }
         val avg = wakes.takeIf { it.isNotEmpty() }?.average()?.toInt()?.let { java.time.LocalTime.of(it / 60, it % 60) }
         val startMs = start.atStartOfDay(zone).toInstant().toEpochMilli()
-        val medal = unlocked.filterValues { it >= startMs }.maxByOrNull { it.value }?.key?.let { id -> AchievementEngine.all.firstOrNull { it.id == id } }
+        val endMs = end.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli()
+        val medal = unlocked.filterValues { it in startMs until endMs }.maxByOrNull { it.value }?.key?.let { id -> AchievementEngine.all.firstOrNull { it.id == id } }
         return WeekRecap(
             won = days.count { mark(it) == DayMark.Won }, days = days.size,
             averageWake = avg?.let { "${it.formatClock()} ${it.formatMeridiem()}" },

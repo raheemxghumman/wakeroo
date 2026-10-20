@@ -100,8 +100,10 @@ import com.wakeroo.app.ui.components.ToggleRow
 import com.wakeroo.app.ui.components.icon
 import com.wakeroo.app.ui.components.press3d
 import com.wakeroo.app.ui.components.sharedContainer
+import com.wakeroo.app.ui.theme.Base
 import com.wakeroo.app.ui.theme.ClockType
 import com.wakeroo.app.ui.theme.DawnLavender
+import com.wakeroo.app.ui.theme.Glass
 import com.wakeroo.app.ui.theme.MorningGold
 import com.wakeroo.app.ui.theme.Night
 import com.wakeroo.app.ui.theme.Paper
@@ -224,7 +226,7 @@ private fun TimeCard(draft: Alarm, use24h: Boolean, state: EditorState, onTime: 
         Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(32.dp))
-            .background(Night.copy(alpha = 0.35f))
+            .background(Glass)
             .background(Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.10f), Color.White.copy(alpha = 0.03f))))
             .border(1.dp, Color.White.copy(alpha = 0.12f), RoundedCornerShape(32.dp))
             .padding(vertical = Space.lg),
@@ -232,7 +234,7 @@ private fun TimeCard(draft: Alarm, use24h: Boolean, state: EditorState, onTime: 
     ) {
         Box(contentAlignment = Alignment.Center) {
             // The highlight band the centre values sit in.
-            Box(Modifier.fillMaxWidth(0.86f).height(64.dp).clip(RoundedCornerShape(20.dp)).background(Night.copy(alpha = 0.35f)))
+            Box(Modifier.fillMaxWidth(0.86f).height(64.dp).clip(RoundedCornerShape(20.dp)).background(Glass))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 DrumWheel(
                     values = hours, selected = if (use24h) draft.hour else draft.hour % 12, style = wheelStyle, label = "Hour",
@@ -359,7 +361,7 @@ private fun MissionsSection(draft: Alarm, max: Int, onEdit: (Int) -> Unit, onRem
                     .padding(bottom = Space.sm)
                     .press3d(maxTilt = 3f, sink = 0.98f)
                     .clip(RoundedCornerShape(20.dp))
-                    .background(Night.copy(alpha = 0.4f))
+                    .background(Glass)
                     .clickable { onEdit(i) }
                     .padding(Space.lg),
                 verticalAlignment = Alignment.CenterVertically,
@@ -425,7 +427,7 @@ private fun SoundSection(draft: Alarm, pro: Boolean, onUpgrade: () -> Unit, upda
                 .fillMaxWidth()
                 .press3d(maxTilt = 3f, sink = 0.98f)
                 .clip(RoundedCornerShape(20.dp))
-                .background(Night.copy(alpha = 0.4f))
+                .background(Glass)
                 .clickable { picking = true }
                 .padding(Space.lg),
             verticalAlignment = Alignment.CenterVertically,
@@ -491,7 +493,7 @@ private fun SceneSection(draft: Alarm, state: EditorState, onUpgrade: () -> Unit
         AnimatedVisibility(suggested != null && draft.soundUri == null && Tones.byId(draft.tone).id != suggested.id) {
             if (suggested == null) return@AnimatedVisibility
             Row(
-                Modifier.padding(top = Space.md).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Night.copy(alpha = 0.4f))
+                Modifier.padding(top = Space.md).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Glass)
                     .clickable { if (!suggested.pro || state.pro) update { it.copy(tone = suggested.id, soundUri = null, soundName = null) } else onUpgrade() }
                     .padding(Space.md),
                 verticalAlignment = Alignment.CenterVertically,
@@ -593,7 +595,7 @@ private fun SaveBar(modifier: Modifier, enabled: Boolean, onSave: () -> Unit) {
     Box(
         modifier
             .fillMaxWidth()
-            .background(Brush.verticalGradient(listOf(Color.Transparent, Night.copy(alpha = 0.9f))))
+            .background(Brush.verticalGradient(listOf(Color.Transparent, Base.copy(alpha = 0.92f))))
             .navigationBarsPadding()
             .padding(horizontal = Space.xl, vertical = Space.lg),
     ) {

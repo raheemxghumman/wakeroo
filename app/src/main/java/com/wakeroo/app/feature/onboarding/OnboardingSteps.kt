@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.onboarding
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
@@ -376,7 +377,7 @@ fun BuildingStep(state: OnboardingState, use24h: Boolean, onNext: () -> Unit) {
                 val stroke = 10.dp.toPx()
                 drawArc(Color.White.copy(alpha = 0.18f), 0f, 360f, false, style = Stroke(stroke))
                 drawArc(
-                    Brush.sweepGradient(listOf(MorningGold, Color.White, MorningGold)), -90f, 360f * p, false,
+                    Brush.sweepGradient(listOf(MorningGoldFixed, Color.White, MorningGoldFixed)), -90f, 360f * p, false,
                     style = Stroke(stroke, cap = StrokeCap.Round),
                 )
                 drawCircle(Brush.radialGradient(listOf(Color.White.copy(alpha = 0.5f * p), Color.Transparent), center, size.minDimension * 0.5f), size.minDimension * 0.5f)

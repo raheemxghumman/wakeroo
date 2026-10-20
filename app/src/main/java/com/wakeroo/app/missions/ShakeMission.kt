@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -169,7 +170,7 @@ fun ShakeMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Flo
                         lineTo(size.width, size.height)
                         close()
                     }
-                    drawPath(liquid, Brush.verticalGradient(listOf(MorningGold, SunriseCoral), startY = level, endY = c.y + r))
+                    drawPath(liquid, Brush.verticalGradient(listOf(MorningGoldFixed, SunriseCoral), startY = level, endY = c.y + r))
                 }
                 drawCircle(
                     Brush.radialGradient(listOf(Color.White.copy(alpha = 0.35f), Color.Transparent), center = c + Offset(-r * 0.38f, -r * 0.42f), radius = r * 0.55f),

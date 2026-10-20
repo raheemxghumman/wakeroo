@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.you
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
@@ -74,6 +75,7 @@ import com.wakeroo.app.ui.components.press3d
 import com.wakeroo.app.ui.theme.Alert
 import com.wakeroo.app.ui.theme.Calm
 import com.wakeroo.app.ui.theme.ClockType
+import com.wakeroo.app.ui.theme.Base
 import com.wakeroo.app.ui.theme.DawnLavender
 import com.wakeroo.app.ui.theme.MorningGold
 import com.wakeroo.app.ui.theme.Night
@@ -252,7 +254,7 @@ private fun RecapCard(recap: WeekRecap) {
 @Composable
 private fun MedalSheet(state: AchievementState, unlockedAt: Long?, onDismiss: () -> Unit) {
     val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Night, dragHandle = null) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Base, dragHandle = null) {
         Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl), horizontalAlignment = Alignment.CenterHorizontally) {
             SpinnableMedal(state.def, state.unlocked, 190.dp)
             Text(if (state.unlocked) "Flick it to spin" else "Locked", style = MaterialTheme.typography.labelSmall, color = PaperMuted, modifier = Modifier.padding(top = Space.md))
@@ -341,7 +343,7 @@ private fun WeekChart(stats: WakeStats) {
                         Canvas(Modifier.width(22.dp).weight(1f)) {
                             val fraction = day.secondsToWake?.let { 0.15f + 0.85f * it / maxSeconds } ?: 0.06f
                             val h = size.height * fraction * grow
-                            val color = when (day.success) { true -> MorningGold; false -> Alert; null -> empty }
+                            val color = when (day.success) { true -> MorningGoldFixed; false -> Alert; null -> empty }
                             drawRoundRect(color, Offset(0f, size.height - h), Size(size.width, h), CornerRadius(size.width / 2))
                         }
                         Text(day.date.dayOfWeek.name.take(1), style = MaterialTheme.typography.labelSmall, color = PaperMuted, modifier = Modifier.padding(top = Space.xs))

@@ -37,7 +37,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.wakeroo.app.ui.theme.DawnLavender
 import com.wakeroo.app.ui.theme.Night
+import com.wakeroo.app.ui.theme.Hairline
 import com.wakeroo.app.ui.theme.NightSurface
+import com.wakeroo.app.ui.theme.NightSurfaceHigh
 import com.wakeroo.app.ui.theme.Paper
 import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.Space
@@ -52,7 +54,7 @@ fun SectionCard(title: String, modifier: Modifier = Modifier, icon: ImageVector?
             .fillMaxWidth()
             .clip(RoundedCornerShape(28.dp))
             .background(NightSurface.copy(alpha = 0.9f))
-            .border(1.dp, Color.White.copy(alpha = 0.06f), RoundedCornerShape(28.dp))
+            .border(1.dp, Hairline, RoundedCornerShape(28.dp))
             .padding(Space.xl),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -103,7 +105,7 @@ fun ToggleRow(title: String, subtitle: String?, checked: Boolean, onChange: (Boo
                 haptics.performHapticFeedback(if (it) HapticFeedbackType.ToggleOn else HapticFeedbackType.ToggleOff)
                 onChange(it)
             },
-            colors = SwitchDefaults.colors(checkedTrackColor = SunriseCoral, checkedThumbColor = Night, uncheckedTrackColor = Night, uncheckedBorderColor = PaperMuted),
+            colors = SwitchDefaults.colors(checkedTrackColor = SunriseCoral, checkedThumbColor = Night, uncheckedTrackColor = NightSurfaceHigh, uncheckedThumbColor = PaperMuted, uncheckedBorderColor = PaperMuted),
         )
     }
 }

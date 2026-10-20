@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -261,7 +262,7 @@ fun StepsMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Flo
 private fun DrawScope.footprint(at: Offset, degrees: Float, alpha: Float) {
     val s = 5.dp.toPx()
     rotate(degrees, at) {
-        drawOval(MorningGold.copy(alpha = alpha), Offset(at.x - s * 0.7f, at.y - s * 1.2f), Size(s * 1.4f, s * 2.4f))
-        drawCircle(MorningGold.copy(alpha = alpha), s * 0.35f, Offset(at.x, at.y - s * 1.8f))
+        drawOval(MorningGoldFixed.copy(alpha = alpha), Offset(at.x - s * 0.7f, at.y - s * 1.2f), Size(s * 1.4f, s * 2.4f))
+        drawCircle(MorningGoldFixed.copy(alpha = alpha), s * 0.35f, Offset(at.x, at.y - s * 1.8f))
     }
 }

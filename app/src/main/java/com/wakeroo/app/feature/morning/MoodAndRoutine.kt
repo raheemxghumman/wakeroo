@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.morning
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
+import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
@@ -80,8 +82,8 @@ import kotlin.math.sin
 val Mood.color: Color
     get() = when (this) {
         Mood.Exhausted -> Color(0xFF8C8FB0)
-        Mood.Tired -> DawnLavender
-        Mood.Okay -> MorningGold
+        Mood.Tired -> DawnLavenderFixed
+        Mood.Okay -> MorningGoldFixed
         Mood.Calm -> Calm
         Mood.Refreshed -> SunriseCoral
     }
@@ -213,7 +215,7 @@ fun RoutineList(
                     val a = k * 0.349f
                     val d = size.minDimension * 0.45f * p
                     val o = Offset(size.width / 2 + cos(a) * d * 1.4f, size.height / 2 + sin(a) * d)
-                    drawCircle(listOf(MorningGold, SunriseCoral, Calm, DawnLavender)[k % 4].copy(alpha = 1 - p), (5 - 3 * p).dp.toPx(), o)
+                    drawCircle(listOf(MorningGoldFixed, SunriseCoral, Calm, DawnLavenderFixed)[k % 4].copy(alpha = 1 - p), (5 - 3 * p).dp.toPx(), o)
                 }
             }
         }

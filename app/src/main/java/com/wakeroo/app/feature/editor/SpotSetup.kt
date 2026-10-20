@@ -61,6 +61,7 @@ import com.wakeroo.app.ui.theme.Paper
 import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.Sky
 import com.wakeroo.app.ui.theme.Space
+import com.wakeroo.app.ui.theme.WakerooTheme
 import kotlinx.coroutines.launch
 
 private val CODE_PLACES = listOf("toothbrush", "toothpaste", "coffee jar", "kettle", "fridge", "meds", "desk", "bathroom mirror")
@@ -75,7 +76,7 @@ fun SpotSetupDialog(
     onNfc: (tagId: String, label: String) -> Unit = { _, _ -> },
 ) {
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
-        SkyBackground(Sky.Night) {
+        WakerooTheme(dark = true) { SkyBackground(Sky.Night) {
             Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(Space.xl)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
@@ -92,6 +93,7 @@ fun SpotSetupDialog(
                 }
             }
         }
+    }
     }
 }
 

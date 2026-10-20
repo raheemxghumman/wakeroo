@@ -45,7 +45,7 @@ val TabContentBottomPadding = BottomBarHeight + 56.dp
 fun MainScaffold(
     initialTab: MainTab,
     snackbar: SnackbarHostState,
-    content: @Composable (tab: MainTab, showBar: (Boolean) -> Unit) -> Unit,
+    content: @Composable (tab: MainTab, selectTab: (MainTab) -> Unit) -> Unit,
 ) {
     var tab by rememberSaveable { mutableStateOf(initialTab) }
     var barVisible by remember { mutableStateOf(true) }
@@ -53,6 +53,10 @@ fun MainScaffold(
     val holder = rememberSaveableStateHolder()
     val reduced = LocalReducedMotion.current
     LaunchedEffect(tab) { barVisible = true }
+    fun select(next: MainTab) {
+        direction = if (next.ordinal >= tab.ordinal) 1 else -1
+        tab = next
+    }
     val hideOnScroll = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
@@ -90,13 +94,10 @@ fun MainScaffold(
                     }
                 },
             ) {
-                holder.SaveableStateProvider(shown.name) { content(shown) { barVisible = it } }
+                holder.SaveableStateProvider(shown.name) { content(shown, ::select) }
             }
         }
         SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(bottom = BottomBarHeight + 28.dp))
-        BottomBar(tab, barVisible, onSelect = {
-            direction = if (it.ordinal >= tab.ordinal) 1 else -1
-            tab = it
-        }, modifier = Modifier.align(Alignment.BottomCenter))
+        BottomBar(tab, barVisible, onSelect = ::select, modifier = Modifier.align(Alignment.BottomCenter))
     }
 }

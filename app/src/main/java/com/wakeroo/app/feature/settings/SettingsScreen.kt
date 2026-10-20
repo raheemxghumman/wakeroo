@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.settings
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
 import android.app.Activity
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
@@ -35,6 +36,8 @@ import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.HealthAndSafety
 import androidx.compose.material.icons.rounded.Tune
+import androidx.compose.material.icons.rounded.WbSunny
+import com.wakeroo.app.data.AppTheme
 import androidx.compose.material.icons.rounded.Wallpaper
 import com.wakeroo.app.ui.scenes.ScenePicker
 import androidx.compose.material3.Icon
@@ -74,9 +77,11 @@ import com.wakeroo.app.ui.components.press3d
 import com.wakeroo.app.ui.theme.Alert
 import com.wakeroo.app.ui.theme.Calm
 import com.wakeroo.app.ui.theme.DawnLavender
+import com.wakeroo.app.ui.theme.Glass
 import com.wakeroo.app.ui.theme.MorningGold
 import com.wakeroo.app.ui.theme.Night
 import com.wakeroo.app.ui.theme.Paper
+import com.wakeroo.app.ui.theme.PaperFixed
 import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.Sky
 import com.wakeroo.app.ui.theme.Space
@@ -97,7 +102,7 @@ fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) 
     }
     var testScheduled by remember { mutableStateOf(false) }
 
-    SkyBackground(Sky.Night) {
+    SkyBackground(Sky.Night, intensity = 0.6f) {
         Column(Modifier.fillMaxSize()) {
             TopBar("Settings", onBack)
             Column(
@@ -156,11 +161,20 @@ fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) 
                         ) { on -> scope.launch { app.settings.update { it.copy(alsoHeadphones = on) } } }
                     }
                 }
-                SectionCard("Preferences", icon = Icons.Rounded.Tune) {
-                    ToggleRow(
-                        "Good-morning screen", "A quick celebration after you finish your mission.", settings.showGoodMorning,
-                    ) { on -> scope.launch { app.settings.update { it.copy(showGoodMorning = on) } } }
-                    Spacer(Modifier.height(Space.md))
+                SectionCard("Appearance", icon = Icons.Rounded.Tune) {
+                    Text("Theme", style = MaterialTheme.typography.bodyLarge, color = Paper)
+                    Text("Alarm and mission screens always stay dark, easy on 6 AM eyes.", style = MaterialTheme.typography.bodySmall, color = PaperMuted)
+                    Spacer(Modifier.height(Space.sm))
+                    ChipRow {
+                        AppTheme.entries.forEach { t ->
+                            Chip(
+                                when (t) { AppTheme.Dark -> "Dark"; AppTheme.Light -> "Light"; AppTheme.System -> "Like my phone" },
+                                settings.appTheme == t,
+                                { scope.launch { app.settings.update { it.copy(appTheme = t) } } },
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(Space.lg))
                     Text("Animations", style = MaterialTheme.typography.bodyLarge, color = Paper)
                     Spacer(Modifier.height(Space.sm))
                     ChipRow {
@@ -172,6 +186,35 @@ fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) 
                             )
                         }
                     }
+                    Spacer(Modifier.height(Space.lg))
+                    ToggleRow(
+                        "24-hour clock", if (settings.use24Hour == null) "Following your phone" else null,
+                        settings.use24Hour ?: android.text.format.DateFormat.is24HourFormat(context),
+                    ) { on -> scope.launch { app.settings.update { it.copy(use24Hour = on) } } }
+                }
+                SectionCard("Morning & notifications", icon = Icons.Rounded.WbSunny) {
+                    ToggleRow(
+                        "Morning briefing", "After an alarm: your plan, the weather, your streak and a quote. Closes by itself.",
+                        settings.showGoodMorning,
+                    ) { on -> scope.launch { app.settings.update { it.copy(showGoodMorning = on) } } }
+                    Spacer(Modifier.height(Space.sm))
+                    ToggleRow(
+                        "Weather heads-up",
+                        if (settings.weatherCity == null) "Choose your city on the Morning tab first." else "After you wake, a note if rain, frost or heat is on the way in ${settings.weatherCity?.name}.",
+                        settings.weatherNotification && settings.weatherCity != null,
+                    ) { on -> if (settings.weatherCity != null) scope.launch { app.settings.update { it.copy(weatherNotification = on) } } }
+                    Spacer(Modifier.height(Space.sm))
+                    ToggleRow("Wind-down reminder", "Before bedtime, worked out from your next alarm.", settings.bedtimeReminder) { on ->
+                        scope.launch { app.settings.update { it.copy(bedtimeReminder = on) } }
+                    }
+                    Spacer(Modifier.height(Space.sm))
+                    ToggleRow("No alarm for tomorrow", "An evening nudge if nothing is set for the morning.", settings.noAlarmReminder) { on ->
+                        scope.launch { app.settings.update { it.copy(noAlarmReminder = on) } }
+                    }
+                    Text(
+                        "Reminders use their own notification channel. Muting them never touches your alarms.",
+                        style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
+                    )
                 }
                 SectionCard("About", icon = Icons.Rounded.FavoriteBorder) {
                     Text("Wakeroo ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodyLarge, color = Paper)
@@ -235,7 +278,7 @@ private fun HealthCard(items: List<HealthItem>, overall: Health, expandedByDefau
             Column(Modifier.padding(top = Space.md), verticalArrangement = Arrangement.spacedBy(Space.sm)) {
                 items.forEach { item -> HealthRow(item) { intent -> OemGuides.open(context, intent) } }
                 val guide = remember { OemGuides.forThisPhone() }
-                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(Night.copy(alpha = 0.4f)).padding(Space.lg)) {
+                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(Glass).padding(Space.lg)) {
                     Text("${guide.brand} tips", style = MaterialTheme.typography.titleSmall, color = MorningGold)
                     guide.steps.forEach { Text("• $it", style = MaterialTheme.typography.bodySmall, color = Paper, modifier = Modifier.padding(top = Space.xs)) }
                 }
@@ -278,13 +321,13 @@ private fun ProCard(pro: Boolean, onPro: () -> Unit) {
         Icon(Icons.Rounded.AutoAwesome, null, tint = MorningGold)
         Spacer(Modifier.width(Space.lg))
         Column(Modifier.weight(1f)) {
-            Text(if (pro) "Wakeroo Pro is yours" else "Wakeroo Pro", style = MaterialTheme.typography.titleMedium, color = Paper)
+            Text(if (pro) "Wakeroo Pro is yours" else "Wakeroo Pro", style = MaterialTheme.typography.titleMedium, color = PaperFixed)
             Text(
                 if (pro) "Thank you for supporting an indie alarm." else "Up to 5 missions per alarm, full history, no banner. Pay once.",
-                style = MaterialTheme.typography.bodySmall, color = Paper.copy(alpha = 0.8f),
+                style = MaterialTheme.typography.bodySmall, color = PaperFixed.copy(alpha = 0.8f),
             )
         }
     }
 }
 
-val Health.color: Color get() = when (this) { Health.Good -> Calm; Health.Warn -> MorningGold; Health.Bad -> Alert }
+val Health.color: Color get() = when (this) { Health.Good -> Calm; Health.Warn -> MorningGoldFixed; Health.Bad -> Alert }

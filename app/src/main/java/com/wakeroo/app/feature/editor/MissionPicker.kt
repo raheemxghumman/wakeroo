@@ -85,6 +85,7 @@ import com.wakeroo.app.ui.components.icon
 import com.wakeroo.app.ui.components.press3d
 import com.wakeroo.app.ui.components.tagline
 import com.wakeroo.app.ui.theme.Calm
+import com.wakeroo.app.ui.theme.Base
 import com.wakeroo.app.ui.theme.DawnLavender
 import com.wakeroo.app.ui.theme.Hairline
 import com.wakeroo.app.ui.theme.MorningGold
@@ -95,6 +96,7 @@ import com.wakeroo.app.ui.theme.Paper
 import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.Sky
 import com.wakeroo.app.ui.theme.Space
+import com.wakeroo.app.ui.theme.WakerooTheme
 import com.wakeroo.app.ui.theme.SunriseCoral
 
 /** Missions the user can run for practice right in the picker. */
@@ -131,7 +133,7 @@ fun MissionPickerSheet(
     }
     val motionPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { permissionTick++ }
 
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Night, dragHandle = null) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Base, dragHandle = null) {
         AnimatedContent(
             targetState = config?.type,
             transitionSpec = {
@@ -437,7 +439,7 @@ fun PillButton(
 fun TryMissionDialog(config: MissionConfig, onClose: () -> Unit) {
     var done by remember { mutableStateOf(false) }
     Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
-        SkyBackground(Sky.Night) {
+        WakerooTheme(dark = true) { SkyBackground(Sky.Night) {
             Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(Space.xl)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("Practice run", style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.weight(1f))
@@ -472,5 +474,6 @@ fun TryMissionDialog(config: MissionConfig, onClose: () -> Unit) {
                 }
             }
         }
+    }
     }
 }

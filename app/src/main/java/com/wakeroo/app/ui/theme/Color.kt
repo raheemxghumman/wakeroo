@@ -11,8 +11,8 @@ import androidx.compose.ui.graphics.Color
 val Night = Color(0xFF0E1120)
 val SunriseCoral = Color(0xFFFF7A59)
 val SunriseCoralDeep = Color(0xFFE85D3F)
-val DawnLavender = Color(0xFFB9A7FF)
-val MorningGold = Color(0xFFFFC857)
+val DawnLavenderFixed = Color(0xFFB9A7FF)
+val MorningGoldFixed = Color(0xFFFFC857)
 val Day = Color(0xFFFFF8F2)
 /** Always-light text, for use on coral, gold and photo backgrounds in both themes. */
 val PaperFixed = Color(0xFFF5F3EE)
@@ -70,6 +70,10 @@ val NightSurfaceHigh: Color @Composable @ReadOnlyComposable get() = LocalPalette
 val Base: Color @Composable @ReadOnlyComposable get() = LocalPalette.current.base
 val Glass: Color @Composable @ReadOnlyComposable get() = LocalPalette.current.glass
 val Hairline: Color @Composable @ReadOnlyComposable get() = LocalPalette.current.hairline
+
+// Accents deepen in the light theme so text in them stays readable on paper.
+val DawnLavender: Color @Composable @ReadOnlyComposable get() = if (LocalPalette.current.isDark) DawnLavenderFixed else Color(0xFF5B4BC4)
+val MorningGold: Color @Composable @ReadOnlyComposable get() = if (LocalPalette.current.isDark) MorningGoldFixed else Color(0xFFB7791F)
 val Alert = Color(0xFFFF5470)
 val Calm = Color(0xFF5BD6A8)
 
@@ -78,7 +82,7 @@ enum class Sky(val top: Color, val bottom: Color) {
     Night(com.wakeroo.app.ui.theme.Night, Color(0xFF1A1E33)),
     Dawn(Color(0xFF2B2550), Color(0xFF6B4A78)),
     Sunrise(Color(0xFF6B4A78), SunriseCoral),
-    Morning(SunriseCoral, MorningGold),
+    Morning(SunriseCoral, MorningGoldFixed),
     Day(com.wakeroo.app.ui.theme.Day, Color(0xFFFFE9D6));
 
     val brush: Brush get() = Brush.verticalGradient(listOf(top, bottom))

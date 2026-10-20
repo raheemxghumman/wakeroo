@@ -14,9 +14,9 @@ private val DawnDark = darkColorScheme(
     onPrimary = Night,
     primaryContainer = Color(0xFF3A2530),
     onPrimaryContainer = PaperFixed,
-    secondary = DawnLavender,
+    secondary = DawnLavenderFixed,
     onSecondary = Night,
-    tertiary = MorningGold,
+    tertiary = MorningGoldFixed,
     onTertiary = Night,
     background = Night,
     onBackground = PaperFixed,
@@ -72,4 +72,10 @@ fun WakerooTheme(dark: Boolean = true, motion: MotionPreference = MotionPreferen
             content = content,
         )
     }
+}
+
+/** For cards that are dark by design (night sky, weather): their text stays light in any theme. */
+@Composable
+fun AlwaysDark(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalPalette provides DarkPalette, content = content)
 }

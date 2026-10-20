@@ -123,7 +123,7 @@ fun WakerooNavHost(onboardingDone: Boolean, restored: Boolean, openHealth: Boole
                     composable<MainRoute> {
                         CompositionLocalProvider(LocalNavScope provides this) {
                             val vm = viewModel { HomeViewModel(app, HealthChecker(context)) }
-                            MainScaffold(initialTab, snackbar) { tab, _ ->
+                            MainScaffold(initialTab, snackbar) { tab, selectTab ->
                                 val openSettings = { nav.navigate(SettingsRoute()) }
                                 when (tab) {
                                     MainTab.Alarms -> HomeScreen(
@@ -132,6 +132,7 @@ fun WakerooNavHost(onboardingDone: Boolean, restored: Boolean, openHealth: Boole
                                         onEdit = { nav.navigate(EditorRoute(it)) },
                                         onSettings = openSettings,
                                         onHealth = { nav.navigate(SettingsRoute(focusHealth = true)) },
+                                        onTab = selectTab,
                                         highlightId = highlight,
                                         onHighlightShown = { highlight = 0L },
                                     )

@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.home
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
+import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import android.text.format.DateFormat
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -72,6 +74,18 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wakeroo.app.BuildConfig
 import com.wakeroo.app.alarm.health.Health
+import com.wakeroo.app.alarm.health.OemGuides
+import com.wakeroo.app.data.model.SoundMode
+import com.wakeroo.app.feature.editor.soundTitle
+import com.wakeroo.app.feature.main.MainTab
+import com.wakeroo.app.feature.stats.WakeStatsCalculator
+import com.wakeroo.app.feature.you.Medal
+import com.wakeroo.app.feature.you.Recap
+import com.wakeroo.app.feature.you.WeekRecap
+import com.wakeroo.app.reminders.BedtimeCalculator
+import com.wakeroo.app.ui.scenes.Scene
+import androidx.compose.foundation.Canvas
+import androidx.compose.material.icons.rounded.Close
 import com.wakeroo.app.ui.brand.AnimatedWakerooMark
 import com.wakeroo.app.ui.brand.Wordmark
 import com.wakeroo.app.feature.main.BottomBarHeight
@@ -92,9 +106,11 @@ import com.wakeroo.app.ui.theme.Alert
 import com.wakeroo.app.ui.theme.Calm
 import com.wakeroo.app.ui.theme.ClockType
 import com.wakeroo.app.ui.theme.DawnLavender
+import com.wakeroo.app.ui.theme.Glass
 import com.wakeroo.app.ui.theme.MorningGold
 import com.wakeroo.app.ui.theme.Night
 import com.wakeroo.app.ui.theme.NightSurface
+import com.wakeroo.app.ui.theme.NightSurfaceHigh
 import com.wakeroo.app.ui.theme.Paper
 import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.Sky
@@ -118,6 +134,7 @@ fun HomeScreen(
     onEdit: (Long) -> Unit,
     onSettings: () -> Unit,
     onHealth: () -> Unit,
+    onTab: (MainTab) -> Unit = {},
     highlightId: Long = 0L,
     onHighlightShown: () -> Unit = {},
 ) {
@@ -156,10 +173,51 @@ fun HomeScreen(
                     lead = { Wordmark(fontSize = MaterialTheme.typography.headlineMedium.fontSize) },
                 )
             }
+            // Something could stop an alarm: say so first, with the fix one tap away.
+            val problem = state.healthItems.firstOrNull { it.status == Health.Bad }
+                ?: state.healthItems.firstOrNull { it.status == Health.Warn }?.takeIf { state.now > state.settings.fixBannerHiddenUntil }
+            if (problem != null && state.loaded) {
+                item(key = "fix") {
+                    FixBanner(
+                        problem,
+                        onFix = {
+                            val fix = problem.fix
+                            when {
+                                fix != null -> OemGuides.open(context, fix())
+                                problem.id == "test" -> {
+                                    vm.ringTest()
+                                    scope.launch { snackbar.showSnackbar("Test alarm in 1 minute. Lock your phone and wait") }
+                                }
+                                else -> onHealth()
+                            }
+                        },
+                        onHide = if (problem.status == Health.Warn) { { vm.hideBanner() } } else null,
+                        modifier = Modifier.padding(bottom = Space.md).animateItem().entrance(1),
+                    )
+                }
+            }
             item(key = "hero") {
                 if (state.loaded) {
+                    val zone = ZoneId.systemDefault()
+                    val now = Instant.ofEpochMilli(state.now).atZone(zone).toLocalTime()
+                    val next = state.next
                     Box(Modifier.entrance(1, EntranceStyle.Flip)) {
-                        HeroCard(state, tilt, use24h, onHealth = onHealth, onCreate = onNewAlarm)
+                        OrbitHero(
+                            nowMinutes = now.hour * 60f + now.minute,
+                            alarmMinutes = next?.let { it.alarm.hour * 60f + it.alarm.minute },
+                            untilText = next?.next?.let { Duration.between(Instant.ofEpochMilli(state.now), it.toInstant()).formatUntil() },
+                            timeText = next?.let { formatClock(it.alarm.hour, it.alarm.minute, use24h) } ?: "",
+                            meridiem = next?.let { formatMeridiem(it.alarm.hour, use24h) } ?: "",
+                            dayText = next?.next?.let { dayName(it.toLocalDate(), state.now) } ?: "",
+                            label = next?.alarm?.label.orEmpty(),
+                            health = state.health,
+                            tilt = tilt,
+                            empty = next == null,
+                            onCreate = onNewAlarm,
+                            onHealth = onHealth,
+                        ) {
+                            next?.let { HeroBack(it, state.health, onEdit = { onEdit(it.alarm.id) }, onHealth = onHealth) }
+                        }
                     }
                 }
             }
@@ -168,6 +226,31 @@ fun HomeScreen(
                     vm.quickAlarm(minutes, state.rows.lastOrNull()?.alarm)
                     scope.launch { snackbar.showSnackbar("Alarm set for ${Duration.ofMinutes(minutes.toLong()).formatUntil()} from now") }
                 })
+            }
+            bedtimeFor(state)?.let { bed ->
+                item(key = "bedtime") {
+                    BedtimeCard(
+                        bedText = bed.first, sleepText = bed.second, closeness = bed.third,
+                        onSleepSounds = { onTab(MainTab.Sleep) },
+                        modifier = Modifier.padding(top = Space.lg).entrance(3),
+                    )
+                }
+            }
+            if (state.events.any { !it.isTest }) {
+                item(key = "streak") {
+                    val stats = remember(state.events) { WakeStatsCalculator.compute(state.events) }
+                    StreakStrip(
+                        week = stats.lastSevenDays.map { it.date.dayOfWeek.name.take(1) to it.success },
+                        streak = stats.streak,
+                        onClick = { onTab(MainTab.You) },
+                        modifier = Modifier.padding(top = Space.md).entrance(3),
+                    )
+                }
+            }
+            mondayRecap(state)?.let { (week, recap) ->
+                item(key = "recap") {
+                    MondayRecap(recap, onOpen = { onTab(MainTab.You) }, onDismiss = { vm.dismissRecap(week) }, modifier = Modifier.padding(top = Space.md).animateItem())
+                }
             }
             if (state.rows.isNotEmpty()) {
                 item(key = "title") {
@@ -224,69 +307,97 @@ fun HomeScreen(
     }
 }
 
-/** The next alarm, on a glass card that leans with the phone like a real object. */
+/** The back of the hero card: everything about the next alarm at a glance. */
 @Composable
-private fun HeroCard(state: HomeState, tilt: Offset, use24h: Boolean, onHealth: () -> Unit, onCreate: () -> Unit) {
-    val next = state.next
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .graphicsLayer {
-                rotationX = -tilt.y * 7f
-                rotationY = tilt.x * 7f
-                cameraDistance = 18f * density
-            }
-            .clip(RoundedCornerShape(32.dp))
-            .background(Night.copy(alpha = 0.35f))
-            .background(Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.12f), Color.White.copy(alpha = 0.04f))))
-            .border(1.dp, Color.White.copy(alpha = 0.14f), RoundedCornerShape(32.dp))
-            .padding(Space.xl),
-    ) {
-        if (next == null) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                AnimatedWakerooMark(Modifier.size(84.dp))
-                Spacer(Modifier.width(Space.lg))
-                Column {
-                    Text(if (state.rows.isEmpty()) "No alarms yet" else "All alarms are off", style = MaterialTheme.typography.headlineSmall, color = Paper)
-                    Text("Tap + to set one in seconds.", style = MaterialTheme.typography.bodyMedium, color = PaperMuted)
-                }
-            }
-            if (state.rows.isEmpty()) {
-                Spacer(Modifier.height(Space.lg))
-                Box(
-                    Modifier.fillMaxWidth().height(56.dp).press3d().clip(CircleShape).background(SunriseCoral).clickable(onClick = onCreate),
-                    contentAlignment = Alignment.Center,
-                ) { Text("Set your first alarm", style = MaterialTheme.typography.labelLarge, color = Night) }
-            }
-            return@Column
-        }
-        val until = Duration.between(Instant.ofEpochMilli(state.now), next.next!!.toInstant())
-        Text("NEXT ALARM", style = MaterialTheme.typography.labelSmall, color = DawnLavender)
-        Text("in ${until.formatUntil()}", style = MaterialTheme.typography.displaySmall, color = Paper, modifier = Modifier.padding(top = Space.xs))
-        Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.padding(top = Space.sm)) {
-            Text(formatClock(next.alarm.hour, next.alarm.minute, use24h), style = ClockType.card, color = Paper)
+private fun HeroBack(row: AlarmRow, health: Health, onEdit: () -> Unit, onHealth: () -> Unit) {
+    val a = row.alarm
+    Column(Modifier.fillMaxSize()) {
+        Text("ABOUT THIS ALARM", style = MaterialTheme.typography.labelSmall, color = DawnLavender)
+        Spacer(Modifier.height(Space.md))
+        HeroFact("Missions", a.missions.joinToString(" · ") { if (it.needsSetup) "${it.type.title} (finish setup)" else it.type.title })
+        HeroFact("Sound", a.soundTitle() + when (a.soundMode) { SoundMode.Rotate -> " · rotating"; SoundMode.Escalate -> " · escalates"; else -> "" })
+        HeroFact("Scene", Scene.byId(a.scene).title)
+        HeroFact("Snooze", if (a.snoozeLimit == 0) "Off" else "${a.snoozeMinutes} min, ${a.snoozeLimit} times")
+        HeroFact("Wake-up check", if (a.wakeCheckMinutes == 0) "Off" else "After ${a.wakeCheckMinutes} min")
+        if (a.hardMode) HeroFact("Harder Mode", "On")
+        Spacer(Modifier.weight(1f))
+        Row {
             Text(
-                " ${formatMeridiem(next.alarm.hour, use24h)}  ·  ${next.next.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }}",
-                style = MaterialTheme.typography.titleMedium, color = PaperMuted, modifier = Modifier.padding(bottom = 6.dp),
+                "Edit alarm", style = MaterialTheme.typography.labelLarge, color = Night,
+                modifier = Modifier.clip(CircleShape).background(SunriseCoral).clickable(onClick = onEdit).padding(horizontal = Space.lg, vertical = Space.sm),
+            )
+            Spacer(Modifier.width(Space.sm))
+            Text(
+                when (health) { Health.Good -> "Ready to ring"; Health.Warn -> "Check health"; Health.Bad -> "Needs a fix" },
+                style = MaterialTheme.typography.labelLarge, color = Paper,
+                modifier = Modifier.clip(CircleShape).background(Glass).clickable(onClick = onHealth).padding(horizontal = Space.lg, vertical = Space.sm),
             )
         }
-        if (next.alarm.label.isNotBlank()) {
-            Text(next.alarm.label, style = MaterialTheme.typography.bodyLarge, color = Paper, modifier = Modifier.padding(top = Space.xs))
+    }
+}
+
+@Composable
+private fun HeroFact(name: String, value: String) {
+    Row(Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
+        Text(name, style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.width(110.dp))
+        Text(value, style = MaterialTheme.typography.bodySmall, color = Paper, maxLines = 1)
+    }
+}
+
+private fun dayName(date: java.time.LocalDate, now: Long): String {
+    val today = Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDate()
+    return when (date) {
+        today -> "Today"
+        today.plusDays(1) -> "Tomorrow"
+        else -> date.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
+    }
+}
+
+/** From 6 PM until the alarm: "Bed by 10:45", the sleep it buys, and how close bedtime is (0..1). */
+private fun bedtimeFor(state: HomeState): Triple<String, String, Float>? {
+    val zone = ZoneId.systemDefault()
+    val now = Instant.ofEpochMilli(state.now).atZone(zone)
+    if (now.hour in 4 until 18) return null
+    val bed = BedtimeCalculator.next(state.rows.map { it.alarm }, state.settings.sleepGoalMinutes, 0, state.now) ?: return null
+    val bedTime = Instant.ofEpochMilli(bed.bedAt).atZone(zone).toLocalTime()
+    val use24 = state.settings.use24Hour ?: false
+    val hours = state.settings.sleepGoalMinutes / 60f
+    val left = bed.bedAt - state.now
+    val closeness = (1f - left / (4 * 3_600_000f)).coerceIn(0f, 1f)
+    val sleep = if (left > 0) "${if (hours % 1f == 0f) "${hours.toInt()} h" else "%.1f h".format(hours)} of sleep before your alarm"
+        else "Past bedtime. Every minute of sleep still counts"
+    return Triple("${bedTime.formatClock(use24)} ${bedTime.formatMeridiem(use24)}", sleep, closeness)
+}
+
+/** On Mondays, last week's recap until dismissed. */
+private fun mondayRecap(state: HomeState): Pair<String, WeekRecap>? {
+    val today = Instant.ofEpochMilli(state.now).atZone(ZoneId.systemDefault()).toLocalDate()
+    if (today.dayOfWeek != java.time.DayOfWeek.MONDAY) return null
+    val week = today.minusWeeks(1).let { "${it.get(java.time.temporal.IsoFields.WEEK_BASED_YEAR)}-W${it.get(java.time.temporal.IsoFields.WEEK_OF_WEEK_BASED_YEAR)}" }
+    if (state.settings.recapDismissedWeek == week) return null
+    val recap = Recap.forWeek(state.events, state.settings.achievements, today.minusWeeks(1))
+    if (recap.won == 0 && recap.medal == null) return null
+    return week to recap
+}
+
+@Composable
+private fun MondayRecap(recap: WeekRecap, onOpen: () -> Unit, onDismiss: () -> Unit, modifier: Modifier) {
+    Row(
+        modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(24.dp))
+            .background(Brush.linearGradient(listOf(Color(0xFF3A2B4E), Color(0xFF6B4A78))))
+            .clickable(onClick = onOpen)
+            .padding(Space.lg),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        recap.medal?.let { Medal(it, unlocked = true, size = 44.dp); Spacer(Modifier.width(Space.md)) }
+        Column(Modifier.weight(1f)) {
+            Text("LAST WEEK", style = MaterialTheme.typography.labelSmall, color = MorningGold)
+            Text("${recap.won} of 7 mornings won", style = MaterialTheme.typography.titleSmall, color = Color(0xFFF5F3EE))
+            recap.averageWake?.let { Text("Usually up at $it", style = MaterialTheme.typography.bodySmall, color = Color(0xFFF5F3EE).copy(alpha = 0.75f)) }
         }
-        Spacer(Modifier.height(Space.lg))
-        val (dot, text) = when (state.health) {
-            Health.Good -> Calm to "Ready to ring"
-            Health.Warn -> MorningGold to "Ready · one setting could be better"
-            Health.Bad -> Alert to "Needs attention before it can ring"
-        }
-        Row(
-            Modifier.clip(CircleShape).background(Night.copy(alpha = 0.35f)).clickable(onClick = onHealth).padding(horizontal = Space.md, vertical = Space.sm),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(Modifier.size(10.dp).clip(CircleShape).background(dot))
-            Spacer(Modifier.width(Space.sm))
-            Text(text, style = MaterialTheme.typography.labelMedium, color = Paper)
-        }
+        Icon(Icons.Rounded.Close, "Dismiss", tint = Color(0xFFF5F3EE).copy(alpha = 0.7f), modifier = Modifier.clip(CircleShape).clickable(onClick = onDismiss).padding(6.dp))
     }
 }
 
@@ -344,7 +455,10 @@ private fun AlarmCard(
         }
     }
     val alarm = row.alarm
-    val on = alarm.enabled
+    // An enabled one-off whose time has passed is effectively off; show it that way.
+    val passed = alarm.enabled && row.next == null
+    val on = alarm.enabled && !passed
+    val sky = Sky.forHour(alarm.hour)
     val contentAlpha by animateFloatAsState(if (on) 1f else 0.45f, WakerooMotion.calm(), label = "alpha")
     val surface by animateColorAsState(if (on) NightSurface.copy(alpha = 0.92f) else NightSurface.copy(alpha = 0.55f), WakerooMotion.calm(), label = "surface")
     // A freshly created alarm pulses a warm outline a few times so the eye finds it.
@@ -380,6 +494,7 @@ private fun AlarmCard(
                 .press3d(maxTilt = 4f, sink = 0.98f)
                 .clip(RoundedCornerShape(28.dp))
                 .background(surface)
+                .background(Brush.horizontalGradient(listOf(sky.top.copy(alpha = if (on) 0.28f else 0.1f), Color.Transparent)))
                 .border(if (glowAlpha > 0.01f) 2.dp else 1.dp, outline, RoundedCornerShape(28.dp))
                 .clickable(onClick = onClick)
                 .padding(horizontal = Space.xl, vertical = Space.lg),
@@ -391,17 +506,18 @@ private fun AlarmCard(
                         Text(" ${formatMeridiem(alarm.hour, use24h)}", style = MaterialTheme.typography.titleMedium, color = PaperMuted, modifier = Modifier.padding(bottom = 6.dp))
                     }
                     Text(
-                        listOfNotNull(alarm.label.takeIf { it.isNotBlank() }, alarm.repeatSummary()).joinToString("  ·  "),
+                        listOfNotNull(alarm.label.takeIf { it.isNotBlank() }, if (passed) "Passed" else alarm.repeatSummary()).joinToString("  ·  "),
                         style = MaterialTheme.typography.bodyMedium, color = PaperMuted, maxLines = 1,
                     )
                 }
+                SkyGlyph(alarm.hour, Modifier.padding(end = Space.md).size(22.dp))
                 Switch(
                     checked = on,
                     onCheckedChange = {
                         haptics.performHapticFeedback(if (it) HapticFeedbackType.ToggleOn else HapticFeedbackType.ToggleOff)
                         onToggle(it)
                     },
-                    colors = SwitchDefaults.colors(checkedTrackColor = SunriseCoral, checkedThumbColor = Night, uncheckedTrackColor = Night, uncheckedBorderColor = PaperMuted),
+                    colors = SwitchDefaults.colors(checkedTrackColor = SunriseCoral, checkedThumbColor = Night, uncheckedTrackColor = NightSurfaceHigh, uncheckedThumbColor = PaperMuted, uncheckedBorderColor = PaperMuted),
                 )
             }
             Row(Modifier.padding(top = Space.md).graphicsLayer { alpha = contentAlpha }, horizontalArrangement = Arrangement.spacedBy(Space.sm)) {
@@ -449,3 +565,21 @@ private fun NewAlarmButton(modifier: Modifier, onClick: () -> Unit) {
     }
 }
 
+
+/** A tiny sun for daytime alarms and a crescent for night ones, so the list reads at a glance. */
+@Composable
+private fun SkyGlyph(hour: Int, modifier: Modifier) {
+    Canvas(modifier) {
+        val r = size.minDimension / 2
+        if (hour in 6..18) {
+            drawCircle(MorningGoldFixed, r * 0.5f)
+            for (k in 0 until 8) {
+                val a = k * 0.785f
+                drawLine(MorningGoldFixed, center + Offset(kotlin.math.cos(a), kotlin.math.sin(a)) * (r * 0.68f), center + Offset(kotlin.math.cos(a), kotlin.math.sin(a)) * r, 1.4f.dp.toPx())
+            }
+        } else {
+            drawCircle(DawnLavenderFixed, r * 0.62f)
+            drawCircle(Color(0xFF1A1E33), r * 0.55f, center + Offset(r * 0.32f, -r * 0.22f))
+        }
+    }
+}

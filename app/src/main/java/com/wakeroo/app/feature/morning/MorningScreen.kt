@@ -61,6 +61,7 @@ import com.wakeroo.app.ui.components.entrance
 import com.wakeroo.app.ui.components.rememberDeviceTilt
 import com.wakeroo.app.ui.theme.ClockType
 import com.wakeroo.app.ui.theme.Hairline
+import com.wakeroo.app.ui.theme.Glass
 import com.wakeroo.app.ui.theme.MorningGold
 import com.wakeroo.app.ui.theme.Night
 import com.wakeroo.app.ui.theme.Paper
@@ -145,7 +146,7 @@ fun MorningScreen(onSettings: () -> Unit) {
                         .fillMaxWidth()
                         .graphicsLayer { rotationX = -tilt.y * 5f; rotationY = tilt.x * 5f; cameraDistance = 18f * density }
                         .clip(RoundedCornerShape(30.dp))
-                        .background(Night.copy(alpha = 0.35f))
+                        .background(Glass)
                         .background(Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.12f), Color.White.copy(alpha = 0.03f))))
                         .border(1.dp, Color.White.copy(alpha = 0.12f), RoundedCornerShape(30.dp))
                         .padding(Space.xl),

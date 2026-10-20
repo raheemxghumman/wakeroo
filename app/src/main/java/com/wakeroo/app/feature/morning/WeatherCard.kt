@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.morning
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
+import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -61,6 +63,8 @@ import com.wakeroo.app.data.TempUnit
 import com.wakeroo.app.feature.editor.PillButton
 import com.wakeroo.app.ui.components.Chip
 import com.wakeroo.app.ui.components.ChipRow
+import com.wakeroo.app.ui.theme.Base
+import com.wakeroo.app.ui.theme.AlwaysDark
 import com.wakeroo.app.ui.theme.DawnLavender
 import com.wakeroo.app.ui.theme.Hairline
 import com.wakeroo.app.ui.theme.LocalReducedMotion
@@ -116,7 +120,7 @@ fun WeatherGlyph(condition: Condition, isDay: Boolean, modifier: Modifier = Modi
                         moveTo(size.width * 0.52f, size.height * 0.55f); lineTo(size.width * 0.44f, size.height * 0.72f)
                         lineTo(size.width * 0.52f, size.height * 0.72f); lineTo(size.width * 0.46f, size.height * 0.9f)
                     }
-                    drawPath(bolt, MorningGold, style = androidx.compose.ui.graphics.drawscope.Stroke(2.5f.dp.toPx(), cap = StrokeCap.Round))
+                    drawPath(bolt, MorningGoldFixed, style = androidx.compose.ui.graphics.drawscope.Stroke(2.5f.dp.toPx(), cap = StrokeCap.Round))
                 }
             }
             Condition.Snow -> {
@@ -132,18 +136,18 @@ fun WeatherGlyph(condition: Condition, isDay: Boolean, modifier: Modifier = Modi
 }
 
 private fun DrawScope.sun(t: Float, c: Offset, r: Float) {
-    drawCircle(Brush.radialGradient(listOf(MorningGold.copy(alpha = 0.5f), Color.Transparent), c, r * 2.2f), r * 2.2f, c)
+    drawCircle(Brush.radialGradient(listOf(MorningGoldFixed.copy(alpha = 0.5f), Color.Transparent), c, r * 2.2f), r * 2.2f, c)
     rotate(t * 360f, c) {
         for (k in 0 until 8) {
             val a = k * PI.toFloat() / 4
-            drawLine(MorningGold, c + Offset(cos(a), sin(a)) * (r * 1.35f), c + Offset(cos(a), sin(a)) * (r * 1.75f), r * 0.18f, StrokeCap.Round)
+            drawLine(MorningGoldFixed, c + Offset(cos(a), sin(a)) * (r * 1.35f), c + Offset(cos(a), sin(a)) * (r * 1.75f), r * 0.18f, StrokeCap.Round)
         }
     }
-    drawCircle(Brush.radialGradient(listOf(Color(0xFFFFE08A), MorningGold), c, r), r, c)
+    drawCircle(Brush.radialGradient(listOf(Color(0xFFFFE08A), MorningGoldFixed), c, r), r, c)
 }
 
 private fun DrawScope.moon(c: Offset, r: Float) {
-    drawCircle(Brush.radialGradient(listOf(DawnLavender.copy(alpha = 0.4f), Color.Transparent), c, r * 2f), r * 2f, c)
+    drawCircle(Brush.radialGradient(listOf(DawnLavenderFixed.copy(alpha = 0.4f), Color.Transparent), c, r * 2f), r * 2f, c)
     drawCircle(Color(0xFFF2EEE3), r, c)
     drawCircle(Color(0xFF1A1E33), r * 0.92f, c + Offset(r * 0.45f, -r * 0.3f))
 }
@@ -164,7 +168,7 @@ fun WeatherCard(
     loading: Boolean,
     modifier: Modifier = Modifier,
     onPickCity: () -> Unit,
-) {
+) = AlwaysDark {
     Column(
         modifier
             .fillMaxWidth()
@@ -260,7 +264,7 @@ fun CitySheet(
         results = search(query)
         searching = false
     }
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Night, dragHandle = null) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Base, dragHandle = null) {
         Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl)) {
             Text("Your city", style = MaterialTheme.typography.headlineMedium, color = Paper)
             Text(

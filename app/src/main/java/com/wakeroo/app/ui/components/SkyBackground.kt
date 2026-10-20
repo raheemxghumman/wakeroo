@@ -19,6 +19,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import com.wakeroo.app.ui.theme.LocalPalette
 import com.wakeroo.app.ui.theme.LocalReducedMotion
 import com.wakeroo.app.ui.theme.Sky
 import com.wakeroo.app.ui.theme.WakerooMotion
@@ -49,6 +50,8 @@ fun SkyBackground(
         if (sky == Sky.Night || sky == Sky.Dawn || intensity < 0.6f) 1f else 0f, WakerooMotion.calm(), label = "stars",
     )
     val reduced = LocalReducedMotion.current
+    val light = !LocalPalette.current.isDark && intensity < 1f
+    val base = LocalPalette.current.base
     val time by if (reduced) remember { androidx.compose.runtime.mutableFloatStateOf(0f) } else
         rememberInfiniteTransition(label = "sky").animateFloat(
             0f, 1f, infiniteRepeatable(tween(12_000, easing = LinearEasing), RepeatMode.Restart), label = "t",
@@ -60,14 +63,18 @@ fun SkyBackground(
 
     Box(modifier.fillMaxSize()) {
         Canvas(Modifier.fillMaxSize()) {
-            if (intensity < 1f) {
+            if (light) {
+                // Light theme: a warm paper base with the hour's colours as a gentle wash.
+                drawRect(base)
+                drawRect(Brush.verticalGradient(0f to bottom.copy(alpha = intensity * 0.45f), 0.55f to top.copy(alpha = intensity * 0.12f), 1f to Color.Transparent))
+            } else if (intensity < 1f) {
                 // Content screens: deep night base, with the hour's colours glowing in from the top.
                 drawRect(com.wakeroo.app.ui.theme.Night)
                 drawRect(Brush.verticalGradient(0f to top.copy(alpha = intensity), 0.5f to bottom.copy(alpha = intensity * 0.45f), 1f to Color.Transparent))
             } else {
                 drawRect(Brush.verticalGradient(listOf(top, bottom)))
             }
-            if (starAlpha > 0.01f) drawStars(stars, time, starAlpha, tilt)
+            if (starAlpha > 0.01f && !light) drawStars(stars, time, starAlpha, tilt)
             if (sunGlow > 0.01f) {
                 val c = Offset(size.width * sunCenter.x - tilt.x * 18f, size.height * sunCenter.y - tilt.y * 18f)
                 val r = size.minDimension * (0.55f + 0.06f * sin(time * 2 * PI.toFloat()))

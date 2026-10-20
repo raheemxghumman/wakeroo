@@ -62,6 +62,7 @@ import com.wakeroo.app.ui.theme.Paper
 import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.Sky
 import com.wakeroo.app.ui.theme.Space
+import com.wakeroo.app.ui.theme.WakerooTheme
 import com.wakeroo.app.ui.theme.SunriseCoral
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
@@ -73,6 +74,12 @@ import kotlin.math.absoluteValue
  */
 @Composable
 fun OnboardingScreen(restore: Boolean, onFinished: (alarmId: Long) -> Unit) {
+    // First run is always the immersive dark story, whatever the app theme.
+    WakerooTheme(dark = true) { OnboardingContent(restore, onFinished) }
+}
+
+@Composable
+private fun OnboardingContent(restore: Boolean, onFinished: (alarmId: Long) -> Unit) {
     val app = LocalContext.current.container
     val vm = viewModel(key = "onboarding-$restore") { OnboardingViewModel(app, createSavedStateHandle(), restore) }
     val state by vm.state.collectAsStateWithLifecycle()

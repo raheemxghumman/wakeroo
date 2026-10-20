@@ -85,6 +85,7 @@ import com.wakeroo.app.alarm.sound.ToneCategory
 import com.wakeroo.app.alarm.sound.Tones
 import com.wakeroo.app.data.model.Alarm
 import com.wakeroo.app.ui.components.press3d
+import com.wakeroo.app.ui.theme.Base
 import com.wakeroo.app.ui.theme.DawnLavender
 import com.wakeroo.app.ui.theme.Hairline
 import com.wakeroo.app.ui.theme.MorningGold
@@ -184,7 +185,7 @@ fun rememberTonePreview(): Pair<TonePreview, String?> {
 fun SoundSheet(draft: Alarm, pro: Boolean, onDismiss: () -> Unit, onUpgrade: () -> Unit, update: ((Alarm) -> Alarm) -> Unit) {
     val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val (preview, playing) = rememberTonePreview()
-    ModalBottomSheet(onDismissRequest = { preview.stop(); onDismiss() }, sheetState = sheet, containerColor = Night, dragHandle = null) {
+    ModalBottomSheet(onDismissRequest = { preview.stop(); onDismiss() }, sheetState = sheet, containerColor = Base, dragHandle = null) {
         Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl)) {
             Text("Alarm sound", style = MaterialTheme.typography.headlineMedium, color = Paper)
             Text(

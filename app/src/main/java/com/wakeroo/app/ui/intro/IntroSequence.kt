@@ -1,5 +1,7 @@
 package com.wakeroo.app.ui.intro
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
+import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -194,7 +196,7 @@ private fun DrawScope.drawPlanetAndSun(
         Brush.radialGradient(
             listOf(
                 SunriseCoral.copy(alpha = 0.55f * glow.coerceAtMost(1f)),
-                DawnLavender.copy(alpha = 0.18f * glow.coerceAtMost(1f)),
+                DawnLavenderFixed.copy(alpha = 0.18f * glow.coerceAtMost(1f)),
                 Color.Transparent
             ), sunCenter, w * (0.75f + dive)
         ),
@@ -207,7 +209,7 @@ private fun DrawScope.drawPlanetAndSun(
             drawLine(
                 Brush.linearGradient(
                     listOf(
-                        MorningGold.copy(alpha = 0.22f * rise),
+                        MorningGoldFixed.copy(alpha = 0.22f * rise),
                         Color.Transparent
                     ), sunCenter, sunCenter + Offset(cos(a) * len, sin(a) * len)
                 ),
@@ -226,7 +228,7 @@ private fun DrawScope.drawPlanetAndSun(
     clipPath(above) {
         drawCircle(
             Brush.radialGradient(
-                listOf(MorningGold, SunriseCoral),
+                listOf(MorningGoldFixed, SunriseCoral),
                 sunCenter - Offset(sunR * 0.3f, sunR * 0.4f),
                 sunR * 1.5f
             ), sunR, sunCenter
@@ -246,7 +248,7 @@ private fun DrawScope.drawPlanetAndSun(
             listOf(
                 Color.Transparent,
                 Color.Transparent,
-                DawnLavender.copy(alpha = 0.5f * rise),
+                DawnLavenderFixed.copy(alpha = 0.5f * rise),
                 Color.Transparent
             ), planetCenter, planetR * 1.012f
         ),
@@ -284,7 +286,7 @@ private fun DrawScope.drawPlanetAndSun(
         val t0 = i / steps.toFloat();
         val t1 = (i + 1) / steps.toFloat()
         drawLine(
-            DawnLavender.copy(alpha = 0.9f),
+            DawnLavenderFixed.copy(alpha = 0.9f),
             at(t0),
             at(t1),
             strokeWidth = (1.5f + 7f * t0) * density,
@@ -296,7 +298,7 @@ private fun DrawScope.drawPlanetAndSun(
     val dotR = sunR * 0.32f * depth
     // Squash on landing: flatter and wider, then springs back round.
     withTransform({ scale(1f + (1f - squash) * 0.8f, squash, pivot = p + Offset(0f, dotR)) }) {
-        drawCircle(MorningGold, dotR, p)
+        drawCircle(MorningGoldFixed, dotR, p)
         drawCircle(
             Brush.radialGradient(
                 listOf(Color.White.copy(alpha = 0.6f), Color.Transparent),
@@ -307,7 +309,7 @@ private fun DrawScope.drawPlanetAndSun(
     }
     if (shock > 0f && shock < 1f) {
         drawCircle(
-            MorningGold.copy(alpha = (1 - shock) * 0.8f),
+            MorningGoldFixed.copy(alpha = (1 - shock) * 0.8f),
             dotR + shock * w * 0.35f,
             end,
             style = Stroke((1 - shock) * 6f * density)

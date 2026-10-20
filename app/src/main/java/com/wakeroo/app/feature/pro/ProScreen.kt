@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.pro
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
 import android.app.Activity
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
@@ -70,6 +71,7 @@ import com.wakeroo.app.ui.theme.Sky
 import com.wakeroo.app.ui.theme.Space
 import com.wakeroo.app.ui.theme.SunriseCoral
 import com.wakeroo.app.ui.theme.WakerooMotion
+import com.wakeroo.app.ui.theme.WakerooTheme
 import kotlinx.coroutines.delay
 
 private data class Benefit(val icon: ImageVector, val title: String, val body: String)
@@ -85,6 +87,11 @@ private val BENEFITS = listOf(
 
 @Composable
 fun ProScreen(onClose: () -> Unit) {
+    WakerooTheme(dark = true) { ProContent(onClose) }
+}
+
+@Composable
+private fun ProContent(onClose: () -> Unit) {
     val context = LocalContext.current
     val app = context.container
     val settings by app.settings.settings.collectAsStateWithLifecycle(Settings())
@@ -169,7 +176,7 @@ private fun ProOrb(tilt: Offset) {
     ) {
         Canvas(Modifier.fillMaxSize()) {
             val r = size.minDimension / 2
-            drawCircle(Brush.radialGradient(listOf(MorningGold, SunriseCoral, Color(0xFFB94A3C)), center = center + Offset(-r * 0.3f + tilt.x * 18f, -r * 0.35f + tilt.y * 18f), radius = r * 1.4f), r)
+            drawCircle(Brush.radialGradient(listOf(MorningGoldFixed, SunriseCoral, Color(0xFFB94A3C)), center = center + Offset(-r * 0.3f + tilt.x * 18f, -r * 0.35f + tilt.y * 18f), radius = r * 1.4f), r)
             drawCircle(Brush.radialGradient(listOf(Color.White.copy(alpha = 0.55f), Color.Transparent), center = center + Offset(-r * 0.35f, -r * 0.45f), radius = r * 0.5f), r)
         }
         WakerooMark(Modifier.size(110.dp), horizonColor = Night, sunColor = Night.copy(alpha = 0.85f), leapColor = Night.copy(alpha = 0.7f), dotColor = Paper)

@@ -1,5 +1,7 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.theme.MorningGoldFixed
+import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -107,8 +109,8 @@ private fun DrawScope.mathDemo(t: Float, m: TextMeasurer) {
     val answer = when { t < 0.3f -> ""; t < 0.48f -> "5"; else -> "51" }
     val solved = phase(t, 0.62f, 0.72f)
     val box = Rect(Offset(c.x - 24 * unit, c.y - 16 * unit), Size(48 * unit, 18 * unit))
-    drawRoundRect(if (solved > 0) MorningGold.copy(alpha = 0.25f + 0.5f * solved) else Panel, box.topLeft, box.size, CornerRadius(6 * unit))
-    label(m, answer.ifEmpty { "?" }, box.center, 12f, if (answer.isEmpty()) Dim else MorningGold)
+    drawRoundRect(if (solved > 0) MorningGoldFixed.copy(alpha = 0.25f + 0.5f * solved) else Panel, box.topLeft, box.size, CornerRadius(6 * unit))
+    label(m, answer.ifEmpty { "?" }, box.center, 12f, if (answer.isEmpty()) Dim else MorningGoldFixed)
     // Mini keypad.
     val keys = Offset(c.x - 21 * unit, c.y + 10 * unit)
     for (r in 0 until 2) for (k in 0 until 3) {
@@ -130,7 +132,7 @@ private fun DrawScope.typingDemo(t: Float, m: TextMeasurer) {
     val layout = m.measure(
         androidx.compose.ui.text.buildAnnotatedString {
             phrase.forEachIndexed { i, ch ->
-                pushStyle(androidx.compose.ui.text.SpanStyle(color = if (i < typed) MorningGold else Dim)); append(ch); pop()
+                pushStyle(androidx.compose.ui.text.SpanStyle(color = if (i < typed) MorningGoldFixed else Dim)); append(ch); pop()
             }
         },
         TextStyle(fontFamily = Outfit, fontWeight = FontWeight.SemiBold, fontSize = (12 * 0.7f * unit).toSp()),
@@ -171,7 +173,7 @@ private fun DrawScope.shakeDemo(t: Float) {
         val oc = s.center
         drawCircle(Panel, r, oc)
         val level = oc.y + r - fill * 2 * r
-        drawRect(Brush.verticalGradient(listOf(MorningGold, SunriseCoral)), Offset(oc.x - r, level), Size(2 * r, oc.y + r - level))
+        drawRect(Brush.verticalGradient(listOf(MorningGoldFixed, SunriseCoral)), Offset(oc.x - r, level), Size(2 * r, oc.y + r - level))
         drawCircle(Color(0xFF0E1120), r * 1.25f, oc, style = Stroke(r * 0.5f))
     }
     if (shaking) {
@@ -179,7 +181,7 @@ private fun DrawScope.shakeDemo(t: Float) {
         for (side in listOf(-1, 1)) {
             for (k in 0..1) {
                 val x = c.x + side * (24 + k * 6) * unit
-                drawArc(DawnLavender.copy(alpha = a * (0.8f - k * 0.3f)), if (side < 0) 150f else -30f, 60f, false,
+                drawArc(DawnLavenderFixed.copy(alpha = a * (0.8f - k * 0.3f)), if (side < 0) 150f else -30f, 60f, false,
                     Offset(x - 6 * unit, c.y - 12 * unit), Size(12 * unit, 24 * unit), style = Stroke(2.2f * unit, cap = StrokeCap.Round))
             }
         }
@@ -247,7 +249,7 @@ private fun DrawScope.photoDemo(t: Float) {
     brackets(Rect(c + off - Offset(s / 2, s / 2), Size(s, s * 0.85f)), if (matched) Calm else Ink, unit)
     val bar = Rect(Offset(c.x - 24 * unit, c.y + 32 * unit), Size(48 * unit, 4 * unit))
     drawRoundRect(Dim, bar.topLeft, bar.size, CornerRadius(2 * unit))
-    drawRoundRect(if (matched) Calm else MorningGold, bar.topLeft, Size(bar.width * ease, bar.height), CornerRadius(2 * unit))
+    drawRoundRect(if (matched) Calm else MorningGoldFixed, bar.topLeft, Size(bar.width * ease, bar.height), CornerRadius(2 * unit))
     check(Offset(c.x + 28 * unit, c.y - 24 * unit), 7 * unit, phase(t, 0.64f, 0.72f))
 }
 
@@ -259,8 +261,8 @@ private fun DrawScope.stepsDemo(t: Float, m: TextMeasurer) {
         val x = size.width * (0.12f + 0.76f * i / (prints - 1))
         val y = size.height * 0.6f + (if (i % 2 == 0) -6 else 6) * unit
         rotate(90f, Offset(x, y)) {
-            drawOval(MorningGold, Offset(x - 3 * unit, y - 5 * unit), Size(6 * unit, 10 * unit))
-            drawCircle(MorningGold, 1.6f * unit, Offset(x, y - 7.5f * unit))
+            drawOval(MorningGoldFixed, Offset(x - 3 * unit, y - 5 * unit), Size(6 * unit, 10 * unit))
+            drawCircle(MorningGoldFixed, 1.6f * unit, Offset(x, y - 7.5f * unit))
         }
     }
     label(m, "${(40 * phase(t, 0.02f, 0.8f)).toInt()}", Offset(size.width / 2, size.height * 0.3f), 20f)
@@ -290,7 +292,7 @@ private fun DrawScope.memoryDemo(t: Float) {
         val face = p > 0.5f
         scale(squash.coerceAtLeast(0.05f), 1f, Offset(x + tile / 2, y + tile / 2)) {
             drawRoundRect(
-                if (face) Brush.linearGradient(listOf(MorningGold, SunriseCoral), Offset(x, y), Offset(x + tile, y + tile)) else Brush.linearGradient(listOf(Panel, Panel)),
+                if (face) Brush.linearGradient(listOf(MorningGoldFixed, SunriseCoral), Offset(x, y), Offset(x + tile, y + tile)) else Brush.linearGradient(listOf(Panel, Panel)),
                 Offset(x, y), Size(tile, tile), CornerRadius(4 * unit),
             )
         }
@@ -305,7 +307,7 @@ private fun DrawScope.nfcDemo(t: Float) {
     val st = 18 * unit
     val touched = phase(t, 0.4f, 0.45f) > 0f
     drawRoundRect(
-        if (touched) Brush.linearGradient(listOf(Calm, Calm)) else Brush.linearGradient(listOf(MorningGold, SunriseCoral)),
+        if (touched) Brush.linearGradient(listOf(Calm, Calm)) else Brush.linearGradient(listOf(MorningGoldFixed, SunriseCoral)),
         sticker - Offset(st / 2, st / 2), Size(st, st), CornerRadius(4 * unit),
     )
     val approach = phase(t, 0.0f, 0.4f) - phase(t, 0.75f, 0.95f)
@@ -313,7 +315,7 @@ private fun DrawScope.nfcDemo(t: Float) {
     if (touched && t < 0.75f) {
         for (k in 0..2) {
             val p = ((t * 3 + k / 3f) % 1f)
-            drawCircle(DawnLavender.copy(alpha = (1 - p) * 0.7f), st * (0.6f + p * 1.2f), sticker, style = Stroke(1.6f * unit))
+            drawCircle(DawnLavenderFixed.copy(alpha = (1 - p) * 0.7f), st * (0.6f + p * 1.2f), sticker, style = Stroke(1.6f * unit))
         }
     }
     phone(Offset(px, c.y), 22 * unit, 40 * unit, -12f)
@@ -347,13 +349,13 @@ private fun DrawScope.huntDemo(t: Float) {
         val x = c.x - 4 * unit + k * 7 * unit
         val rise = (t * 2 + k * 0.5f) % 1f
         translate(0f, -rise * 8 * unit) {
-            drawArc(DawnLavender.copy(alpha = 1 - rise), 180f, 180f, false, Offset(x - 2 * unit, body.top - 10 * unit), Size(4 * unit, 6 * unit), style = Stroke(1.6f * unit, cap = StrokeCap.Round))
+            drawArc(DawnLavenderFixed.copy(alpha = 1 - rise), 180f, 180f, false, Offset(x - 2 * unit, body.top - 10 * unit), Size(4 * unit, 6 * unit), style = Stroke(1.6f * unit, cap = StrokeCap.Round))
         }
     }
     val found = phase(t, 0.55f, 0.6f)
     val pulse = 1f + 0.1f * sin(t * 2 * PI.toFloat() * 4) * (1 - found)
     val s = 58 * unit * pulse
-    brackets(Rect(Offset(c.x - s / 2, c.y - s / 2), Size(s, s)), if (found > 0) MorningGold else Ink, unit)
+    brackets(Rect(Offset(c.x - s / 2, c.y - s / 2), Size(s, s)), if (found > 0) MorningGoldFixed else Ink, unit)
     if (found == 0f) drawCircle(SunriseCoral.copy(alpha = 0.6f), s * 0.42f, c, style = Stroke(1.4f * unit))
     check(Offset(c.x + 26 * unit, c.y - 26 * unit), 7 * unit, phase(t, 0.6f, 0.68f))
 }
