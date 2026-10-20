@@ -135,7 +135,7 @@ fun WakerooNavHost(onboardingDone: Boolean, restored: Boolean, openHealth: Boole
                                         highlightId = highlight,
                                         onHighlightShown = { highlight = 0L },
                                     )
-                                    MainTab.Sleep -> SleepScreen(onSettings = openSettings)
+                                    MainTab.Sleep -> SleepScreen(onSettings = openSettings, onNewAlarm = { nav.navigate(EditorRoute()) }, onPro = { nav.navigate(ProRoute) })
                                     MainTab.Morning -> MorningScreen(onSettings = openSettings)
                                     MainTab.You -> YouScreen(onSettings = openSettings, onPro = { nav.navigate(ProRoute) })
                                 }

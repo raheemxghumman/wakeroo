@@ -21,6 +21,7 @@ import com.wakeroo.app.data.model.MissionConfig
 import com.wakeroo.app.data.model.MissionType
 import com.wakeroo.app.data.model.SoundMode
 import com.wakeroo.app.alarm.sound.Tone
+import com.wakeroo.app.sleep.SleepPlayer
 import com.wakeroo.app.alarm.sound.Tones
 import android.net.Uri
 import kotlinx.coroutines.launch
@@ -99,6 +100,8 @@ class RingService : Service() {
             wakeCheckDeadline = if (kind == RingKind.WakeCheck) now + WAKE_CHECK_WINDOW_MS else 0L,
         )
         RingSession.publish(state)
+        // Sleep sounds stop a minute early anyway; this is the belt to that braces.
+        SleepPlayer.stop(this)
         store.activeRing = ActiveRing(alarmId, scheduledAt, now, snoozes, kind)
         goForeground(state)
         acquireWakeLock()

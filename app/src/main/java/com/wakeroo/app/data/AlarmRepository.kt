@@ -8,6 +8,7 @@ import com.wakeroo.app.data.db.WakerooDatabase
 import com.wakeroo.app.data.db.toEntity
 import com.wakeroo.app.data.db.toModel
 import com.wakeroo.app.data.model.Alarm
+import com.wakeroo.app.reminders.Reminders
 import com.wakeroo.app.widget.NextAlarmWidget
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -24,6 +25,7 @@ class AlarmRepository(
     private val db: Lazy<WakerooDatabase>,
     private val store: DirectBootStore,
     private val scheduler: AlarmScheduler,
+    private val settings: () -> SettingsStore,
 ) {
     private val lock = Mutex()
 
@@ -96,8 +98,10 @@ class AlarmRepository(
     }
 
     private suspend fun syncLocked() {
-        scheduler.rescheduleAll(db.value.alarms().all().map { it.toModel() })
+        val alarms = db.value.alarms().all().map { it.toModel() }
+        scheduler.rescheduleAll(alarms)
         runCatching { NextAlarmWidget.refresh(context) }
+        runCatching { Reminders.reschedule(context, alarms, settings().current()) }
     }
 
     private fun isUnlocked() = UserManagerCompat.isUserUnlocked(context)

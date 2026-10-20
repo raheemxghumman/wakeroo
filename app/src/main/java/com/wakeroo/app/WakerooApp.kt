@@ -9,6 +9,8 @@ import com.wakeroo.app.data.AlarmRepository
 import com.wakeroo.app.data.DirectBootStore
 import com.wakeroo.app.data.SettingsStore
 import com.wakeroo.app.data.db.WakerooDatabase
+import com.wakeroo.app.reminders.Reminders
+import com.wakeroo.app.sleep.SleepSoundService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +24,7 @@ class AppContainer(context: Context) {
     val scheduler = AlarmScheduler(context, directBoot)
     val database = lazy { WakerooDatabase.create(context) }
     val settings by lazy { SettingsStore(context, directBoot) }
-    val repository = AlarmRepository(context, database, directBoot, scheduler)
+    val repository = AlarmRepository(context, database, directBoot, scheduler) { settings }
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     val billing by lazy { ProBilling(context, settings, appScope) }
 }
@@ -35,6 +37,8 @@ class WakerooApp : Application() {
         super.onCreate()
         container = AppContainer(this)
         Notifications.createChannels(this)
+        Reminders.createChannel(this)
+        SleepSoundService.createChannel(this)
     }
 }
 

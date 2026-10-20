@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.wakeroo.app.billing.Ads
 import com.wakeroo.app.data.AppTheme
 import com.wakeroo.app.data.RingPrefs
+import com.wakeroo.app.reminders.Reminders
 import com.wakeroo.app.data.Settings
 import com.wakeroo.app.feature.main.MainTab
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -37,9 +38,16 @@ class MainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
         )
         lifecycleScope.launch {
+            var lastReminderKey: List<Any>? = null
             container.settings.settings.collect {
                 settings.value = it
                 container.directBoot.ringPrefs = RingPrefs(it.alwaysSpeaker, it.alsoHeadphones, it.missionTimeLimit, it.ringScene)
+                // Reminder settings changed: line the reminders up again.
+                val key = listOf(it.bedtimeReminder, it.sleepGoalMinutes, it.windDownMinutes, it.noAlarmReminder, it.noAlarmReminderAt)
+                if (key != lastReminderKey) {
+                    lastReminderKey = key
+                    Reminders.reschedule(this@MainActivity, container.repository.all(), it)
+                }
             }
         }
         lifecycleScope.launch {
