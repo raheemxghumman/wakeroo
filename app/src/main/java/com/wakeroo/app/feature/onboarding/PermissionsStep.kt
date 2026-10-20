@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.onboarding
 
+import com.wakeroo.app.ui.i18n.tr
+import com.wakeroo.app.ui.i18n.n
 import android.Manifest
 import android.app.NotificationManager
 import android.content.Context
@@ -82,10 +84,14 @@ import com.wakeroo.app.ui.theme.Space
 import com.wakeroo.app.ui.theme.SunriseCoral
 import kotlin.math.abs
 
-enum class Permission(val title: String, val why: String, val action: String, val icon: ImageVector) {
-    Notifications("Alarm alerts", "So the alarm screen can appear", "Allow alarm alerts", Icons.Rounded.NotificationsActive),
-    FullScreen("Full-screen alarm", "Takes over the lock screen instead of a small banner", "Turn on full screen", Icons.Rounded.Fullscreen),
-    Battery("No battery limits", "The #1 reason alarm apps miss alarms", "Remove battery limits", Icons.Rounded.BatteryChargingFull),
+enum class Permission(private val titleEn: String, private val whyEn: String, private val actionEn: String, val icon: ImageVector) {
+    Notifications(n("Alarm alerts"), n("So the alarm screen can appear"), n("Allow alarm alerts"), Icons.Rounded.NotificationsActive),
+    FullScreen(n("Full-screen alarm"), n("Takes over the lock screen instead of a small banner"), n("Turn on full screen"), Icons.Rounded.Fullscreen),
+    Battery(n("No battery limits"), n("The #1 reason alarm apps miss alarms"), n("Remove battery limits"), Icons.Rounded.BatteryChargingFull);
+
+    val title: String get() = tr(titleEn)
+    val why: String get() = tr(whyEn)
+    val action: String get() = tr(actionEn)
 }
 
 /** Which permissions this phone needs at all; full-screen only exists as a switch on Android 14+. */

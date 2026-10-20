@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.morning
 
+import com.wakeroo.app.ui.util.full
+import com.wakeroo.app.ui.util.formatSeconds
 import android.text.format.DateFormat
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -158,11 +160,11 @@ fun MorningScreen(onSettings: () -> Unit) {
                     val line = when {
                         wokeToday != null -> {
                             val up = Instant.ofEpochMilli(wokeToday.endedAt!!).atZone(zone).toLocalTime()
-                            "Up since ${up.formatClock(use24h)} ${up.formatMeridiem(use24h)}${wokeToday.secondsToWake?.let { s -> " · awake in ${if (s < 60) "${s}s" else "${s / 60} min"}" } ?: ""}"
+                            "Up since ${up.formatClock(use24h)} ${up.formatMeridiem(use24h)}" + (wokeToday.secondsToWake?.let { s -> " · " + "awake in ${formatSeconds(s)}" } ?: "")
                         }
                         nextAlarm != null -> {
                             val at = Instant.ofEpochMilli(nextAlarm).atZone(zone)
-                            val day = if (at.toLocalDate() == today) "today" else if (at.toLocalDate() == today.plusDays(1)) "tomorrow" else at.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
+                            val day = if (at.toLocalDate() == today) "today" else if (at.toLocalDate() == today.plusDays(1)) "tomorrow" else at.dayOfWeek.full()
                             "Next alarm ${at.toLocalTime().formatClock(use24h)} ${at.toLocalTime().formatMeridiem(use24h)} $day"
                         }
                         else -> "No alarm set"

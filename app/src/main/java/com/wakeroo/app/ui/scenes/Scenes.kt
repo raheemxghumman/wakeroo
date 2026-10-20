@@ -1,5 +1,7 @@
 package com.wakeroo.app.ui.scenes
 
+import com.wakeroo.app.ui.i18n.tr
+import com.wakeroo.app.ui.i18n.n
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.RuntimeShader
@@ -49,14 +51,17 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 /** An animated alarm background, drawn in code: no video files. Suggested tones are free ones. */
-enum class Scene(val id: String, val title: String, val blurb: String, val pro: Boolean, val suggestedTone: String?) {
-    NightSky("night", "Night Sky", "Stars and a slow sunrise glow", false, "wakeroo_rise"),
-    IntoSpace("space", "Into Space", "Sunrise over a turning planet", false, "dawn_chimes"),
-    Minimal("minimal", "Minimal Black", "Pure black. Easy on OLED and eyes", false, "bright_pulse"),
-    Aurora("aurora", "Aurora", "Northern lights drifting overhead", true, "dawn_chimes"),
-    Ocean("ocean", "Ocean Dawn", "Waves rolling under a peach sky", true, "soft_marimba"),
-    Kinetic("kinetic", "WAKE UP", "Loud type that won't let you doze", true, "klaxon"),
-    Photo("photo", "Your photo", "Any picture, slowly drifting", true, null);
+enum class Scene(val id: String, private val titleEn: String, private val blurbEn: String, val pro: Boolean, val suggestedTone: String?) {
+    NightSky("night", n("Night Sky"), n("Stars and a slow sunrise glow"), false, "wakeroo_rise"),
+    IntoSpace("space", n("Into Space"), n("Sunrise over a turning planet"), false, "dawn_chimes"),
+    Minimal("minimal", n("Minimal Black"), n("Pure black. Easy on OLED and eyes"), false, "bright_pulse"),
+    Aurora("aurora", n("Aurora"), n("Northern lights drifting overhead"), true, "dawn_chimes"),
+    Ocean("ocean", n("Ocean Dawn"), n("Waves rolling under a peach sky"), true, "soft_marimba"),
+    Kinetic("kinetic", n("WAKE UP"), n("Loud type that won't let you doze"), true, "klaxon"),
+    Photo("photo", n("Your photo"), n("Any picture, slowly drifting"), true, null);
+
+    val title: String get() = tr(titleEn)
+    val blurb: String get() = tr(blurbEn)
 
     companion object {
         fun byId(id: String?): Scene = entries.firstOrNull { it.id == id } ?: NightSky
@@ -312,7 +317,7 @@ private fun OceanScene(clock: MutableFloatState, tilt: Offset) {
     }
 }
 
-private val KINETIC_WORDS = listOf("WAKE UP", "RISE", "GET UP", "GO", "TODAY")
+private val KINETIC_WORDS get() = listOf(tr("WAKE UP"), tr("RISE"), tr("GET UP"), tr("GO"), tr("TODAY"))
 
 /** Bold type slams in on the beat, shakes and fades, word after word, in the background. */
 @Composable

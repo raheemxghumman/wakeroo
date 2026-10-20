@@ -64,7 +64,7 @@ import com.wakeroo.app.ui.theme.Space
 import com.wakeroo.app.ui.theme.WakerooTheme
 import kotlinx.coroutines.launch
 
-private val CODE_PLACES = listOf("toothbrush", "toothpaste", "coffee jar", "kettle", "fridge", "meds", "desk", "bathroom mirror")
+private val CODE_PLACES get() = listOf("toothbrush", "toothpaste", "coffee jar", "kettle", "fridge", "meds", "desk", "bathroom mirror")
 
 /** Register the QR/barcode or the photo spot a mission will ask for at alarm time. */
 @Composable
@@ -168,7 +168,7 @@ private fun PhotoSetup(onPhoto: (Long, List<String>, String) -> Unit) {
     }
 }
 
-private val STICKER_PLACES = listOf("bathroom mirror", "kettle", "coffee machine", "front door", "fridge", "desk", "toothbrush")
+private val STICKER_PLACES get() = listOf("bathroom mirror", "kettle", "coffee machine", "front door", "fridge", "desk", "toothbrush")
 
 @Composable
 private fun NfcSetup(onNfc: (String, String) -> Unit) {

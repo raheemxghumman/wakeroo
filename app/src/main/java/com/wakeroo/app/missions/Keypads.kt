@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -59,7 +60,7 @@ fun RowScope.KeyCap(
     val haptics = LocalHapticFeedback.current
     val label = when (key) {
         is Key.Char -> key.c.toString()
-        Key.Space -> "space"
+        Key.Space -> tr("space")
         else -> ""
     }
     val description = when (key) {

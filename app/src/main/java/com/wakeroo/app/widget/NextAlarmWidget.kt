@@ -1,5 +1,6 @@
 package com.wakeroo.app.widget
 
+import com.wakeroo.app.ui.util.full
 import android.content.Context
 import android.text.format.DateFormat
 import androidx.compose.runtime.Composable
@@ -59,7 +60,7 @@ class NextAlarmWidget : GlanceAppWidget() {
                     time = next?.let { formatClock(it.first.hour, it.first.minute, use24h) },
                     meridiem = next?.let { formatMeridiem(it.first.hour, use24h) } ?: "",
                     until = next?.let { Duration.between(Instant.ofEpochMilli(now), Instant.ofEpochMilli(it.second)).formatUntil() },
-                    day = next?.let { Instant.ofEpochMilli(it.second).atZone(ZoneId.systemDefault()).dayOfWeek.name.lowercase().replaceFirstChar { c -> c.uppercase() } },
+                    day = next?.let { Instant.ofEpochMilli(it.second).atZone(ZoneId.systemDefault()).dayOfWeek.full() },
                     label = next?.first?.label.orEmpty(),
                 )
             }

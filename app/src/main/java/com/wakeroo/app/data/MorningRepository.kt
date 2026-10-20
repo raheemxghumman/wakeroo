@@ -1,5 +1,7 @@
 package com.wakeroo.app.data
 
+import com.wakeroo.app.ui.i18n.tr
+import com.wakeroo.app.ui.i18n.n
 import android.content.Context
 import com.wakeroo.app.data.db.MoodEntity
 import com.wakeroo.app.data.db.RoutineItemEntity
@@ -23,17 +25,23 @@ data class Quote(
     @SerialName("th") val theme: String,
 )
 
-enum class QuoteTheme(val id: String, val title: String) {
-    Positivity("positivity", "Positivity"),
-    Productivity("productivity", "Productivity"),
-    Calm("calm", "Calm"),
-    HardTimes("hard_times", "Hard times"),
-    Health("health", "Health"),
-    Learning("learning", "Learning"),
+enum class QuoteTheme(val id: String, private val titleEn: String) {
+    Positivity("positivity", n("Positivity")),
+    Productivity("productivity", n("Productivity")),
+    Calm("calm", n("Calm")),
+    HardTimes("hard_times", n("Hard times")),
+    Health("health", n("Health")),
+    Learning("learning", n("Learning"));
+
+    val title: String get() = tr(titleEn)
 }
 
 /** How you felt on waking. Ordered from worst to best. */
-enum class Mood(val title: String) { Exhausted("Exhausted"), Tired("Tired"), Okay("Okay"), Calm("Calm"), Refreshed("Refreshed") }
+enum class Mood(private val titleEn: String) {
+    Exhausted(n("Exhausted")), Tired(n("Tired")), Okay(n("Okay")), Calm(n("Calm")), Refreshed(n("Refreshed"));
+
+    val title: String get() = tr(titleEn)
+}
 
 /** The bundled quotes for the device language, falling back to English. */
 object QuoteBook {

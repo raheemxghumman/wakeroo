@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.you
 
+import com.wakeroo.app.ui.util.initial
+import com.wakeroo.app.ui.util.formatSeconds
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
@@ -142,7 +144,7 @@ fun YouScreen(onSettings: () -> Unit, onPro: () -> Unit) {
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.md)) {
                         NumberTile("On time", stats.successRate?.let { "$it%" } ?: "–", "last 30 days", Modifier.height(94.dp))
                         NumberTile(
-                            "Up in", stats.averageSecondsToWake?.let { if (it < 60) "${it}s" else "${it / 60}m ${it % 60}s" } ?: "–",
+                            "Up in", stats.averageSecondsToWake?.let { formatSeconds(it) } ?: "–",
                             "on average", Modifier.height(94.dp),
                         )
                     }
@@ -241,7 +243,7 @@ private fun RecapCard(recap: WeekRecap) {
             Text(
                 listOfNotNull(
                     recap.averageWake?.let { "Usually up at $it" },
-                    recap.fastest?.let { "Fastest: ${if (it < 60) "${it}s" else "${it / 60} min ${it % 60}s"}" },
+                    recap.fastest?.let { "Fastest: ${formatSeconds(it)}" },
                 ).joinToString(" · ").ifEmpty { "Your first mornings will show here" },
                 style = MaterialTheme.typography.bodySmall, color = PaperFixed.copy(alpha = 0.75f),
             )
@@ -346,7 +348,7 @@ private fun WeekChart(stats: WakeStats) {
                             val color = when (day.success) { true -> MorningGoldFixed; false -> Alert; null -> empty }
                             drawRoundRect(color, Offset(0f, size.height - h), Size(size.width, h), CornerRadius(size.width / 2))
                         }
-                        Text(day.date.dayOfWeek.name.take(1), style = MaterialTheme.typography.labelSmall, color = PaperMuted, modifier = Modifier.padding(top = Space.xs))
+                        Text(day.date.dayOfWeek.initial(), style = MaterialTheme.typography.labelSmall, color = PaperMuted, modifier = Modifier.padding(top = Space.xs))
                     }
                 }
             }
@@ -377,7 +379,7 @@ private fun LogRow(event: RingEventEntity, modifier: Modifier) {
                 style = MaterialTheme.typography.bodyMedium, color = Paper,
             )
             Text(
-                listOfNotNull(outcome, event.label.takeIf { it.isNotBlank() }, if (event.snoozes > 0) "${event.snoozes} snooze${if (event.snoozes > 1) "s" else ""}" else null).joinToString(" · "),
+                listOfNotNull(outcome, event.label.takeIf { it.isNotBlank() }, if (event.snoozes == 1) "1 snooze" else if (event.snoozes > 1) "${event.snoozes} snoozes" else null).joinToString(" · "),
                 style = MaterialTheme.typography.bodySmall, color = PaperMuted,
             )
         }

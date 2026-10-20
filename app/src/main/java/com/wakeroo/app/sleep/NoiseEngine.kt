@@ -1,5 +1,7 @@
 package com.wakeroo.app.sleep
 
+import com.wakeroo.app.ui.i18n.tr
+import com.wakeroo.app.ui.i18n.n
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
@@ -9,14 +11,16 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 /** A sleep sound. All are synthesised live, so they never loop audibly and cost no APK space. */
-enum class SleepSound(val id: String, val title: String, val pro: Boolean) {
-    Rain("rain", "Rain", false),
-    Ocean("ocean", "Ocean waves", false),
-    White("white", "White noise", false),
-    Brown("brown", "Brown noise", false),
-    Pink("pink", "Pink noise", true),
-    Fan("fan", "Fan", true),
-    Crickets("crickets", "Crickets", true);
+enum class SleepSound(val id: String, private val titleEn: String, val pro: Boolean) {
+    Rain("rain", n("Rain"), false),
+    Ocean("ocean", n("Ocean waves"), false),
+    White("white", n("White noise"), false),
+    Brown("brown", n("Brown noise"), false),
+    Pink("pink", n("Pink noise"), true),
+    Fan("fan", n("Fan"), true),
+    Crickets("crickets", n("Crickets"), true);
+
+    val title: String get() = tr(titleEn)
 
     companion object {
         fun byId(id: String) = entries.firstOrNull { it.id == id }

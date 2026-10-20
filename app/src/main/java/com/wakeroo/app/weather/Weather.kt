@@ -1,5 +1,7 @@
 package com.wakeroo.app.weather
 
+import com.wakeroo.app.ui.i18n.tr
+import com.wakeroo.app.ui.i18n.n
 import android.Manifest
 import android.app.PendingIntent
 import android.content.Context
@@ -34,9 +36,11 @@ import java.net.URLEncoder
 import java.time.LocalDateTime
 
 /** What the sky is doing, from WMO weather codes. */
-enum class Condition(val label: String) {
-    Clear("Clear"), PartlyCloudy("Partly cloudy"), Cloudy("Cloudy"), Fog("Foggy"),
-    Drizzle("Drizzle"), Rain("Rain"), Snow("Snow"), Storm("Thunderstorms");
+enum class Condition(private val labelEn: String) {
+    Clear(n("Clear")), PartlyCloudy(n("Partly cloudy")), Cloudy(n("Cloudy")), Fog(n("Foggy")),
+    Drizzle(n("Drizzle")), Rain(n("Rain")), Snow(n("Snow")), Storm(n("Thunderstorms"));
+
+    val label: String get() = tr(labelEn)
 
     val wet: Boolean get() = this == Drizzle || this == Rain || this == Storm
 
@@ -96,8 +100,8 @@ data class Forecast(
 }
 
 fun hourLabel(hour: Int): String = when {
-    hour == 0 -> "midnight"
-    hour == 12 -> "noon"
+    hour == 0 -> tr("midnight")
+    hour == 12 -> tr("noon")
     hour < 12 -> "$hour AM"
     else -> "${hour - 12} PM"
 }

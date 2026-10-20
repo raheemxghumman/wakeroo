@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.you
 
+import com.wakeroo.app.ui.util.initial
+import com.wakeroo.app.ui.util.formatSeconds
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import android.content.Context
@@ -152,7 +154,7 @@ fun WakeCalendar(events: List<RingEventEntity>, pro: Boolean, onDay: (LocalDate)
         Spacer(Modifier.height(Space.sm))
         Row(Modifier.fillMaxWidth()) {
             DayOfWeek.entries.forEach { d ->
-                Text(d.name.take(1), style = MaterialTheme.typography.labelSmall, color = PaperMuted, textAlign = TextAlign.Center, modifier = Modifier.weight(1f))
+                Text(d.initial(), style = MaterialTheme.typography.labelSmall, color = PaperMuted, textAlign = TextAlign.Center, modifier = Modifier.weight(1f))
             }
         }
         HorizontalPager(pager, modifier = Modifier.fillMaxWidth()) { page ->
@@ -255,7 +257,7 @@ fun DaySheet(day: LocalDate, events: List<RingEventEntity>, mood: MoodEntity?, o
             dayEvents.forEach { e ->
                 val rang = Instant.ofEpochMilli(e.scheduledAt).atZone(zone).toLocalTime()
                 val (color, label) = when (e.outcome) {
-                    RingOutcome.Dismissed -> if (e.wakeCheckPassed == true) Calm to "Wake-up check passed" else Calm to "Mission done${e.secondsToWake?.let { s -> " in ${if (s < 60) "${s}s" else "${s / 60} min ${s % 60}s"}" } ?: ""}"
+                    RingOutcome.Dismissed -> if (e.wakeCheckPassed == true) Calm to "Wake-up check passed" else Calm to (e.secondsToWake?.let { s -> "Mission done in ${formatSeconds(s)}" } ?: "Mission done")
                     RingOutcome.Escaped -> MorningGold to "Emergency exit"
                     RingOutcome.Missed -> Alert to if (e.wakeCheckPassed == false) "Fell back asleep, the alarm came back" else "Didn't ring (phone off or app paused)"
                     RingOutcome.Snoozed -> DawnLavender to "Snoozed"
@@ -269,7 +271,7 @@ fun DaySheet(day: LocalDate, events: List<RingEventEntity>, mood: MoodEntity?, o
                     Column {
                         Text("${rang.formatClock()} ${rang.formatMeridiem()}${e.label.takeIf { it.isNotBlank() }?.let { " · $it" } ?: ""}", style = MaterialTheme.typography.titleSmall, color = Paper)
                         Text(
-                            listOfNotNull(label, if (e.snoozes > 0) "${e.snoozes} snooze${if (e.snoozes > 1) "s" else ""}" else null).joinToString(" · "),
+                            listOfNotNull(label, if (e.snoozes == 1) "1 snooze" else if (e.snoozes > 1) "${e.snoozes} snoozes" else null).joinToString(" · "),
                             style = MaterialTheme.typography.bodySmall, color = PaperMuted,
                         )
                     }

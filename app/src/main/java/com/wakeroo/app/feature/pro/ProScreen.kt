@@ -76,7 +76,7 @@ import kotlinx.coroutines.delay
 
 private data class Benefit(val icon: ImageVector, val title: String, val body: String)
 
-private val BENEFITS = listOf(
+private val BENEFITS get() = listOf(
     Benefit(Icons.Rounded.Layers, "Up to 5 missions per alarm", "Stack math, a QR code in the kitchen and a photo of the sink."),
     Benefit(Icons.Rounded.Lock, "Harder Mode", "Off, delete, skip and snooze all need a mission first. No sleepy cheating."),
     Benefit(Icons.Rounded.Palette, "Every wake-up scene", "Aurora, Ocean Dawn, WAKE UP and your own photo, plus four more tones."),

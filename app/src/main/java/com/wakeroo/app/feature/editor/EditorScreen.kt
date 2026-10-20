@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.editor
 
+import com.wakeroo.app.ui.util.initial
+import com.wakeroo.app.ui.util.twoDigits
 import android.app.Activity
 import android.content.Intent
 import android.media.RingtoneManager
@@ -218,8 +220,8 @@ private fun IconCircle(icon: androidx.compose.ui.graphics.vector.ImageVector, la
 
 @Composable
 private fun TimeCard(draft: Alarm, use24h: Boolean, state: EditorState, onTime: (Int, Int) -> Unit) {
-    val hours = if (use24h) (0..23).map { "%02d".format(it) } else (0..11).map { if (it == 0) "12" else "$it" }
-    val minutes = (0..59).map { "%02d".format(it) }
+    val hours = if (use24h) (0..23).map { twoDigits(it) } else (0..11).map { if (it == 0) "12" else "$it" }
+    val minutes = (0..59).map { twoDigits(it) }
     val pm = draft.hour >= 12
     val wheelStyle = ClockType.card.copy(fontSize = 44.sp)
     Column(
@@ -292,7 +294,7 @@ private fun RepeatSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
                         },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(day.name.take(1), style = MaterialTheme.typography.labelLarge, color = if (on) Night else Paper)
+                    Text(day.initial(), style = MaterialTheme.typography.labelLarge, color = if (on) Night else Paper)
                 }
             }
         }
@@ -405,7 +407,7 @@ private fun MissionsSection(draft: Alarm, max: Int, onEdit: (Int) -> Unit, onRem
 
 fun MissionConfig.summary(): String = when (type) {
     MissionType.Math -> "$count problems · ${difficultyName(difficulty)}"
-    MissionType.Typing -> "$count phrase${if (count > 1) "s" else ""}"
+    MissionType.Typing -> if (count == 1) "1 phrase" else "$count phrases"
     MissionType.Shake -> "$count shakes"
     MissionType.Scan -> codeLabel?.let { "Code on your $it" } ?: if (codeValue == null) "Any code" else "Registered code"
     MissionType.Photo -> if (photoHash == null) "Spot not set" else "Your photo spot · ${difficultyName(difficulty)} match"
@@ -413,7 +415,7 @@ fun MissionConfig.summary(): String = when (type) {
     MissionType.Memory -> "$count rounds · ${gridSize}×$gridSize"
     MissionType.Nfc -> nfcLabel?.let { "Sticker by the $it" } ?: "Sticker not registered"
     MissionType.Plan -> "Three words about your day"
-    MissionType.Hunt -> "$count object${if (count > 1) "s" else ""} · ${listOf("Everyday", "Varied", "Strict")[(difficulty - 1).coerceIn(0, 2)]}"
+    MissionType.Hunt -> (if (count == 1) "1 object" else "$count objects") + " · " + listOf("Everyday", "Varied", "Strict")[(difficulty - 1).coerceIn(0, 2)]
 }.let { if (needsSetup) "Set up tonight · math until then" else it }
 
 fun difficultyName(d: Int) = when (d) { 1 -> "Easy"; 2 -> "Medium"; else -> "Hard" }

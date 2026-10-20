@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.home
 
+import com.wakeroo.app.ui.util.full
+import com.wakeroo.app.ui.util.initial
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import android.text.format.DateFormat
@@ -240,7 +242,7 @@ fun HomeScreen(
                 item(key = "streak") {
                     val stats = remember(state.events) { WakeStatsCalculator.compute(state.events) }
                     StreakStrip(
-                        week = stats.lastSevenDays.map { it.date.dayOfWeek.name.take(1) to it.success },
+                        week = stats.lastSevenDays.map { it.date.dayOfWeek.initial() to it.success },
                         streak = stats.streak,
                         onClick = { onTab(MainTab.You) },
                         modifier = Modifier.padding(top = Space.md).entrance(3),
@@ -349,7 +351,7 @@ private fun dayName(date: java.time.LocalDate, now: Long): String {
     return when (date) {
         today -> "Today"
         today.plusDays(1) -> "Tomorrow"
-        else -> date.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
+        else -> date.dayOfWeek.full()
     }
 }
 

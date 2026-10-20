@@ -1,22 +1,26 @@
 package com.wakeroo.app.data.model
 
+import com.wakeroo.app.ui.i18n.tr
+import com.wakeroo.app.ui.i18n.n
 import kotlinx.serialization.Serializable
 import java.time.DayOfWeek
 import java.time.LocalDate
 
 /** A wake-up mission the user must finish before the alarm goes quiet. */
 @Serializable
-enum class MissionType(val title: String, val worksInAnotherRoom: Boolean) {
-    Math("Math", false),
-    Typing("Typing", false),
-    Shake("Shake", false),
-    Scan("QR / Barcode", true),
-    Photo("Photo spot", true),
-    Steps("Steps", true),
-    Memory("Memory tiles", false),
-    Nfc("NFC tag", true),
-    Plan("Type your plan", false),
-    Hunt("Item hunt", true);
+enum class MissionType(private val titleEn: String, val worksInAnotherRoom: Boolean) {
+    Math(n("Math"), false),
+    Typing(n("Typing"), false),
+    Shake(n("Shake"), false),
+    Scan(n("QR / Barcode"), true),
+    Photo(n("Photo spot"), true),
+    Steps(n("Steps"), true),
+    Memory(n("Memory tiles"), false),
+    Nfc(n("NFC tag"), true),
+    Plan(n("Type your plan"), false),
+    Hunt(n("Item hunt"), true);
+
+    val title: String get() = tr(titleEn)
 
     /** Missions that need something registered before they can run. */
     val needsSetupStep: Boolean get() = this == Scan || this == Photo || this == Nfc

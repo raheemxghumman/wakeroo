@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.main
 
+import com.wakeroo.app.ui.i18n.tr
+import com.wakeroo.app.ui.i18n.n
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateDpAsState
@@ -62,11 +64,13 @@ import com.wakeroo.app.ui.theme.NightSurfaceHigh
 import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.SunriseCoral
 
-enum class MainTab(val title: String, val filled: ImageVector, val outlined: ImageVector) {
-    Alarms("Alarms", Icons.Rounded.Alarm, Icons.Outlined.Alarm),
-    Sleep("Sleep", Icons.Rounded.Bedtime, Icons.Outlined.Bedtime),
-    Morning("Morning", Icons.Rounded.WbSunny, Icons.Outlined.WbSunny),
-    You("You", Icons.Rounded.EmojiEvents, Icons.Outlined.EmojiEvents),
+enum class MainTab(private val titleEn: String, val filled: ImageVector, val outlined: ImageVector) {
+    Alarms(n("Alarms"), Icons.Rounded.Alarm, Icons.Outlined.Alarm),
+    Sleep(n("Sleep"), Icons.Rounded.Bedtime, Icons.Outlined.Bedtime),
+    Morning(n("Morning"), Icons.Rounded.WbSunny, Icons.Outlined.WbSunny),
+    You(n("You"), Icons.Rounded.EmojiEvents, Icons.Outlined.EmojiEvents);
+
+    val title: String get() = tr(titleEn)
 }
 
 val BottomBarHeight = 68.dp

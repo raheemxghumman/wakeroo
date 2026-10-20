@@ -1,5 +1,6 @@
 package com.wakeroo.app.alarm.ring
 
+import com.wakeroo.app.ui.util.formatSeconds
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -186,7 +187,7 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
             )
             Text(
                 if (test) "Your alarms will ring like this, even when the phone is locked."
-                else "Up at ${time.formatClock()} ${time.formatMeridiem()}  ·  awake in ${formatDuration(result.secondsToWake)}",
+                else "Up at ${time.formatClock()} ${time.formatMeridiem()}  ·  awake in ${formatSeconds(result.secondsToWake)}",
                 style = MaterialTheme.typography.titleMedium, color = ink.copy(alpha = 0.8f),
                 textAlign = TextAlign.Center, modifier = Modifier.padding(top = Space.sm),
             )
@@ -289,4 +290,3 @@ private fun BriefingLine(visible: Boolean, order: Int, content: @Composable () -
     }
 }
 
-private fun formatDuration(seconds: Int): String = if (seconds < 60) "${seconds}s" else "${seconds / 60} min ${seconds % 60}s"

@@ -293,7 +293,7 @@ private fun EmergencyExit(holdSeconds: Int, onCancel: () -> Unit, onEscape: () -
     val hold = remember { Animatable(0f) }
     var unlocked by remember { mutableStateOf(false) }
     var typed by remember { mutableStateOf("") }
-    val phrase = "i am awake"
+    val phrase = TypingPhrases.ESCAPE
 
     Box(
         Modifier
@@ -340,7 +340,7 @@ private fun EmergencyExit(holdSeconds: Int, onCancel: () -> Unit, onEscape: () -
                     }
                     Box(Modifier.size(170.dp).clip(CircleShape).background(NightSurface), contentAlignment = Alignment.Center) {
                         Text(
-                            if (hold.value > 0f) "${(holdSeconds - hold.value * holdSeconds).toInt() + 1}s" else "Hold",
+                            if (hold.value > 0f) "${(holdSeconds - hold.value * holdSeconds).toInt() + 1}" else "Hold",
                             style = MaterialTheme.typography.displaySmall, color = Paper,
                         )
                     }

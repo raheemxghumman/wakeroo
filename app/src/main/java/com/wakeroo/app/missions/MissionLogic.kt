@@ -28,6 +28,9 @@ object MathProblems {
 
 /** Short, upbeat phrases: easy to type with one thumb, impossible to type asleep. */
 object TypingPhrases {
+    /** Typed to leave through the emergency exit. Latin letters, so the keypad can type it. */
+    const val ESCAPE = "i am awake"
+
     private val phrases = listOf(
         "today is going to be good",
         "my feet are on the floor",

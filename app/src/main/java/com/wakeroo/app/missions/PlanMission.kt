@@ -41,7 +41,7 @@ import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.Space
 import kotlinx.coroutines.launch
 
-private val PROMPTS = listOf(
+private val PROMPTS get() = listOf(
     "What's the first thing you'll do today?",
     "What would make today a good day?",
     "What are you getting up for?",

@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.onboarding
 
+import com.wakeroo.app.ui.util.twoDigits
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
@@ -116,7 +117,7 @@ fun RestoredStep(alarms: List<Alarm>, use24h: Boolean, onNext: () -> Unit) {
     StepScaffold(
         title = "Welcome back",
         subtitle = if (alarms.isEmpty()) "Your settings came over from your old phone." else
-            "We restored your ${alarms.size} alarm${if (alarms.size == 1) "" else "s"}. A new phone resets alarm permissions, so let's make sure they ring here too.",
+            (if (alarms.size == 1) "We restored your alarm." else "We restored your ${alarms.size} alarms.") + " A new phone resets alarm permissions, so let's make sure they ring here too.",
         primary = "Make sure they ring",
         onPrimary = onNext,
     ) {
@@ -150,8 +151,8 @@ fun RestoredStep(alarms: List<Alarm>, use24h: Boolean, onNext: () -> Unit) {
 @Composable
 fun TimeStep(state: OnboardingState, use24h: Boolean, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> Unit) {
     val draft = state.draft
-    val hours = if (use24h) (0..23).map { "%02d".format(it) } else (0..11).map { if (it == 0) "12" else "$it" }
-    val minutes = (0..59).map { "%02d".format(it) }
+    val hours = if (use24h) (0..23).map { twoDigits(it) } else (0..11).map { if (it == 0) "12" else "$it" }
+    val minutes = (0..59).map { twoDigits(it) }
     val pm = draft.hour >= 12
     val wheelStyle = ClockType.card.copy(fontSize = 52.sp)
     fun setTime(h: Int, m: Int) = update { it.copy(hour = h, minute = m) }

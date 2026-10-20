@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.you
 
+import com.wakeroo.app.ui.i18n.tr
+import com.wakeroo.app.ui.i18n.n
 import com.wakeroo.app.data.db.RingEventEntity
 import com.wakeroo.app.data.db.RingOutcome
 import com.wakeroo.app.feature.stats.WakeStatsCalculator
@@ -10,7 +12,10 @@ import java.time.ZoneId
 
 enum class MedalTier { Bronze, Silver, Gold, Special }
 
-data class AchievementDef(val id: String, val title: String, val description: String, val tier: MedalTier, val icon: String)
+data class AchievementDef(val id: String, private val titleEn: String, private val descriptionEn: String, val tier: MedalTier, val icon: String) {
+    val title: String get() = tr(titleEn)
+    val description: String get() = tr(descriptionEn)
+}
 
 data class AchievementState(val def: AchievementDef, val progress: Float, val unlocked: Boolean, val progressLabel: String)
 
@@ -32,20 +37,20 @@ data class AchievementInput(
  */
 object AchievementEngine {
     val all = listOf(
-        AchievementDef("first_rise", "First Rise", "Finish your first wake-up mission.", MedalTier.Bronze, "sunrise"),
-        AchievementDef("streak_3", "Three in a Row", "Win three mornings in a row.", MedalTier.Bronze, "flame"),
-        AchievementDef("streak_7", "Full Week", "Win seven mornings in a row.", MedalTier.Silver, "flame"),
-        AchievementDef("streak_14", "Fortnight", "Win fourteen mornings in a row.", MedalTier.Silver, "flame"),
-        AchievementDef("streak_30", "Habit Formed", "Win thirty mornings in a row.", MedalTier.Gold, "flame"),
-        AchievementDef("streak_100", "Century", "Win a hundred mornings in a row.", MedalTier.Special, "crown"),
-        AchievementDef("early_bird", "Early Bird", "Get up before 6 AM five times.", MedalTier.Silver, "bird"),
-        AchievementDef("no_snooze_week", "No Snooze Week", "Seven straight mornings without a single snooze.", MedalTier.Gold, "bolt"),
-        AchievementDef("quick_riser", "Quick Riser", "Finish your mission in under a minute, five times.", MedalTier.Bronze, "timer"),
-        AchievementDef("mission_explorer", "Mission Explorer", "Complete five different kinds of mission.", MedalTier.Silver, "compass"),
-        AchievementDef("spot_on", "Out of Bed", "Finish ten missions in another room (QR, photo, NFC, item hunt or steps).", MedalTier.Gold, "door"),
-        AchievementDef("routine_pro", "Routine Pro", "Tick off your whole morning routine on seven days.", MedalTier.Silver, "check"),
-        AchievementDef("weekend_warrior", "Weekend Warrior", "Win both mornings of a weekend.", MedalTier.Bronze, "star"),
-        AchievementDef("night_owl", "Night Owl Reformed", "Get up 30 minutes earlier on average than in your first week.", MedalTier.Gold, "moon"),
+        AchievementDef("first_rise", n("First Rise"), n("Finish your first wake-up mission."), MedalTier.Bronze, "sunrise"),
+        AchievementDef("streak_3", n("Three in a Row"), n("Win three mornings in a row."), MedalTier.Bronze, "flame"),
+        AchievementDef("streak_7", n("Full Week"), n("Win seven mornings in a row."), MedalTier.Silver, "flame"),
+        AchievementDef("streak_14", n("Fortnight"), n("Win fourteen mornings in a row."), MedalTier.Silver, "flame"),
+        AchievementDef("streak_30", n("Habit Formed"), n("Win thirty mornings in a row."), MedalTier.Gold, "flame"),
+        AchievementDef("streak_100", n("Century"), n("Win a hundred mornings in a row."), MedalTier.Special, "crown"),
+        AchievementDef("early_bird", n("Early Bird"), n("Get up before 6 AM five times."), MedalTier.Silver, "bird"),
+        AchievementDef("no_snooze_week", n("No Snooze Week"), n("Seven straight mornings without a single snooze."), MedalTier.Gold, "bolt"),
+        AchievementDef("quick_riser", n("Quick Riser"), n("Finish your mission in under a minute, five times."), MedalTier.Bronze, "timer"),
+        AchievementDef("mission_explorer", n("Mission Explorer"), n("Complete five different kinds of mission."), MedalTier.Silver, "compass"),
+        AchievementDef("spot_on", n("Out of Bed"), n("Finish ten missions in another room (QR, photo, NFC, item hunt or steps)."), MedalTier.Gold, "door"),
+        AchievementDef("routine_pro", n("Routine Pro"), n("Tick off your whole morning routine on seven days."), MedalTier.Silver, "check"),
+        AchievementDef("weekend_warrior", n("Weekend Warrior"), n("Win both mornings of a weekend."), MedalTier.Bronze, "star"),
+        AchievementDef("night_owl", n("Night Owl Reformed"), n("Get up 30 minutes earlier on average than in your first week."), MedalTier.Gold, "moon"),
     )
 
     private val AWAY = setOf("Scan", "Photo", "Nfc", "Hunt", "Steps")
