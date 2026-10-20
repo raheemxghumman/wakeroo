@@ -48,6 +48,9 @@ import androidx.compose.material.icons.rounded.Flag
 import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material.icons.rounded.Wallpaper
 import com.wakeroo.app.ui.scenes.Scene
+import com.wakeroo.app.missions.HarderMode
+import com.wakeroo.app.missions.MissionGateDialog
+import androidx.compose.material.icons.rounded.Lock
 import com.wakeroo.app.ui.scenes.ScenePicker
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Snooze
@@ -129,6 +132,9 @@ fun EditorScreen(
     val use24h = DateFormat.is24HourFormat(context)
     val draft = state.draft
     var missionSheet by remember { mutableStateOf<Int?>(null) }
+    // Harder Mode: an action waiting for its mission to be done.
+    var gated by remember { mutableStateOf<Pair<String, () -> Unit>?>(null) }
+    val original = state.original
 
     Box(Modifier.fillMaxSize().sharedContainer(if (state.isNew) "alarm-new" else "alarm-${draft.id}")) {
         SkyBackground(Sky.forHour(draft.hour), intensity = 0.5f) {
@@ -142,7 +148,8 @@ fun EditorScreen(
                     Text(if (state.isNew) "New alarm" else "Edit alarm", style = MaterialTheme.typography.titleMedium, color = Paper)
                     Spacer(Modifier.weight(1f))
                     if (!state.isNew) IconCircle(Icons.Rounded.DeleteOutline, "Delete alarm") {
-                        scope.launch { vm.delete(); onClose() }
+                        val delete = { scope.launch { vm.delete(); onClose() }; Unit }
+                        if (original?.hardMode == true) gated = "Delete this alarm" to delete else delete()
                     } else Spacer(Modifier.size(48.dp))
                 }
                 if (!state.loaded) return@Column
@@ -158,6 +165,7 @@ fun EditorScreen(
                     SceneSection(draft, state, onUpgrade) { vm.update(it) }
                     SnoozeSection(draft) { vm.update(it) }
                     WakeCheckSection(draft) { vm.update(it) }
+                    HardModeSection(draft, state, onUpgrade) { vm.update(it) }
                     Spacer(Modifier.height(110.dp))
                 }
             }
@@ -165,14 +173,25 @@ fun EditorScreen(
                 Modifier.align(Alignment.BottomCenter),
                 enabled = state.loaded,
                 onSave = {
-                    scope.launch {
-                        vm.save()
-                        val until = state.nextRing?.let { Duration.between(ZonedDateTime.now(), it).formatUntil() }
-                        onSaved(if (until != null) "Alarm set for $until from now" else "Alarm saved")
+                    val save = {
+                        scope.launch {
+                            vm.save()
+                            val until = state.nextRing?.let { Duration.between(ZonedDateTime.now(), it).formatUntil() }
+                            onSaved(if (until != null) "Alarm set for $until from now" else "Alarm saved")
+                        }
+                        Unit
                     }
+                    if (original != null && HarderMode.weakens(original, draft.copy(enabled = true))) gated = "Save these changes" to save else save()
                 },
             )
         }
+    }
+
+    gated?.let { (title, action) ->
+        MissionGateDialog(
+            mission = original?.missions?.firstOrNull() ?: HarderMode.SNOOZE_MISSION, title = title,
+            onPassed = { gated = null; action() }, onCancel = { gated = null },
+        )
     }
 
     missionSheet?.let { index ->
@@ -535,6 +554,36 @@ private fun WakeCheckSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
                     Chip("After $m min", draft.wakeCheckMinutes == m, { update { it.copy(wakeCheckMinutes = m) } })
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun HardModeSection(draft: Alarm, state: EditorState, onUpgrade: () -> Unit, update: ((Alarm) -> Alarm) -> Unit) {
+    val soon = state.nextRing?.let { Duration.between(ZonedDateTime.now(), it).toMillis() < HarderMode.MIN_LEAD_MS } == true
+    SectionCard("Harder Mode", icon = Icons.Rounded.Lock) {
+        if (!state.pro) {
+            Text(
+                "Turning this alarm off, deleting it, skipping it or snoozing takes a mission first. Part of Pro.",
+                style = MaterialTheme.typography.bodyMedium, color = PaperMuted,
+            )
+            Spacer(Modifier.height(Space.md))
+            PillButton("See Pro", Modifier.fillMaxWidth(), outlined = true, icon = Icons.Rounded.Lock, onClick = onUpgrade)
+            return@SectionCard
+        }
+        ToggleRow(
+            "Protect this alarm",
+            "Off, delete, skip, snooze or moving it 2+ hours later all need a mission first. The emergency exit still works.",
+            draft.hardMode,
+        ) { on ->
+            // Switching it off is a weakening change, handled at save time like any other.
+            if (!on || !soon) update { it.copy(hardMode = on) }
+        }
+        if (soon && !draft.hardMode) {
+            Text(
+                "Can't be switched on for an alarm less than 10 minutes away, so nobody locks themselves in by accident.",
+                style = MaterialTheme.typography.bodySmall, color = MorningGold, modifier = Modifier.padding(top = Space.sm),
+            )
         }
     }
 }

@@ -19,6 +19,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wakeroo.app.container
 import com.wakeroo.app.data.RingKind
 import com.wakeroo.app.missions.MissionFlow
+import com.wakeroo.app.missions.HarderMode
+import com.wakeroo.app.missions.MissionGateDialog
 import com.wakeroo.app.missions.runnableMission
 import com.wakeroo.app.ui.theme.WakerooTheme
 import com.wakeroo.app.ui.scenes.Scene
@@ -54,11 +56,19 @@ class RingActivity : ComponentActivity() {
                 val state by RingSession.state.collectAsStateWithLifecycle()
                 var phase by remember { mutableStateOf(RingPhase.Ringing) }
                 var finished by remember { mutableStateOf<FinishedRing?>(null) }
+                var snoozeGate by remember { mutableStateOf(false) }
                 BackHandler { /* The way out is the mission. */ }
 
                 val current = state
                 LaunchedEffect(current, finished) {
                     if (current == null && finished == null) closeScreen()
+                }
+                if (snoozeGate) {
+                    MissionGateDialog(
+                        HarderMode.SNOOZE_MISSION, "Snooze for ${current?.alarm?.snoozeMinutes ?: 5} minutes",
+                        onPassed = { snoozeGate = false; RingService.send(this, RingService.ACTION_SNOOZE) },
+                        onCancel = { snoozeGate = false },
+                    )
                 }
                 when {
                     finished != null -> GoodMorningScreen(finished!!, onDone = ::closeScreen)
@@ -73,7 +83,10 @@ class RingActivity : ComponentActivity() {
                             RingService.send(this, RingService.ACTION_ENGAGED)
                             phase = RingPhase.Mission
                         },
-                        onSnooze = { RingService.send(this, RingService.ACTION_SNOOZE) },
+                        onSnooze = {
+                            // Harder Mode: even a snooze takes one quick sum.
+                            if (current.alarm.hardMode) snoozeGate = true else RingService.send(this, RingService.ACTION_SNOOZE)
+                        },
                     )
                     else -> MissionFlow(
                         state = current,

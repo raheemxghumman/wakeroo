@@ -175,6 +175,10 @@ fun SettingsScreen(focusHealth: Boolean, onBack: () -> Unit, onPro: () -> Unit) 
                 }
                 SectionCard("About", icon = Icons.Rounded.FavoriteBorder) {
                     Text("Wakeroo ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodyLarge, color = Paper)
+                    if (BuildConfig.DEBUG) {
+                        // Debug builds only: try Pro features without a Play purchase.
+                        ToggleRow("Pretend Pro (debug)", null, settings.pro) { on -> scope.launch { app.settings.update { it.copy(pro = on) } } }
+                    }
                     Text(
                         "Alarms, missions and photos stay on your phone. No account, no tracking on the alarm path.",
                         style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.xs),

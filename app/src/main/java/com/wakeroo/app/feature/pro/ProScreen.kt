@@ -33,6 +33,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Insights
 import androidx.compose.material.icons.rounded.Layers
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.VolunteerActivism
 import androidx.compose.material3.Icon
@@ -74,9 +76,11 @@ private data class Benefit(val icon: ImageVector, val title: String, val body: S
 
 private val BENEFITS = listOf(
     Benefit(Icons.Rounded.Layers, "Up to 5 missions per alarm", "Stack math, a QR code in the kitchen and a photo of the sink."),
-    Benefit(Icons.Rounded.Insights, "Your whole history", "Every morning, streak and ring, not just the last two weeks."),
-    Benefit(Icons.Rounded.Palette, "No banner, ever", "The Stats and Settings screens go completely ad-free."),
-    Benefit(Icons.Rounded.VolunteerActivism, "Support an indie alarm", "Pay once. No subscription, no renewal, no surprises."),
+    Benefit(Icons.Rounded.Lock, "Harder Mode", "Off, delete, skip and snooze all need a mission first. No sleepy cheating."),
+    Benefit(Icons.Rounded.Palette, "Every wake-up scene", "Aurora, Ocean Dawn, WAKE UP and your own photo, plus four more tones."),
+    Benefit(Icons.Rounded.Bedtime, "Mix sleep sounds", "Layer rain over a fan, and unlock pink noise and crickets."),
+    Benefit(Icons.Rounded.Insights, "Your whole history", "Every month on the calendar and every ring in the log."),
+    Benefit(Icons.Rounded.VolunteerActivism, "No banner, and you support an indie alarm", "Pay once. No subscription, no renewal, no surprises."),
 )
 
 @Composable

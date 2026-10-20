@@ -36,6 +36,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.BarChart
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.NightsStay
+import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material3.Icon
@@ -77,6 +78,10 @@ import com.wakeroo.app.feature.main.BottomBarHeight
 import com.wakeroo.app.feature.main.TabContentBottomPadding
 import com.wakeroo.app.ui.components.EntranceStyle
 import com.wakeroo.app.ui.components.TabHeader
+import com.wakeroo.app.missions.HarderMode
+import com.wakeroo.app.missions.MissionGateDialog
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.wakeroo.app.ui.components.SkyBackground
 import com.wakeroo.app.ui.components.entrance
 import com.wakeroo.app.ui.components.icon
@@ -125,6 +130,13 @@ fun HomeScreen(
         vm.refreshHealth()
         onPauseOrDispose { }
     }
+    var gate by remember { mutableStateOf<Triple<com.wakeroo.app.data.model.Alarm, String, () -> Unit>?>(null) }
+    gate?.let { (alarm, title, action) ->
+        MissionGateDialog(
+            mission = alarm.missions.firstOrNull() ?: HarderMode.SNOOZE_MISSION, title = title,
+            onPassed = { gate = null; action() }, onCancel = { gate = null },
+        )
+    }
     LaunchedEffect(highlightId) {
         if (highlightId != 0L) {
             kotlinx.coroutines.delay(4000)
@@ -172,23 +184,34 @@ fun HomeScreen(
                     glow = row.alarm.id == highlightId,
                     modifier = Modifier.animateItem().padding(bottom = Space.md).entrance(4 + index.coerceAtMost(6)),
                     onClick = { onEdit(row.alarm.id) },
-                    onToggle = { vm.toggle(row.alarm, it) },
+                    onToggle = { on ->
+                        val toggle = { vm.toggle(row.alarm, on); Unit }
+                        if (!on && row.alarm.hardMode) gate = Triple(row.alarm, "Turn this alarm off", toggle) else toggle()
+                    },
                     onDelete = {
-                        vm.delete(row.alarm)
-                        scope.launch {
-                            val r = snackbar.showSnackbar("Alarm deleted", actionLabel = "Undo", duration = SnackbarDuration.Short)
-                            if (r == SnackbarResult.ActionPerformed) vm.restore(row.alarm)
+                        val delete = {
+                            vm.delete(row.alarm)
+                            scope.launch {
+                                val r = snackbar.showSnackbar("Alarm deleted", actionLabel = "Undo", duration = SnackbarDuration.Short)
+                                if (r == SnackbarResult.ActionPerformed) vm.restore(row.alarm)
+                            }
+                            Unit
                         }
+                        if (row.alarm.hardMode) gate = Triple(row.alarm, "Delete this alarm", delete) else delete()
                     },
                     onSkip = {
-                        vm.skipNext(row)
-                        scope.launch {
-                            val msg = if (row.alarm.isRepeating) "Skipping the next one" else "Alarm turned off"
-                            val r = snackbar.showSnackbar(msg, actionLabel = "Undo", duration = SnackbarDuration.Short)
-                            if (r == SnackbarResult.ActionPerformed) {
-                                if (row.alarm.isRepeating) vm.undoSkip(row.alarm) else vm.toggle(row.alarm, true)
+                        val skip = {
+                            vm.skipNext(row)
+                            scope.launch {
+                                val msg = if (row.alarm.isRepeating) "Skipping the next one" else "Alarm turned off"
+                                val r = snackbar.showSnackbar(msg, actionLabel = "Undo", duration = SnackbarDuration.Short)
+                                if (r == SnackbarResult.ActionPerformed) {
+                                    if (row.alarm.isRepeating) vm.undoSkip(row.alarm) else vm.toggle(row.alarm, true)
+                                }
                             }
+                            Unit
                         }
+                        if (row.alarm.hardMode) gate = Triple(row.alarm, if (row.alarm.isRepeating) "Skip the next one" else "Turn this alarm off", skip) else skip()
                     },
                 )
             }
@@ -393,6 +416,12 @@ private fun AlarmCard(
                         Spacer(Modifier.width(6.dp))
                         Text(if (m.needsSetup) "${m.type.title} · finish setup" else m.type.title, style = MaterialTheme.typography.labelSmall, color = tint)
                     }
+                }
+                if (alarm.hardMode) {
+                    Row(
+                        Modifier.clip(CircleShape).background(DawnLavender.copy(alpha = 0.16f)).padding(horizontal = Space.sm, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) { Icon(Icons.Rounded.Lock, "Harder Mode", tint = DawnLavender, modifier = Modifier.size(14.dp)) }
                 }
                 if (alarm.skipDate != null) {
                     Text("Next one skipped", style = MaterialTheme.typography.labelSmall, color = DawnLavender, modifier = Modifier.align(Alignment.CenterVertically))
