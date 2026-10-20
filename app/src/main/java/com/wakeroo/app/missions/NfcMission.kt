@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import android.app.Activity
 import android.content.Context
@@ -178,7 +179,7 @@ fun NfcMission(config: MissionConfig, onActivity: () -> Unit, onFailedAttempt: (
             done()
         } else if (System.currentTimeMillis() - lastWrong > 2000) {
             lastWrong = System.currentTimeMillis()
-            hint = "That's a different sticker. Find the one you registered."
+            hint = tr("That's a different sticker. Find the one you registered.")
             haptics.performHapticFeedback(HapticFeedbackType.Reject)
             onFailedAttempt()
         }
@@ -187,21 +188,21 @@ fun NfcMission(config: MissionConfig, onActivity: () -> Unit, onFailedAttempt: (
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            config.nfcLabel?.let { "Tap your phone on the sticker by the $it" } ?: "Tap your phone on your sticker",
+            config.nfcLabel?.let { tr("Tap your phone on the sticker by the {0}", it) } ?: tr("Tap your phone on your sticker"),
             style = MaterialTheme.typography.headlineSmall, color = Paper, textAlign = TextAlign.Center,
         )
         Spacer(Modifier.weight(1f))
         NfcWaves(matched, onSimulate = if (nfcSimulated && state != NfcState.Ready) { { read(config.nfcTagId ?: "SIM") } } else null)
         Spacer(Modifier.weight(1f))
         if (state == NfcState.Off) {
-            Text("NFC is switched off", style = MaterialTheme.typography.titleMedium, color = MorningGold)
+            Text(tr("NFC is switched off"), style = MaterialTheme.typography.titleMedium, color = MorningGold)
             Spacer(Modifier.height(Space.sm))
             com.wakeroo.app.feature.editor.PillButton("Turn on NFC", Modifier.fillMaxWidth()) {
                 runCatching { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
             }
         } else {
             Text(
-                hint ?: "Hold the top of your phone flat against it for a second",
+                hint ?: tr("Hold the top of your phone flat against it for a second"),
                 style = MaterialTheme.typography.bodyLarge, color = if (hint != null) MorningGold else PaperMuted, textAlign = TextAlign.Center,
             )
         }

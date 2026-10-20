@@ -12,6 +12,8 @@ import com.wakeroo.app.weather.WeatherClient
 import com.wakeroo.app.data.SettingsStore
 import com.wakeroo.app.data.db.WakerooDatabase
 import com.wakeroo.app.reminders.Reminders
+import com.wakeroo.app.ui.i18n.AppLocale
+import com.wakeroo.app.ui.i18n.I18n
 import com.wakeroo.app.sleep.SleepSoundService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -39,6 +41,8 @@ class WakerooApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AppLocale.applyDefault(this)
+        I18n.init(this)
         container = AppContainer(this)
         Notifications.createChannels(this)
         Reminders.createChannel(this)

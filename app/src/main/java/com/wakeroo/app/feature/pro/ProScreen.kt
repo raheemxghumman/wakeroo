@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.pro
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import android.app.Activity
 import androidx.compose.animation.core.Animatable
@@ -77,12 +78,12 @@ import kotlinx.coroutines.delay
 private data class Benefit(val icon: ImageVector, val title: String, val body: String)
 
 private val BENEFITS get() = listOf(
-    Benefit(Icons.Rounded.Layers, "Up to 5 missions per alarm", "Stack math, a QR code in the kitchen and a photo of the sink."),
-    Benefit(Icons.Rounded.Lock, "Harder Mode", "Off, delete, skip and snooze all need a mission first. No sleepy cheating."),
-    Benefit(Icons.Rounded.Palette, "Every wake-up scene", "Aurora, Ocean Dawn, WAKE UP and your own photo, plus four more tones."),
-    Benefit(Icons.Rounded.Bedtime, "Mix sleep sounds", "Layer rain over a fan, and unlock pink noise and crickets."),
-    Benefit(Icons.Rounded.Insights, "Your whole history", "Every month on the calendar and every ring in the log."),
-    Benefit(Icons.Rounded.VolunteerActivism, "No banner, and you support an indie alarm", "Pay once. No subscription, no renewal, no surprises."),
+    Benefit(Icons.Rounded.Layers, tr("Up to 5 missions per alarm"), tr("Stack math, a QR code in the kitchen and a photo of the sink.")),
+    Benefit(Icons.Rounded.Lock, tr("Harder Mode"), tr("Off, delete, skip and snooze all need a mission first. No sleepy cheating.")),
+    Benefit(Icons.Rounded.Palette, tr("Every wake-up scene"), tr("Aurora, Ocean Dawn, WAKE UP and your own photo, plus four more tones.")),
+    Benefit(Icons.Rounded.Bedtime, tr("Mix sleep sounds"), tr("Layer rain over a fan, and unlock pink noise and crickets.")),
+    Benefit(Icons.Rounded.Insights, tr("Your whole history"), tr("Every month on the calendar and every ring in the log.")),
+    Benefit(Icons.Rounded.VolunteerActivism, tr("No banner, and you support an indie alarm"), tr("Pay once. No subscription, no renewal, no surprises.")),
 )
 
 @Composable
@@ -108,14 +109,14 @@ private fun ProContent(onClose: () -> Unit) {
             Row(Modifier.fillMaxWidth().padding(top = Space.sm)) {
                 Spacer(Modifier.weight(1f))
                 Box(
-                    Modifier.size(48.dp).clip(CircleShape).background(Night.copy(alpha = 0.3f)).clickable(onClickLabel = "Close", onClick = onClose),
+                    Modifier.size(48.dp).clip(CircleShape).background(Night.copy(alpha = 0.3f)).clickable(onClickLabel = tr("Close"), onClick = onClose),
                     contentAlignment = Alignment.Center,
-                ) { Icon(Icons.Rounded.Close, "Close", tint = Paper) }
+                ) { Icon(Icons.Rounded.Close, tr("Close"), tint = Paper) }
             }
             ProOrb(tilt)
-            Text("Wakeroo Pro", style = MaterialTheme.typography.displaySmall, color = Paper)
+            Text(tr("Wakeroo Pro"), style = MaterialTheme.typography.displaySmall, color = Paper)
             Text(
-                "Every mission and every reliability feature stays free. Always.",
+                tr("Every mission and every reliability feature stays free. Always."),
                 style = MaterialTheme.typography.bodyLarge, color = Paper.copy(alpha = 0.85f), textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = Space.sm, bottom = Space.xl),
             )
@@ -125,7 +126,7 @@ private fun ProContent(onClose: () -> Unit) {
                 Row(
                     Modifier.fillMaxWidth().height(64.dp).clip(CircleShape).background(Calm),
                     verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center,
-                ) { Text("Pro is active. Thank you!", style = MaterialTheme.typography.titleMedium, color = Night) }
+                ) { Text(tr("Pro is active. Thank you!"), style = MaterialTheme.typography.titleMedium, color = Night) }
             } else {
                 Box(
                     Modifier
@@ -139,11 +140,11 @@ private fun ProContent(onClose: () -> Unit) {
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        "Unlock Pro · ${price ?: "\$4.99"} once", style = MaterialTheme.typography.titleMedium, color = MorningGold,
+                        tr("Unlock Pro · {0} once", price ?: "\$4.99"), style = MaterialTheme.typography.titleMedium, color = MorningGold,
                     )
                 }
                 Text(
-                    "Restore purchase", style = MaterialTheme.typography.labelLarge, color = Paper,
+                    tr("Restore purchase"), style = MaterialTheme.typography.labelLarge, color = Paper,
                     modifier = Modifier.padding(top = Space.md).clip(CircleShape).clickable { app.billing.restore() }.padding(Space.md),
                 )
             }

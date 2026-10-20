@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.morning
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import androidx.compose.animation.AnimatedVisibility
@@ -189,21 +190,21 @@ fun RoutineList(
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(onDone = { if (newItem.isNotBlank()) { onAdd(newItem); newItem = "" } }),
                         modifier = Modifier.weight(1f),
-                        decorationBox = { inner -> if (newItem.isEmpty()) Text("Add a habit, like 'Make the bed'", style = MaterialTheme.typography.bodyLarge, color = PaperMuted); inner() },
+                        decorationBox = { inner -> if (newItem.isEmpty()) Text(tr("Add a habit, like 'Make the bed'"), style = MaterialTheme.typography.bodyLarge, color = PaperMuted); inner() },
                     )
                 }
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     when {
-                        allDone -> "Routine complete. Great start!"
-                        items.isEmpty() -> "Add up to five small habits."
-                        else -> "${items.count { it.id in done }} of ${items.size} done"
+                        allDone -> tr("Routine complete. Great start!")
+                        items.isEmpty() -> tr("Add up to five small habits.")
+                        else -> tr("{0} of {1} done", items.count { it.id in done }, items.size)
                     },
                     style = MaterialTheme.typography.labelMedium, color = if (allDone) Calm else PaperMuted,
                 )
                 Text(
-                    if (editing) "Done" else "Edit", style = MaterialTheme.typography.labelLarge, color = DawnLavender,
+                    if (editing) tr("Done") else tr("Edit"), style = MaterialTheme.typography.labelLarge, color = DawnLavender,
                     modifier = Modifier.clip(CircleShape).clickable { editing = !editing }.padding(Space.sm),
                 )
             }
@@ -265,6 +266,6 @@ private fun RoutineRow(item: RoutineItemEntity, checked: Boolean, editing: Boole
             textDecoration = if (checked) TextDecoration.LineThrough else null,
             modifier = Modifier.weight(1f),
         )
-        if (editing) Icon(Icons.Rounded.Close, "Remove", tint = PaperMuted, modifier = Modifier.clip(CircleShape).clickable(onClick = onDelete).padding(4.dp))
+        if (editing) Icon(Icons.Rounded.Close, tr("Remove"), tint = PaperMuted, modifier = Modifier.clip(CircleShape).clickable(onClick = onDelete).padding(4.dp))
     }
 }

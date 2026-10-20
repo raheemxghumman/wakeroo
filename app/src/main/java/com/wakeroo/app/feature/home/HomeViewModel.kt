@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.home
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wakeroo.app.AppContainer
@@ -96,7 +97,7 @@ class HomeViewModel(private val app: AppContainer, private val checker: HealthCh
         app.repository.save(
             base.copy(
                 id = 0, hour = at.hour, minute = at.minute, days = emptySet(), date = at.toLocalDate(),
-                label = if (minutesFromNow < 120) "Power nap" else base.label, enabled = true, skipDate = null,
+                label = if (minutesFromNow < 120) tr("Power nap") else base.label, enabled = true, skipDate = null,
                 createdAt = System.currentTimeMillis(),
             ),
         )

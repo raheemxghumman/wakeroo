@@ -1,5 +1,8 @@
 package com.wakeroo.app.alarm.ring
 
+import android.content.Context
+import com.wakeroo.app.ui.i18n.AppLocale
+import com.wakeroo.app.ui.i18n.tr
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -31,6 +34,8 @@ import kotlinx.coroutines.launch
  * volume keys, and asks the service to re-raise it if the user leaves.
  */
 class RingActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: Context) = super.attachBaseContext(AppLocale.wrap(newBase))
+
     private var leavingOnPurpose = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +70,7 @@ class RingActivity : ComponentActivity() {
                 }
                 if (snoozeGate) {
                     MissionGateDialog(
-                        HarderMode.SNOOZE_MISSION, "Snooze for ${current?.alarm?.snoozeMinutes ?: 5} minutes",
+                        HarderMode.SNOOZE_MISSION, tr("Snooze for {0} minutes", current?.alarm?.snoozeMinutes ?: 5),
                         onPassed = { snoozeGate = false; RingService.send(this, RingService.ACTION_SNOOZE) },
                         onCancel = { snoozeGate = false },
                     )

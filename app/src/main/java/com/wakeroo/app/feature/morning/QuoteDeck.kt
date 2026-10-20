@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.morning
 
+import com.wakeroo.app.ui.i18n.tr
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -149,19 +150,19 @@ fun QuoteDeck(
         }
         Spacer(Modifier.height(Space.md))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            DeckButton(if (top.id in saved) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder, if (top.id in saved) "Saved" else "Save") {
+            DeckButton(if (top.id in saved) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder, if (top.id in saved) tr("Saved") else tr("Save")) {
                 haptics.performHapticFeedback(HapticFeedbackType.Confirm)
                 onSave(top, top.id !in saved)
             }
             Spacer(Modifier.size(Space.sm))
-            DeckButton(Icons.Rounded.IosShare, "Share") {
+            DeckButton(Icons.Rounded.IosShare, tr("Share")) {
                 scope.launch {
                     val bitmap = capture.toImageBitmap().asAndroidBitmap()
                     shareQuote(context, bitmap, top)
                 }
             }
             Spacer(Modifier.weight(1f))
-            DeckButton(Icons.AutoMirrored.Rounded.ArrowForward, "Another") { next(-1f) }
+            DeckButton(Icons.AutoMirrored.Rounded.ArrowForward, tr("Another")) { next(-1f) }
         }
         Spacer(Modifier.height(Space.md))
         androidx.compose.foundation.layout.FlowRow(horizontalArrangement = Arrangement.spacedBy(Space.sm), verticalArrangement = Arrangement.spacedBy(Space.sm)) {
@@ -218,7 +219,7 @@ fun QuoteCard(quote: Quote, saved: Boolean, modifier: Modifier = Modifier) {
             }
         }
         Wordmark(Modifier.align(Alignment.BottomEnd), fontSize = 16.sp, color = Color(0xFF0E1120).copy(alpha = 0.6f), accent = Color.White)
-        if (saved) Icon(Icons.Rounded.Bookmark, "Saved", tint = Color(0xFF0E1120).copy(alpha = 0.6f), modifier = Modifier.align(Alignment.TopEnd))
+        if (saved) Icon(Icons.Rounded.Bookmark, tr("Saved"), tint = Color(0xFF0E1120).copy(alpha = 0.6f), modifier = Modifier.align(Alignment.TopEnd))
     }
 }
 
@@ -229,10 +230,10 @@ private suspend fun shareQuote(context: Context, bitmap: Bitmap, quote: Quote) {
         file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         FileProvider.getUriForFile(context, "${context.packageName}.files", file)
     }
-    val text = quote.text + (quote.author?.let { " — $it" } ?: "") + "\n\nWoke up with Wakeroo"
+    val text = quote.text + (quote.author?.let { " — $it" } ?: "") + tr("\n\nWoke up with Wakeroo")
     val send = Intent(Intent.ACTION_SEND).setType("image/png")
         .putExtra(Intent.EXTRA_STREAM, uri)
         .putExtra(Intent.EXTRA_TEXT, text)
         .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    context.startActivity(Intent.createChooser(send, "Share quote").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    context.startActivity(Intent.createChooser(send, tr("Share quote")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 }

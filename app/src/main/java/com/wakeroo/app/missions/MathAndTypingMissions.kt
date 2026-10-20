@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
@@ -70,7 +71,7 @@ fun MathMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Floa
     val (shake, nope) = rememberNope()
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Problem ${solved + 1} of ${config.count}", style = MaterialTheme.typography.labelLarge, color = DawnLavender)
+        Text(tr("Problem {0} of {1}", solved + 1, config.count), style = MaterialTheme.typography.labelLarge, color = DawnLavender)
         Spacer(Modifier.weight(1f))
         AnimatedContent(
             targetState = problem,
@@ -135,7 +136,7 @@ fun TypingMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Fl
     val target = phrases[index]
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
-        Text("Phrase ${index + 1} of ${phrases.size}", style = MaterialTheme.typography.labelLarge, color = DawnLavender)
+        Text(tr("Phrase {0} of {1}", index + 1, phrases.size), style = MaterialTheme.typography.labelLarge, color = DawnLavender)
         Spacer(Modifier.weight(1f))
         AnimatedContent(
             targetState = target,

@@ -1,5 +1,6 @@
 package com.wakeroo.app.billing
 
+import com.wakeroo.app.ui.i18n.tr
 import android.app.Activity
 import android.content.Context
 import com.android.billingclient.api.AcknowledgePurchaseParams
@@ -65,7 +66,7 @@ class ProBilling(context: Context, private val settings: SettingsStore, private 
     fun buy(activity: Activity) {
         val product = details
         if (product == null) {
-            _message.value = "Purchases aren't available right now. Check your connection and try again."
+            _message.value = tr("Purchases aren't available right now. Check your connection and try again.")
             start()
             return
         }
@@ -77,16 +78,16 @@ class ProBilling(context: Context, private val settings: SettingsStore, private 
 
     fun restore() = scope.launch {
         if (!connect()) {
-            _message.value = "Couldn't reach Google Play. Try again in a moment."
+            _message.value = tr("Couldn't reach Google Play. Try again in a moment.")
             return@launch
         }
         val before = settings.current().pro
         refreshEntitlement()
         val after = settings.current().pro
         _message.value = when {
-            after && !before -> "Pro restored. Welcome back!"
-            after -> "Pro is already active."
-            else -> "No Pro purchase found for this Google account."
+            after && !before -> tr("Pro restored. Welcome back!")
+            after -> tr("Pro is already active.")
+            else -> tr("No Pro purchase found for this Google account.")
         }
     }
 

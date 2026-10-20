@@ -113,8 +113,8 @@ object AchievementEngine {
                 else -> 0 to 1
             }
             val label = when (def.id) {
-                "night_owl" -> if (owlGain == null) "Needs three weeks of mornings" else "$value of $target min earlier"
-                "weekend_warrior" -> if (value >= 1) "Done" else "Win a Saturday and a Sunday"
+                "night_owl" -> if (owlGain == null) tr("Needs three weeks of mornings") else tr("{0} of {1} min earlier", value, target)
+                "weekend_warrior" -> if (value >= 1) tr("Done") else tr("Win a Saturday and a Sunday")
                 else -> "${value.coerceAtMost(target)} of $target"
             }
             AchievementState(def, (value / target.toFloat()).coerceIn(0f, 1f), value >= target, label)

@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.editor
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -64,7 +65,7 @@ import com.wakeroo.app.ui.theme.Space
 import com.wakeroo.app.ui.theme.WakerooTheme
 import kotlinx.coroutines.launch
 
-private val CODE_PLACES get() = listOf("toothbrush", "toothpaste", "coffee jar", "kettle", "fridge", "meds", "desk", "bathroom mirror")
+private val CODE_PLACES get() = listOf(tr("toothbrush"), tr("toothpaste"), tr("coffee jar"), tr("kettle"), tr("fridge"), tr("meds"), tr("desk"), tr("bathroom mirror"))
 
 /** Register the QR/barcode or the photo spot a mission will ask for at alarm time. */
 @Composable
@@ -80,10 +81,10 @@ fun SpotSetupDialog(
             Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(Space.xl)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        when (type) { MissionType.Scan -> "Register your code"; MissionType.Nfc -> "Register your sticker"; else -> "Save your photo spot" },
+                        when (type) { MissionType.Scan -> tr("Register your code"); MissionType.Nfc -> tr("Register your sticker"); else -> tr("Save your photo spot") },
                         style = MaterialTheme.typography.headlineSmall, color = Paper, modifier = Modifier.weight(1f),
                     )
-                    Icon(Icons.Rounded.Close, "Close", tint = Paper, modifier = Modifier.clip(CircleShape).clickable(onClick = onDismiss).padding(Space.sm))
+                    Icon(Icons.Rounded.Close, tr("Close"), tint = Paper, modifier = Modifier.clip(CircleShape).clickable(onClick = onDismiss).padding(Space.sm))
                 }
                 Spacer(Modifier.height(Space.lg))
                 when (type) {
@@ -109,7 +110,7 @@ private fun CodeSetup(onCode: (String, String) -> Unit) {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             if (value == null) {
                 Text(
-                    "Walk to another room and scan any barcode or QR code. You'll need to scan the same one to stop the alarm.",
+                    tr("Walk to another room and scan any barcode or QR code. You'll need to scan the same one to stop the alarm."),
                     style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center,
                 )
                 Spacer(Modifier.height(Space.lg))
@@ -123,11 +124,11 @@ private fun CodeSetup(onCode: (String, String) -> Unit) {
                     }
                 }
             } else {
-                Text("Got it!", style = MaterialTheme.typography.displaySmall, color = Paper)
-                Text("Where is this code?", style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.padding(vertical = Space.lg))
+                Text(tr("Got it!"), style = MaterialTheme.typography.displaySmall, color = Paper)
+                Text(tr("Where is this code?"), style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.padding(vertical = Space.lg))
                 ChipRow { CODE_PLACES.forEach { place -> Chip(place, false, { onCode(value, place) }) } }
                 Spacer(Modifier.height(Space.lg))
-                Text("Tip: a code you can't reach from bed works best.", style = MaterialTheme.typography.bodySmall, color = PaperMuted)
+                Text(tr("Tip: a code you can't reach from bed works best."), style = MaterialTheme.typography.bodySmall, color = PaperMuted)
             }
         }
     }
@@ -146,7 +147,7 @@ private fun PhotoSetup(onPhoto: (Long, List<String>, String) -> Unit) {
 
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Space.lg)) {
         Text(
-            "Stand where you'll be at alarm time and frame something that doesn't move: the sink, the kettle, a poster.",
+            tr("Stand where you'll be at alarm time and frame something that doesn't move: the sink, the kettle, a poster."),
             style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center,
         )
         Viewfinder(matched = false, torch = torch, onTorch = { torch = !torch }) { frame ->
@@ -164,11 +165,11 @@ private fun PhotoSetup(onPhoto: (Long, List<String>, String) -> Unit) {
                 }
             }
         }
-        PillButton(if (busy) "Saving…" else "Use this view", Modifier.fillMaxWidth(), enabled = !busy) { capture = true }
+        PillButton(if (busy) tr("Saving…") else tr("Use this view"), Modifier.fillMaxWidth(), enabled = !busy) { capture = true }
     }
 }
 
-private val STICKER_PLACES get() = listOf("bathroom mirror", "kettle", "coffee machine", "front door", "fridge", "desk", "toothbrush")
+private val STICKER_PLACES get() = listOf(tr("bathroom mirror"), tr("kettle"), tr("coffee machine"), tr("front door"), tr("fridge"), tr("desk"), tr("toothbrush"))
 
 @Composable
 private fun NfcSetup(onNfc: (String, String) -> Unit) {
@@ -190,7 +191,7 @@ private fun NfcSetup(onNfc: (String, String) -> Unit) {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             if (value == null) {
                 Text(
-                    "Hold the top of your phone against the sticker. Put it somewhere you can't reach from bed.",
+                    tr("Hold the top of your phone against the sticker. Put it somewhere you can't reach from bed."),
                     style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center,
                 )
                 Spacer(Modifier.height(Space.xl))
@@ -200,18 +201,18 @@ private fun NfcSetup(onNfc: (String, String) -> Unit) {
                 )
                 Spacer(Modifier.height(Space.xl))
                 if (state == NfcState.Off) {
-                    Text("NFC is switched off", style = MaterialTheme.typography.titleMedium, color = MorningGold)
+                    Text(tr("NFC is switched off"), style = MaterialTheme.typography.titleMedium, color = MorningGold)
                     Spacer(Modifier.height(Space.sm))
                     PillButton("Turn on NFC", Modifier.fillMaxWidth()) {
                         runCatching { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
                     }
                 } else if (nfcSimulated && state != NfcState.Ready) {
-                    Text("No NFC here. Tap the sticker to simulate it (debug build).", style = MaterialTheme.typography.bodySmall, color = PaperMuted)
+                    Text(tr("No NFC here. Tap the sticker to simulate it (debug build)."), style = MaterialTheme.typography.bodySmall, color = PaperMuted)
                 }
             } else {
                 NfcWaves(matched = true)
-                Text("Sticker locked in", style = MaterialTheme.typography.headlineSmall, color = Paper, modifier = Modifier.padding(top = Space.lg))
-                Text("Where is it?", style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.padding(vertical = Space.lg))
+                Text(tr("Sticker locked in"), style = MaterialTheme.typography.headlineSmall, color = Paper, modifier = Modifier.padding(top = Space.lg))
+                Text(tr("Where is it?"), style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.padding(vertical = Space.lg))
                 ChipRow { STICKER_PLACES.forEach { place -> Chip(place, false, { onNfc(value, place) }) } }
             }
         }

@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -135,7 +136,7 @@ fun ShakeMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Flo
     )
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Shake your phone", style = MaterialTheme.typography.labelLarge, color = DawnLavender)
+        Text(tr("Shake your phone"), style = MaterialTheme.typography.labelLarge, color = DawnLavender)
         Spacer(Modifier.weight(1f))
         Box(
             Modifier
@@ -184,7 +185,7 @@ fun ShakeMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Flo
         }
         Spacer(Modifier.height(Space.xl))
         Text(
-            if (count == 0) "Give it a proper shake" else "Keep going. Stop and it drains",
+            if (count == 0) tr("Give it a proper shake") else tr("Keep going. Stop and it drains"),
             style = MaterialTheme.typography.bodyLarge, color = PaperMuted,
         )
         Spacer(Modifier.weight(1f))

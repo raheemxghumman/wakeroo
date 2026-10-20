@@ -1,5 +1,6 @@
 package com.wakeroo.app.tile
 
+import com.wakeroo.app.ui.i18n.tr
 import android.content.ComponentName
 import android.content.Context
 import android.graphics.drawable.Icon
@@ -62,9 +63,9 @@ class PowerNapTileService : TileService() {
         tile.icon = Icon.createWithResource(this, R.drawable.ic_stat_wakeroo)
         tile.label = "Power nap"
         val left = nap?.let { ((it.second - System.currentTimeMillis()) / 60_000).coerceAtLeast(0) + 1 }
-        val subtitle = if (left != null) "$left min left" else "$NAP_MINUTES min"
+        val subtitle = if (left != null) tr("{0} min left", left) else tr("{0} min", NAP_MINUTES)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) tile.subtitle = subtitle
-        tile.contentDescription = "Power nap, $subtitle"
+        tile.contentDescription = tr("Power nap, {0}", subtitle)
         tile.updateTile()
     }
 

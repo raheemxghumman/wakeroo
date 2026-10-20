@@ -1,5 +1,6 @@
 package com.wakeroo.app.alarm.ring
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -112,8 +113,8 @@ fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Uni
                 Text(time.formatClock(), style = ClockType.ring, color = Paper, maxLines = 1)
                 Spacer(Modifier.height(Space.md))
                 val label = when (state.kind) {
-                    RingKind.Test -> "Test alarm: finish the mission to pass"
-                    else -> state.alarm.label.ifBlank { "Time to get up" }
+                    RingKind.Test -> tr("Test alarm: finish the mission to pass")
+                    else -> state.alarm.label.ifBlank { tr("Time to get up") }
                 }
                 Text(label, style = MaterialTheme.typography.headlineMedium, color = Paper, textAlign = TextAlign.Center)
                 MissionSummary(state)
@@ -134,10 +135,10 @@ fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Uni
                     .clip(RoundedCornerShape(44.dp))
                     .background(Brush.horizontalGradient(listOf(SunriseCoral, Color(0xFFFF9466))))
                     .clickable(role = Role.Button, onClick = onStartMission)
-                    .semantics { contentDescription = "Start mission to stop the alarm" },
+                    .semantics { contentDescription = tr("Start mission to stop the alarm") },
                 contentAlignment = Alignment.Center,
             ) {
-                Text("Start mission", style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp), color = Night)
+                Text(tr("Start mission"), style = MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp), color = Night)
             }
             Spacer(Modifier.height(Space.lg))
             if (state.snoozesLeft > 0 && state.kind == RingKind.Alarm) {
@@ -152,12 +153,12 @@ fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Uni
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        "Snooze ${state.alarm.snoozeMinutes} min  ·  ${state.snoozesLeft} left",
+                        tr("Snooze {0} min  ·  {1} left", state.alarm.snoozeMinutes, state.snoozesLeft),
                         style = MaterialTheme.typography.titleMedium, color = Paper,
                     )
                 }
             } else {
-                Text("No snoozing this one. You've got this.", style = MaterialTheme.typography.bodyMedium, color = PaperMuted)
+                Text(tr("No snoozing this one. You've got this."), style = MaterialTheme.typography.bodyMedium, color = PaperMuted)
             }
             Spacer(Modifier.height(Space.xxl))
         }
@@ -168,10 +169,10 @@ fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Uni
 @Composable
 private fun EscalationHint(state: RingState, now: Long) {
     val text = when {
-        state.escalated -> "Full volume. Start your mission to quiet it"
+        state.escalated -> tr("Full volume. Start your mission to quiet it")
         state.escalateAt > 0 -> {
             val left = ((state.escalateAt - now) / 1000).coerceAtLeast(0)
-            "Getting louder in %d:%02d".format(left / 60, left % 60)
+            tr("Getting louder in %d:%02d").format(left / 60, left % 60)
         }
         else -> return
     }
@@ -207,9 +208,9 @@ fun WakeCheckScreen(state: RingState, onConfirm: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Text("Still up?", style = MaterialTheme.typography.displayMedium, color = Paper)
+            Text(tr("Still up?"), style = MaterialTheme.typography.displayMedium, color = Paper)
             Text(
-                "Tap before the ring runs out, or your alarm comes back.",
+                tr("Tap before the ring runs out, or your alarm comes back."),
                 style = MaterialTheme.typography.bodyLarge, color = Paper.copy(alpha = 0.85f),
                 textAlign = TextAlign.Center, modifier = Modifier.padding(top = Space.sm, bottom = Space.xxl),
             )
@@ -233,7 +234,7 @@ fun WakeCheckScreen(state: RingState, onConfirm: () -> Unit) {
                         },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text("I'm up", style = MaterialTheme.typography.displaySmall, color = Night)
+                    Text(tr("I'm up"), style = MaterialTheme.typography.displaySmall, color = Night)
                 }
             }
         }

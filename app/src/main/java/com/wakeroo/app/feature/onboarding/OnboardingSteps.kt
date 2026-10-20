@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.onboarding
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.util.twoDigits
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import androidx.compose.animation.AnimatedContent
@@ -115,10 +116,10 @@ private val WEEKEND = setOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY)
 @Composable
 fun RestoredStep(alarms: List<Alarm>, use24h: Boolean, onNext: () -> Unit) {
     StepScaffold(
-        title = "Welcome back",
-        subtitle = if (alarms.isEmpty()) "Your settings came over from your old phone." else
-            (if (alarms.size == 1) "We restored your alarm." else "We restored your ${alarms.size} alarms.") + " A new phone resets alarm permissions, so let's make sure they ring here too.",
-        primary = "Make sure they ring",
+        title = tr("Welcome back"),
+        subtitle = if (alarms.isEmpty()) tr("Your settings came over from your old phone.") else
+            (if (alarms.size == 1) tr("We restored your alarm.") else tr("We restored your {0} alarms.", alarms.size)) + tr(" A new phone resets alarm permissions, so let's make sure they ring here too."),
+        primary = tr("Make sure they ring"),
         onPrimary = onNext,
     ) {
         alarms.sortedBy { it.hour * 60 + it.minute }.take(6).forEachIndexed { i, a ->
@@ -144,7 +145,7 @@ fun RestoredStep(alarms: List<Alarm>, use24h: Boolean, onNext: () -> Unit) {
                 }
             }
         }
-        if (alarms.size > 6) StepHint("and ${alarms.size - 6} more")
+        if (alarms.size > 6) StepHint(tr("and {0} more", alarms.size - 6))
     }
 }
 
@@ -157,15 +158,15 @@ fun TimeStep(state: OnboardingState, use24h: Boolean, update: ((Alarm) -> Alarm)
     val wheelStyle = ClockType.card.copy(fontSize = 52.sp)
     fun setTime(h: Int, m: Int) = update { it.copy(hour = h, minute = m) }
     StepScaffold(
-        title = "When do you want to wake up?",
+        title = tr("When do you want to wake up?"),
         subtitle = null,
-        primary = "Continue",
+        primary = tr("Continue"),
         onPrimary = onNext,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = Space.lg)) {
             WakerooMark(Modifier.size(40.dp))
             Spacer(Modifier.width(Space.sm))
-            Text("Let's set up your first alarm. It takes about a minute.", style = MaterialTheme.typography.bodyMedium, color = PaperMuted)
+            Text(tr("Let's set up your first alarm. It takes about a minute."), style = MaterialTheme.typography.bodyMedium, color = PaperMuted)
         }
         Column(
             Modifier
@@ -189,7 +190,7 @@ fun TimeStep(state: OnboardingState, use24h: Boolean, update: ((Alarm) -> Alarm)
                     DrumWheel(values = minutes, selected = draft.minute, style = wheelStyle, label = "Minute", itemHeight = 72.dp, width = 104.dp, onSelected = { m -> setTime(draft.hour, m) })
                     if (!use24h) {
                         DrumWheel(
-                            values = listOf("AM", "PM"), selected = if (pm) 1 else 0, cyclic = false, width = 80.dp, itemHeight = 72.dp,
+                            values = listOf(formatMeridiem(0), formatMeridiem(12)), selected = if (pm) 1 else 0, cyclic = false, width = 80.dp, itemHeight = 72.dp,
                             style = MaterialTheme.typography.headlineSmall, label = "AM or PM",
                             onSelected = { i -> setTime(draft.hour % 12 + if (i == 1) 12 else 0, draft.minute) },
                         )
@@ -198,15 +199,15 @@ fun TimeStep(state: OnboardingState, use24h: Boolean, update: ((Alarm) -> Alarm)
             }
             val until = state.nextRing?.let { Duration.between(ZonedDateTime.now(), it).formatUntil() }
             AnimatedContent(until, transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "until") { text ->
-                Text(if (text == null) "" else "Rings in $text", style = MaterialTheme.typography.titleMedium, color = MorningGold)
+                Text(if (text == null) "" else tr("Rings in {0}", text), style = MaterialTheme.typography.titleMedium, color = MorningGold)
             }
         }
         Spacer(Modifier.height(Space.lg))
         ChipRow {
-            Chip("Weekdays", draft.days == WEEKDAYS, { update { it.copy(days = WEEKDAYS, date = null) } })
-            Chip("Every day", draft.days.size == 7, { update { it.copy(days = DayOfWeek.entries.toSet(), date = null) } })
-            Chip("Weekends", draft.days == WEEKEND, { update { it.copy(days = WEEKEND, date = null) } })
-            Chip("Just once", draft.days.isEmpty(), { update { it.copy(days = emptySet(), date = null) } })
+            Chip(tr("Weekdays"), draft.days == WEEKDAYS, { update { it.copy(days = WEEKDAYS, date = null) } })
+            Chip(tr("Every day"), draft.days.size == 7, { update { it.copy(days = DayOfWeek.entries.toSet(), date = null) } })
+            Chip(tr("Weekends"), draft.days == WEEKEND, { update { it.copy(days = WEEKEND, date = null) } })
+            Chip(tr("Just once"), draft.days.isEmpty(), { update { it.copy(days = emptySet(), date = null) } })
         }
     }
 }
@@ -218,9 +219,9 @@ fun SceneStep(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> Un
     var previewing by remember { mutableStateOf<Scene?>(null) }
     val selected = Scene.byId(draft.scene)
     StepScaffold(
-        title = "Pick your wake-up scene",
-        subtitle = "This is what your alarm screen looks like. Tap one to see it full screen.",
-        primary = "Continue with ${selected.title}",
+        title = tr("Pick your wake-up scene"),
+        subtitle = tr("This is what your alarm screen looks like. Tap one to see it full screen."),
+        primary = tr("Continue with {0}", selected.title),
         onPrimary = onNext,
     ) {
         val scenes = Scene.entries.filter { it != Scene.Photo }
@@ -253,7 +254,7 @@ fun SceneStep(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> Un
                                 Box(
                                     Modifier.align(Alignment.TopEnd).padding(6.dp).size(24.dp).clip(CircleShape).background(Night.copy(alpha = 0.7f)),
                                     contentAlignment = Alignment.Center,
-                                ) { Icon(Icons.Rounded.Lock, "Pro", tint = MorningGold, modifier = Modifier.size(13.dp)) }
+                                ) { Icon(Icons.Rounded.Lock, tr("Pro"), tint = MorningGold, modifier = Modifier.size(13.dp)) }
                             }
                         }
                         Text(scene.title, style = MaterialTheme.typography.labelMedium, color = if (isSelected) SunriseCoral else Paper, modifier = Modifier.padding(top = Space.xs), maxLines = 1)
@@ -261,7 +262,7 @@ fun SceneStep(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> Un
                 }
             }
         }
-        StepHint("Pro scenes can be unlocked any time later. No pressure.")
+        StepHint(tr("Pro scenes can be unlocked any time later. No pressure."))
     }
     previewing?.let { scene ->
         ScenePreviewDialog(
@@ -282,15 +283,15 @@ fun SceneStep(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> Un
 fun SoundStep(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> Unit) {
     val (preview, playing) = rememberTonePreview()
     StepScaffold(
-        title = "Pick your sound",
-        subtitle = "Tap to hear it at alarm volume.",
-        primary = "Continue",
+        title = tr("Pick your sound"),
+        subtitle = tr("Tap to hear it at alarm volume."),
+        primary = tr("Continue"),
         onPrimary = { preview.stop(); onNext() },
     ) {
         SoundPicker(draft, pro = false, preview = preview, playing = playing, onUpgrade = { preview.stop() }, update = update)
         Spacer(Modifier.height(Space.xl))
         Row(Modifier.fillMaxWidth()) {
-            Text("Volume", style = MaterialTheme.typography.bodyLarge, color = Paper, modifier = Modifier.weight(1f))
+            Text(tr("Volume"), style = MaterialTheme.typography.bodyLarge, color = Paper, modifier = Modifier.weight(1f))
             Text("${draft.volume}%", style = MaterialTheme.typography.labelLarge, color = MorningGold)
         }
         Slider(
@@ -298,11 +299,11 @@ fun SoundStep(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> Un
             onValueChange = { v -> update { it.copy(volume = (v * 100).toInt()) } },
             colors = SliderDefaults.colors(thumbColor = SunriseCoral, activeTrackColor = SunriseCoral, inactiveTrackColor = Paper.copy(alpha = 0.12f)),
         )
-        Text("Gentle start", style = MaterialTheme.typography.bodyLarge, color = Paper, modifier = Modifier.padding(top = Space.sm))
-        StepHint("Starts quiet and rises to full volume, so you wake calmly.")
+        Text(tr("Gentle start"), style = MaterialTheme.typography.bodyLarge, color = Paper, modifier = Modifier.padding(top = Space.sm))
+        StepHint(tr("Starts quiet and rises to full volume, so you wake calmly."))
         Spacer(Modifier.height(Space.sm))
         ChipRow {
-            listOf(0 to "Off", 30 to "30 s", 60 to "1 min", 300 to "5 min").forEach { (sec, label) ->
+            listOf(0 to tr("Off"), 30 to "30 s", 60 to tr("1 min"), 300 to tr("5 min")).forEach { (sec, label) ->
                 Chip(label, draft.rampSeconds == sec, { update { it.copy(rampSeconds = sec) } })
             }
         }
@@ -315,9 +316,9 @@ fun MissionStep(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> 
     var editing by remember { mutableStateOf<MissionConfig?>(null) }
     val current = draft.missions.firstOrNull() ?: MissionConfig(MissionType.Math)
     StepScaffold(
-        title = "Choose your wake-up mission",
-        subtitle = "The alarm keeps ringing until it's done. Missions in another room work best.",
-        primary = "Continue with ${current.type.title}",
+        title = tr("Choose your wake-up mission"),
+        subtitle = tr("The alarm keeps ringing until it's done. Missions in another room work best."),
+        primary = tr("Continue with {0}", current.type.title),
         onPrimary = onNext,
     ) {
         Row(
@@ -327,7 +328,7 @@ fun MissionStep(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> 
             Icon(current.type.icon, null, tint = MorningGold)
             Spacer(Modifier.width(Space.md))
             Column(Modifier.weight(1f)) {
-                Text("Chosen: ${current.type.title}", style = MaterialTheme.typography.titleSmall, color = Paper)
+                Text(tr("Chosen: {0}", current.type.title), style = MaterialTheme.typography.titleSmall, color = Paper)
                 Text(current.summary(), style = MaterialTheme.typography.bodySmall, color = PaperMuted)
             }
         }
@@ -336,8 +337,8 @@ fun MissionStep(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> 
             Row(Modifier.fillMaxWidth().padding(bottom = Space.md), horizontalArrangement = Arrangement.spacedBy(Space.md)) {
                 pair.forEach { t ->
                     val unavailable = when (t) {
-                        MissionType.Nfc -> if (nfc == NfcState.Missing && !nfcSimulated) "No NFC on this phone" else null
-                        MissionType.Steps -> if (!context.canCountSteps()) "No motion sensor" else null
+                        MissionType.Nfc -> if (nfc == NfcState.Missing && !nfcSimulated) tr("No NFC on this phone") else null
+                        MissionType.Steps -> if (!context.canCountSteps()) tr("No motion sensor") else null
                         else -> null
                     }
                     MissionTile(t, Modifier.weight(1f), unavailable, selected = t == current.type) {
@@ -356,7 +357,7 @@ fun MissionStep(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit, onNext: () -> 
                 editing = null
             },
             allowSetupLater = true,
-            saveLabel = "Use this mission",
+            saveLabel = tr("Use this mission"),
         )
     }
 }
@@ -392,10 +393,10 @@ fun BuildingStep(state: OnboardingState, use24h: Boolean, onNext: () -> Unit) {
         Spacer(Modifier.height(Space.xl))
         AnimatedContent(
             when {
-                done -> "All set!"
-                p < 0.3f -> "Setting your time…"
-                p < 0.6f -> "Tuning your sound…"
-                else -> "Loading your mission…"
+                done -> tr("All set!")
+                p < 0.3f -> tr("Setting your time…")
+                p < 0.6f -> tr("Tuning your sound…")
+                else -> tr("Loading your mission…")
             },
             transitionSpec = { (slideInVertically { it / 2 } + fadeIn()) togetherWith fadeOut() },
             label = "buildText",
@@ -414,7 +415,7 @@ fun BuildingStep(state: OnboardingState, use24h: Boolean, onNext: () -> Unit) {
                         .padding(Space.xl),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Text("YOUR FIRST ALARM IS READY", style = MaterialTheme.typography.labelSmall, color = MorningGold)
+                    Text(tr("YOUR FIRST ALARM IS READY"), style = MaterialTheme.typography.labelSmall, color = MorningGold)
                     Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.padding(top = Space.sm)) {
                         Text(formatClock(a.hour, a.minute, use24h), style = ClockType.card, color = Color(0xFFF5F3EE))
                         Text(" ${formatMeridiem(a.hour, use24h)}", style = MaterialTheme.typography.titleMedium, color = Color(0xFFA9ABB8), modifier = Modifier.padding(bottom = 6.dp))
@@ -435,12 +436,12 @@ fun BuildingStep(state: OnboardingState, use24h: Boolean, onNext: () -> Unit) {
 @Composable
 fun TestStep(restore: Boolean, onTest: () -> Unit, onLater: () -> Unit) {
     StepScaffold(
-        title = "Want to test it now?",
-        subtitle = "A test alarm rings in one minute with an easy mission. Lock your phone and wait: if it rings over the lock screen, you're set.",
-        primary = "Ring in 1 minute",
+        title = tr("Want to test it now?"),
+        subtitle = tr("A test alarm rings in one minute with an easy mission. Lock your phone and wait: if it rings over the lock screen, you're set."),
+        primary = tr("Ring in 1 minute"),
         onPrimary = onTest,
         warm = true,
-        secondary = if (restore) "Not now" else "Later, take me to my alarm",
+        secondary = if (restore) tr("Not now") else tr("Later, take me to my alarm"),
         onSecondary = onLater,
         scroll = false,
     ) {
@@ -461,7 +462,7 @@ fun TestStep(restore: Boolean, onTest: () -> Unit, onLater: () -> Unit) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Box(Modifier.size(10.dp).clip(CircleShape).background(Calm))
             Spacer(Modifier.width(Space.sm))
-            Text("Takes one minute. Proves it works on your phone.", style = MaterialTheme.typography.bodySmall, color = Night.copy(alpha = 0.8f))
+            Text(tr("Takes one minute. Proves it works on your phone."), style = MaterialTheme.typography.bodySmall, color = Night.copy(alpha = 0.8f))
         }
     }
 }

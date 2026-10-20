@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.editor
 
+import com.wakeroo.app.ui.i18n.tr
 import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -111,7 +112,7 @@ fun MissionPickerSheet(
     onDismiss: () -> Unit,
     onSave: (MissionConfig) -> Unit,
     allowSetupLater: Boolean = false,
-    saveLabel: String = "Add mission",
+    saveLabel: String = tr("Add mission"),
 ) {
     val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var config by remember { mutableStateOf(existing) }
@@ -144,9 +145,9 @@ fun MissionPickerSheet(
         ) { type ->
             Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).navigationBarsPadding().padding(Space.xl)) {
                 if (type == null) {
-                    Text("Pick a mission", style = MaterialTheme.typography.headlineMedium, color = Paper)
+                    Text(tr("Pick a mission"), style = MaterialTheme.typography.headlineMedium, color = Paper)
                     Text(
-                        "Missions in another room work best: you have to get out of bed.",
+                        tr("Missions in another room work best: you have to get out of bed."),
                         style = MaterialTheme.typography.bodyMedium, color = PaperMuted, modifier = Modifier.padding(top = Space.xs, bottom = Space.lg),
                     )
                     val nfc = context.nfcState()
@@ -154,8 +155,8 @@ fun MissionPickerSheet(
                         Row(Modifier.fillMaxWidth().padding(bottom = Space.md), horizontalArrangement = Arrangement.spacedBy(Space.md)) {
                             pair.forEach { t ->
                                 val unavailable = when (t) {
-                                    MissionType.Nfc -> if (nfc == NfcState.Missing && !nfcSimulated) "No NFC on this phone" else null
-                                    MissionType.Steps -> if (!context.canCountSteps()) "No motion sensor" else null
+                                    MissionType.Nfc -> if (nfc == NfcState.Missing && !nfcSimulated) tr("No NFC on this phone") else null
+                                    MissionType.Steps -> if (!context.canCountSteps()) tr("No motion sensor") else null
                                     else -> null
                                 }
                                 MissionTile(t, Modifier.weight(1f), unavailable) {
@@ -169,7 +170,7 @@ fun MissionPickerSheet(
                     val c = config!!
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            Icons.AutoMirrored.Rounded.ArrowBack, "Back to missions", tint = Paper,
+                            Icons.AutoMirrored.Rounded.ArrowBack, tr("Back to missions"), tint = Paper,
                             modifier = Modifier.clip(CircleShape).clickable { config = null }.padding(Space.sm),
                         )
                         Spacer(Modifier.width(Space.sm))
@@ -211,7 +212,7 @@ fun MissionPickerSheet(
                                 } else trying = true
                             }
                         }
-                        if (ready || !allowSetupLater) PillButton(if (ready) saveLabel else "Set up first", Modifier.weight(1f), enabled = ready) {
+                        if (ready || !allowSetupLater) PillButton(if (ready) saveLabel else tr("Set up first"), Modifier.weight(1f), enabled = ready) {
                             if (c.type == MissionType.Hunt && !cameraOk) {
                                 afterCamera = { onSave(c) }
                                 cameraPermission.launch(Manifest.permission.CAMERA)
@@ -222,13 +223,13 @@ fun MissionPickerSheet(
                         Spacer(Modifier.height(Space.md))
                         PillButton("I'll set it up tonight", Modifier.fillMaxWidth(), outlined = true) { onSave(c.copy(needsSetup = true)) }
                         Text(
-                            "Until it's set up, this alarm uses math instead.",
+                            tr("Until it's set up, this alarm uses math instead."),
                             style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
                         )
                     }
                     if (c.type == MissionType.Hunt && !cameraOk) {
                         Text(
-                            "Item hunt uses the camera only while the alarm screen is open.",
+                            tr("Item hunt uses the camera only while the alarm screen is open."),
                             style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
                         )
                     }
@@ -295,26 +296,26 @@ private fun MissionConfigFields(
         MissionType.Math -> {
             DifficultyChips(c.difficulty) { onChange(c.copy(difficulty = it)) }
             Spacer(Modifier.height(Space.md))
-            Stepper("Problems", "${c.count}", { onChange(c.copy(count = (c.count - 1).coerceAtLeast(1))) }, { onChange(c.copy(count = (c.count + 1).coerceAtMost(10))) }, c.count > 1, c.count < 10)
+            Stepper(tr("Problems"), "${c.count}", { onChange(c.copy(count = (c.count - 1).coerceAtLeast(1))) }, { onChange(c.copy(count = (c.count + 1).coerceAtMost(10))) }, c.count > 1, c.count < 10)
             Text(
-                when (c.difficulty) { 1 -> "Like 24 + 7"; 2 -> "Like 17 × 6 + 38"; else -> "Like 34 × 11 + 245" },
+                when (c.difficulty) { 1 -> tr("Like 24 + 7"); 2 -> tr("Like 17 × 6 + 38"); else -> tr("Like 34 × 11 + 245") },
                 style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
             )
         }
-        MissionType.Typing -> Stepper("Phrases", "${c.count}", { onChange(c.copy(count = (c.count - 1).coerceAtLeast(1))) }, { onChange(c.copy(count = (c.count + 1).coerceAtMost(5))) }, c.count > 1, c.count < 5)
-        MissionType.Shake -> Stepper("Shakes", "${c.count}", { onChange(c.copy(count = (c.count - 10).coerceAtLeast(10))) }, { onChange(c.copy(count = (c.count + 10).coerceAtMost(150))) }, c.count > 10, c.count < 150)
+        MissionType.Typing -> Stepper(tr("Phrases"), "${c.count}", { onChange(c.copy(count = (c.count - 1).coerceAtLeast(1))) }, { onChange(c.copy(count = (c.count + 1).coerceAtMost(5))) }, c.count > 1, c.count < 5)
+        MissionType.Shake -> Stepper(tr("Shakes"), "${c.count}", { onChange(c.copy(count = (c.count - 10).coerceAtLeast(10))) }, { onChange(c.copy(count = (c.count + 10).coerceAtMost(150))) }, c.count > 10, c.count < 150)
         MissionType.Steps -> {
-            Stepper("Steps", "${c.count}", { onChange(c.copy(count = (c.count - 10).coerceAtLeast(20))) }, { onChange(c.copy(count = (c.count + 10).coerceAtMost(200))) }, c.count > 20, c.count < 200)
+            Stepper(tr("Steps"), "${c.count}", { onChange(c.copy(count = (c.count - 10).coerceAtLeast(20))) }, { onChange(c.copy(count = (c.count + 10).coerceAtMost(200))) }, c.count > 20, c.count < 200)
             Text(
-                "Stand still for 10 seconds and the count drains, so you have to keep moving.",
+                tr("Stand still for 10 seconds and the count drains, so you have to keep moving."),
                 style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
             )
             if (!motionGranted) {
                 Spacer(Modifier.height(Space.md))
                 SpotStatus(
                     done = false, doneText = "",
-                    todo = "Wakeroo needs motion access to count your steps. It's only used while this mission runs.",
-                    action = "Allow motion access", onClick = onAskMotion,
+                    todo = tr("Wakeroo needs motion access to count your steps. It's only used while this mission runs."),
+                    action = tr("Allow motion access"), onClick = onAskMotion,
                 )
             }
         }
@@ -325,52 +326,52 @@ private fun MissionConfigFields(
                 onChange(when (d) { 1 -> c.copy(gridSize = 3, count = 3); 2 -> c.copy(gridSize = 3, count = 4); else -> c.copy(gridSize = 4, count = 5) })
             }
             Spacer(Modifier.height(Space.md))
-            Stepper("Rounds", "${c.count}", { onChange(c.copy(count = (c.count - 1).coerceAtLeast(2))) }, { onChange(c.copy(count = (c.count + 1).coerceAtMost(8))) }, c.count > 2, c.count < 8)
+            Stepper(tr("Rounds"), "${c.count}", { onChange(c.copy(count = (c.count - 1).coerceAtLeast(2))) }, { onChange(c.copy(count = (c.count + 1).coerceAtMost(8))) }, c.count > 2, c.count < 8)
             Text(
-                "${c.gridSize}×${c.gridSize} grid. Each round lights one more tile.",
+                tr("{0}×{1} grid. Each round lights one more tile.", c.gridSize, c.gridSize),
                 style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
             )
         }
         MissionType.Scan -> SpotStatus(
             done = c.codeValue != null,
-            doneText = "Registered: the code on your ${c.codeLabel ?: "item"}",
-            todo = "Pick something in another room with a barcode or QR code (toothpaste, coffee, a book) and scan it now.",
-            action = if (c.codeValue != null) "Scan a different code" else "Scan your code",
+            doneText = tr("Registered: the code on your {0}", c.codeLabel ?: "item"),
+            todo = tr("Pick something in another room with a barcode or QR code (toothpaste, coffee, a book) and scan it now."),
+            action = if (c.codeValue != null) tr("Scan a different code") else tr("Scan your code"),
             onClick = onSetUp,
         )
         MissionType.Photo -> {
             SpotStatus(
                 done = c.photoHash != null,
-                doneText = "Spot saved. At alarm time, point the camera at the same view.",
-                todo = "Take a photo of a spot away from your bed, like the bathroom sink or the kettle.",
-                action = if (c.photoHash != null) "Retake photo" else "Take the photo",
+                doneText = tr("Spot saved. At alarm time, point the camera at the same view."),
+                todo = tr("Take a photo of a spot away from your bed, like the bathroom sink or the kettle."),
+                action = if (c.photoHash != null) tr("Retake photo") else tr("Take the photo"),
                 onClick = onSetUp,
             )
             Spacer(Modifier.height(Space.md))
-            Text("How close the view must match", style = MaterialTheme.typography.bodyMedium, color = Paper)
+            Text(tr("How close the view must match"), style = MaterialTheme.typography.bodyMedium, color = Paper)
             Spacer(Modifier.height(Space.sm))
-            DifficultyChips(c.difficulty, names = listOf("Relaxed", "Normal", "Strict")) { onChange(c.copy(difficulty = it)) }
+            DifficultyChips(c.difficulty, names = listOf(tr("Relaxed"), tr("Normal"), tr("Strict"))) { onChange(c.copy(difficulty = it)) }
         }
         MissionType.Nfc -> SpotStatus(
             done = c.nfcTagId != null,
-            doneText = "Registered: the sticker by the ${c.nfcLabel ?: "door"}",
-            todo = "Stick an NFC tag (cheap NTAG stickers work) by the bathroom mirror or the kettle, then register it here.",
-            action = if (c.nfcTagId != null) "Register a different sticker" else "Register your sticker",
+            doneText = tr("Registered: the sticker by the {0}", c.nfcLabel ?: "door"),
+            todo = tr("Stick an NFC tag (cheap NTAG stickers work) by the bathroom mirror or the kettle, then register it here."),
+            action = if (c.nfcTagId != null) tr("Register a different sticker") else tr("Register your sticker"),
             onClick = onSetUp,
         )
         MissionType.Plan -> Text(
-            "No setup needed. At alarm time you type at least three words about your day. Your plan then shows on the Morning tab.",
+            tr("No setup needed. At alarm time you type at least three words about your day. Your plan then shows on the Morning tab."),
             style = MaterialTheme.typography.bodyMedium, color = Paper,
         )
         MissionType.Hunt -> {
-            DifficultyChips(c.difficulty, names = listOf("Everyday", "Varied", "Strict")) { onChange(c.copy(difficulty = it)) }
+            DifficultyChips(c.difficulty, names = listOf(tr("Everyday"), tr("Varied"), tr("Strict"))) { onChange(c.copy(difficulty = it)) }
             Spacer(Modifier.height(Space.md))
-            Stepper("Objects to find", "${c.count}", { onChange(c.copy(count = (c.count - 1).coerceAtLeast(1))) }, { onChange(c.copy(count = (c.count + 1).coerceAtMost(3))) }, c.count > 1, c.count < 3)
+            Stepper(tr("Objects to find"), "${c.count}", { onChange(c.copy(count = (c.count - 1).coerceAtLeast(1))) }, { onChange(c.copy(count = (c.count + 1).coerceAtMost(3))) }, c.count > 1, c.count < 3)
             Text(
                 when (c.difficulty) {
-                    1 -> "Things in almost every home: a cup, a chair, a plant, the sink."
-                    2 -> "Any of 30 objects, from a jacket to a frying pan."
-                    else -> "Any object, and the camera must be really sure."
+                    1 -> tr("Things in almost every home: a cup, a chair, a plant, the sink.")
+                    2 -> tr("Any of 30 objects, from a jacket to a frying pan.")
+                    else -> tr("Any object, and the camera must be really sure.")
                 },
                 style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
             )
@@ -379,7 +380,7 @@ private fun MissionConfigFields(
 }
 
 @Composable
-private fun DifficultyChips(value: Int, names: List<String> = listOf("Easy", "Medium", "Hard"), onChange: (Int) -> Unit) {
+private fun DifficultyChips(value: Int, names: List<String> = listOf("Easy", tr("Medium"), tr("Hard")), onChange: (Int) -> Unit) {
     ChipRow { names.forEachIndexed { i, n -> Chip(n, value == i + 1, { onChange(i + 1) }) } }
 }
 
@@ -442,16 +443,16 @@ fun TryMissionDialog(config: MissionConfig, onClose: () -> Unit) {
         WakerooTheme(dark = true) { SkyBackground(Sky.Night) {
             Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(Space.xl)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Practice run", style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.weight(1f))
-                    Icon(Icons.Rounded.Close, "Close", tint = Paper, modifier = Modifier.clip(CircleShape).clickable(onClick = onClose).padding(Space.sm))
+                    Text(tr("Practice run"), style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.weight(1f))
+                    Icon(Icons.Rounded.Close, tr("Close"), tint = Paper, modifier = Modifier.clip(CircleShape).clickable(onClick = onClose).padding(Space.sm))
                 }
                 Spacer(Modifier.height(Space.lg))
                 AnimatedContent(done, transitionSpec = { scaleIn() + fadeIn() togetherWith fadeOut() }, label = "try") { finished ->
                     if (finished) {
                         Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                             Icon(Icons.Rounded.CheckCircle, null, tint = MorningGold, modifier = Modifier.size(96.dp))
-                            Text("That's how it works", style = MaterialTheme.typography.headlineMedium, color = Paper, modifier = Modifier.padding(top = Space.lg))
-                            Text("At alarm time the sound stops once you finish.", style = MaterialTheme.typography.bodyMedium, color = PaperMuted)
+                            Text(tr("That's how it works"), style = MaterialTheme.typography.headlineMedium, color = Paper, modifier = Modifier.padding(top = Space.lg))
+                            Text(tr("At alarm time the sound stops once you finish."), style = MaterialTheme.typography.bodyMedium, color = PaperMuted)
                             Spacer(Modifier.height(Space.xl))
                             PillButton("Done", onClick = onClose)
                         }

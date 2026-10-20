@@ -1,5 +1,6 @@
 package com.wakeroo.app.weather
 
+import com.wakeroo.app.ui.util.formatMeridiem
 import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.i18n.n
 import android.Manifest
@@ -91,9 +92,9 @@ data class Forecast(
         val celsius = if (unit == "fahrenheit") (high - 32) * 5 / 9 else high
         val celsiusLow = if (unit == "fahrenheit") (low - 32) * 5 / 9 else low
         return when {
-            rainy != null -> "Rain likely around ${hourLabel(rainy.hour)}. Take an umbrella."
-            celsiusLow <= 2 -> "Cold one today, down to ${low.toInt()}°. Wrap up warm."
-            celsius >= 35 -> "Hot day ahead, up to ${high.toInt()}°. Drink plenty of water."
+            rainy != null -> tr("Rain likely around {0}. Take an umbrella.", hourLabel(rainy.hour))
+            celsiusLow <= 2 -> tr("Cold one today, down to {0}°. Wrap up warm.", low.toInt())
+            celsius >= 35 -> tr("Hot day ahead, up to {0}°. Drink plenty of water.", high.toInt())
             else -> null
         }
     }
@@ -102,8 +103,7 @@ data class Forecast(
 fun hourLabel(hour: Int): String = when {
     hour == 0 -> tr("midnight")
     hour == 12 -> tr("noon")
-    hour < 12 -> "$hour AM"
-    else -> "${hour - 12} PM"
+    else -> "${if (hour % 12 == 0) 12 else hour % 12} ${formatMeridiem(hour)}"
 }
 
 /**
@@ -217,7 +217,7 @@ object WeatherNotifier {
         )
         val n = NotificationCompat.Builder(context, Reminders.CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_wakeroo)
-            .setContentTitle("Weather in ${city.name}")
+            .setContentTitle(tr("Weather in {0}", city.name))
             .setContentText(text)
             .setContentIntent(open)
             .setAutoCancel(true)

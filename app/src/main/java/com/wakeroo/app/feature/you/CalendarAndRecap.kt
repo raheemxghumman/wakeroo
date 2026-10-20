@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.you
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.util.initial
 import com.wakeroo.app.ui.util.formatSeconds
 import com.wakeroo.app.ui.theme.MorningGoldFixed
@@ -140,14 +141,14 @@ fun WakeCalendar(events: List<RingEventEntity>, pro: Boolean, onDay: (LocalDate)
             Text(DateTimeFormatter.ofPattern("MMMM yyyy").format(shown), style = MaterialTheme.typography.titleMedium, color = Paper, modifier = Modifier.weight(1f))
             val canBack = pager.currentPage > 0
             Icon(
-                Icons.AutoMirrored.Rounded.ArrowBack, "Previous month", tint = if (canBack || !pro) Paper else PaperMuted.copy(alpha = 0.3f),
+                Icons.AutoMirrored.Rounded.ArrowBack, tr("Previous month"), tint = if (canBack || !pro) Paper else PaperMuted.copy(alpha = 0.3f),
                 modifier = Modifier.clip(CircleShape).clickable {
                     if (!pro) onPro() else if (canBack) scope.launch { pager.animateScrollToPage(pager.currentPage - 1) }
                 }.padding(Space.sm),
             )
             val canForward = pager.currentPage < months - 1
             Icon(
-                Icons.AutoMirrored.Rounded.ArrowForward, "Next month", tint = if (canForward) Paper else PaperMuted.copy(alpha = 0.3f),
+                Icons.AutoMirrored.Rounded.ArrowForward, tr("Next month"), tint = if (canForward) Paper else PaperMuted.copy(alpha = 0.3f),
                 modifier = Modifier.clip(CircleShape).clickable(enabled = canForward) { scope.launch { pager.animateScrollToPage(pager.currentPage + 1) } }.padding(Space.sm),
             )
         }
@@ -172,7 +173,7 @@ fun WakeCalendar(events: List<RingEventEntity>, pro: Boolean, onDay: (LocalDate)
         }
         if (!pro) {
             Text(
-                "See every month back to your first alarm with Pro",
+                tr("See every month back to your first alarm with Pro"),
                 style = MaterialTheme.typography.labelMedium, color = MorningGold,
                 modifier = Modifier.padding(top = Space.sm).clip(CircleShape).clickable(onClick = onPro).padding(Space.sm),
             )
@@ -253,14 +254,14 @@ fun DaySheet(day: LocalDate, events: List<RingEventEntity>, mood: MoodEntity?, o
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Base, dragHandle = null) {
         Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl), verticalArrangement = Arrangement.spacedBy(Space.md)) {
             Text(DateTimeFormatter.ofPattern("EEEE d MMMM").format(day), style = MaterialTheme.typography.headlineSmall, color = Paper)
-            if (dayEvents.isEmpty()) Text("No alarm rang this day.", style = MaterialTheme.typography.bodyMedium, color = PaperMuted)
+            if (dayEvents.isEmpty()) Text(tr("No alarm rang this day."), style = MaterialTheme.typography.bodyMedium, color = PaperMuted)
             dayEvents.forEach { e ->
                 val rang = Instant.ofEpochMilli(e.scheduledAt).atZone(zone).toLocalTime()
                 val (color, label) = when (e.outcome) {
-                    RingOutcome.Dismissed -> if (e.wakeCheckPassed == true) Calm to "Wake-up check passed" else Calm to (e.secondsToWake?.let { s -> "Mission done in ${formatSeconds(s)}" } ?: "Mission done")
-                    RingOutcome.Escaped -> MorningGold to "Emergency exit"
-                    RingOutcome.Missed -> Alert to if (e.wakeCheckPassed == false) "Fell back asleep, the alarm came back" else "Didn't ring (phone off or app paused)"
-                    RingOutcome.Snoozed -> DawnLavender to "Snoozed"
+                    RingOutcome.Dismissed -> if (e.wakeCheckPassed == true) Calm to tr("Wake-up check passed") else Calm to (e.secondsToWake?.let { s -> tr("Mission done in {0}", formatSeconds(s)) } ?: tr("Mission done"))
+                    RingOutcome.Escaped -> MorningGold to tr("Emergency exit")
+                    RingOutcome.Missed -> Alert to if (e.wakeCheckPassed == false) tr("Fell back asleep, the alarm came back") else tr("Didn't ring (phone off or app paused)")
+                    RingOutcome.Snoozed -> DawnLavender to tr("Snoozed")
                 }
                 Row(
                     Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(NightSurface).padding(Space.lg),
@@ -271,7 +272,7 @@ fun DaySheet(day: LocalDate, events: List<RingEventEntity>, mood: MoodEntity?, o
                     Column {
                         Text("${rang.formatClock()} ${rang.formatMeridiem()}${e.label.takeIf { it.isNotBlank() }?.let { " · $it" } ?: ""}", style = MaterialTheme.typography.titleSmall, color = Paper)
                         Text(
-                            listOfNotNull(label, if (e.snoozes == 1) "1 snooze" else if (e.snoozes > 1) "${e.snoozes} snoozes" else null).joinToString(" · "),
+                            listOfNotNull(label, if (e.snoozes == 1) tr("1 snooze") else if (e.snoozes > 1) tr("{0} snoozes", e.snoozes) else null).joinToString(" · "),
                             style = MaterialTheme.typography.bodySmall, color = PaperMuted,
                         )
                     }
@@ -282,7 +283,7 @@ fun DaySheet(day: LocalDate, events: List<RingEventEntity>, mood: MoodEntity?, o
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     MoodFace(mood, Modifier.size(32.dp))
                     Spacer(Modifier.width(Space.md))
-                    Text("You felt ${mood.title.lowercase()}", style = MaterialTheme.typography.bodyMedium, color = Paper)
+                    Text(tr("You felt {0}", mood.title.lowercase()), style = MaterialTheme.typography.bodyMedium, color = Paper)
                 }
             }
         }
@@ -344,7 +345,7 @@ fun ShareStreakDialog(streak: Int, week: List<Boolean?>, medal: AchievementDef?,
                 if (medal != null) Medal(medal, unlocked = true, size = 96.dp) else WakerooMark(Modifier.size(96.dp))
                 Spacer(Modifier.height(Space.md))
                 Text("$streak", style = ClockType.hero.copy(fontSize = 84.sp), color = Night)
-                Text(if (streak == 1) "morning in a row" else "mornings in a row", style = MaterialTheme.typography.titleMedium, color = Night.copy(alpha = 0.8f))
+                Text(if (streak == 1) tr("morning in a row") else tr("mornings in a row"), style = MaterialTheme.typography.titleMedium, color = Night.copy(alpha = 0.8f))
                 Spacer(Modifier.height(Space.lg))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     week.forEach { s ->
@@ -352,13 +353,13 @@ fun ShareStreakDialog(streak: Int, week: List<Boolean?>, medal: AchievementDef?,
                     }
                 }
                 Spacer(Modifier.weight(1f))
-                Text("Up with a mission, every morning.", style = MaterialTheme.typography.labelMedium, color = Night.copy(alpha = 0.7f))
+                Text(tr("Up with a mission, every morning."), style = MaterialTheme.typography.labelMedium, color = Night.copy(alpha = 0.7f))
             }
             Spacer(Modifier.height(Space.lg))
             PillButton("Share", Modifier.fillMaxWidth(), icon = Icons.Rounded.IosShare) {
                 scope.launch {
                     val bmp = capture.toImageBitmap().asAndroidBitmap()
-                    shareImage(context, bmp, "wakeroo-streak.png", "$streak mornings in a row with Wakeroo")
+                    shareImage(context, bmp, "wakeroo-streak.png", tr("{0} mornings in a row with Wakeroo", streak))
                     onDismiss()
                 }
             }
@@ -379,5 +380,5 @@ suspend fun shareImage(context: Context, bitmap: Bitmap, name: String, text: Str
         .putExtra(Intent.EXTRA_STREAM, uri)
         .putExtra(Intent.EXTRA_TEXT, text)
         .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    context.startActivity(Intent.createChooser(send, "Share").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    context.startActivity(Intent.createChooser(send, tr("Share")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 }

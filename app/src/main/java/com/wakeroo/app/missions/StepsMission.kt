@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import android.Manifest
 import android.content.Context
@@ -198,7 +199,7 @@ fun StepsMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Flo
     val trackColor = Paper.copy(alpha = 0.12f)
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Get up and walk", style = MaterialTheme.typography.labelLarge, color = DawnLavender)
+        Text(tr("Get up and walk"), style = MaterialTheme.typography.labelLarge, color = DawnLavender)
         Spacer(Modifier.weight(1f))
         Box(
             Modifier
@@ -241,16 +242,16 @@ fun StepsMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Flo
                 modifier = Modifier.graphicsLayer { val s = 1f + bump.value * 0.08f; scaleX = s; scaleY = s },
             ) {
                 Text("$steps", style = ClockType.hero, color = Paper)
-                Text("of $target steps", style = MaterialTheme.typography.titleMedium, color = PaperMuted)
+                Text(tr("of {0} steps", target), style = MaterialTheme.typography.titleMedium, color = PaperMuted)
             }
         }
         Spacer(Modifier.height(Space.lg))
         val idle = System.currentTimeMillis() - lastStep > 4000
         Text(
             when {
-                steps == 0 -> "Walk to another room. Your steps count as you go."
-                idle -> "Keep walking. Stand still and the track drains"
-                else -> "Nice pace. Keep going"
+                steps == 0 -> tr("Walk to another room. Your steps count as you go.")
+                idle -> tr("Keep walking. Stand still and the track drains")
+                else -> tr("Nice pace. Keep going")
             },
             style = MaterialTheme.typography.bodyLarge, color = PaperMuted, textAlign = TextAlign.Center,
         )

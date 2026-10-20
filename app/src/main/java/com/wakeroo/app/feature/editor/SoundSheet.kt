@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.editor
 
+import com.wakeroo.app.ui.i18n.tr
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -154,16 +155,16 @@ class TonePreview(private val context: Context) {
     }
 }
 
-private enum class SoundTab(val title: String) { Gentle("Gentle"), Energetic("Energetic"), Extreme("Extreme"), Own("Your own") }
+private enum class SoundTab(val title: String) { Gentle(tr("Gentle")), Energetic(tr("Energetic")), Extreme(tr("Extreme")), Own("Your own") }
 
 fun Alarm.soundTitle(): String = when {
-    soundUri != null -> soundName ?: "Your sound"
+    soundUri != null -> soundName ?: tr("Your sound")
     else -> Tones.byId(tone).name
 }
 
 fun Alarm.soundCategoryTitle(): String = when {
     soundUri?.startsWith("content://media") == true -> "Phone tone"
-    soundUri != null -> "Your music"
+    soundUri != null -> tr("Your music")
     else -> Tones.byId(tone).category.title
 }
 
@@ -187,9 +188,9 @@ fun SoundSheet(draft: Alarm, pro: Boolean, onDismiss: () -> Unit, onUpgrade: () 
     val (preview, playing) = rememberTonePreview()
     ModalBottomSheet(onDismissRequest = { preview.stop(); onDismiss() }, sheetState = sheet, containerColor = Base, dragHandle = null) {
         Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl)) {
-            Text("Alarm sound", style = MaterialTheme.typography.headlineMedium, color = Paper)
+            Text(tr("Alarm sound"), style = MaterialTheme.typography.headlineMedium, color = Paper)
             Text(
-                "Tap to hear it at your alarm's volume.",
+                tr("Tap to hear it at your alarm's volume."),
                 style = MaterialTheme.typography.bodyMedium, color = PaperMuted, modifier = Modifier.padding(top = Space.xs, bottom = Space.lg),
             )
             SoundPicker(draft, pro, preview, playing, onUpgrade = { preview.stop(); onUpgrade() }, update = update)
@@ -224,7 +225,7 @@ fun SoundPicker(
         if (result.resultCode != Activity.RESULT_OK) return@rememberLauncherForActivityResult
         @Suppress("DEPRECATION")
         val uri = result.data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI) ?: return@rememberLauncherForActivityResult
-        val name = runCatching { RingtoneManager.getRingtone(context, uri).getTitle(context) }.getOrNull() ?: "Phone tone"
+        val name = runCatching { RingtoneManager.getRingtone(context, uri).getTitle(context) }.getOrNull() ?: tr("Phone tone")
         update { it.copy(soundUri = uri.toString(), soundName = name) }
     }
     val filePicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -232,7 +233,7 @@ fun SoundPicker(
         runCatching { context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
         val name = context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c ->
             if (c.moveToFirst()) c.getString(0) else null
-        } ?: "Your song"
+        } ?: tr("Your song")
         update { it.copy(soundUri = uri.toString(), soundName = name.substringBeforeLast('.')) }
     }
 
@@ -252,7 +253,7 @@ fun SoundPicker(
         ) { t ->
             Column(verticalArrangement = Arrangement.spacedBy(Space.md)) {
                 if (t == SoundTab.Own) {
-                    OwnSoundRow(Icons.Rounded.PhoneAndroid, "Phone tone", "One of your phone's alarm sounds", draft.soundUri?.startsWith("content://media") == true, draft.soundName) {
+                    OwnSoundRow(Icons.Rounded.PhoneAndroid, tr("Phone tone"), tr("One of your phone's alarm sounds"), draft.soundUri?.startsWith("content://media") == true, draft.soundName) {
                         preview.stop()
                         ringtonePicker.launch(
                             Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
@@ -261,12 +262,12 @@ fun SoundPicker(
                         )
                     }
                     val isFile = draft.soundUri != null && !draft.soundUri.startsWith("content://media")
-                    OwnSoundRow(Icons.Rounded.Folder, "Your music", "Any song or audio file", isFile, draft.soundName) {
+                    OwnSoundRow(Icons.Rounded.Folder, tr("Your music"), tr("Any song or audio file"), isFile, draft.soundName) {
                         preview.stop()
                         filePicker.launch(arrayOf("audio/*"))
                     }
                     Text(
-                        "If your file is ever moved or deleted, Wakeroo Rise plays instead. An alarm is never silent.",
+                        tr("If your file is ever moved or deleted, Wakeroo Rise plays instead. An alarm is never silent."),
                         style = MaterialTheme.typography.bodySmall, color = PaperMuted,
                     )
                 } else {
@@ -305,7 +306,7 @@ fun SoundPicker(
             ) {
                 Icon(Icons.Rounded.Lock, null, tint = MorningGold)
                 Spacer(Modifier.width(Space.md))
-                Text("${tone.name} comes with Pro. Tap to see Pro", style = MaterialTheme.typography.labelLarge, color = Paper, modifier = Modifier.weight(1f))
+                Text(tr("{0} comes with Pro. Tap to see Pro", tone.name), style = MaterialTheme.typography.labelLarge, color = Paper, modifier = Modifier.weight(1f))
             }
         }
     }
@@ -396,7 +397,7 @@ private fun OwnSoundRow(icon: ImageVector, title: String, subtitle: String, sele
         Spacer(Modifier.width(Space.md))
         Column(Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.titleMedium, color = Paper)
-            Text(if (selected && name != null) "Chosen: $name" else subtitle, style = MaterialTheme.typography.bodySmall, color = PaperMuted, maxLines = 1)
+            Text(if (selected && name != null) tr("Chosen: {0}", name) else subtitle, style = MaterialTheme.typography.bodySmall, color = PaperMuted, maxLines = 1)
         }
     }
 }

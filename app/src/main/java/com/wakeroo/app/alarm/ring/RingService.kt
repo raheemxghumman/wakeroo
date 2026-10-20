@@ -1,5 +1,6 @@
 package com.wakeroo.app.alarm.ring
 
+import com.wakeroo.app.ui.i18n.tr
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -158,12 +159,12 @@ class RingService : Service() {
         val time = DateTimeFormatter.ofPattern("h:mm", Locale.getDefault())
             .format(Instant.ofEpochMilli(state.scheduledAt).atZone(ZoneId.systemDefault()))
         val title = when (state.kind) {
-            RingKind.WakeCheck -> "Still up?"
-            RingKind.Test -> "Test alarm"
-            RingKind.Alarm -> state.alarm.label.ifBlank { "Wake up, it's $time" }
+            RingKind.WakeCheck -> tr("Still up?")
+            RingKind.Test -> tr("Test alarm")
+            RingKind.Alarm -> state.alarm.label.ifBlank { tr("Wake up, it's {0}", time) }
         }
-        val text = if (state.kind == RingKind.WakeCheck) "Tap to confirm you're awake" else "Finish your mission to stop the alarm"
-        val action = if (state.kind == RingKind.WakeCheck) "I'm up" else "Open mission"
+        val text = if (state.kind == RingKind.WakeCheck) tr("Tap to confirm you're awake") else tr("Finish your mission to stop the alarm")
+        val action = if (state.kind == RingKind.WakeCheck) tr("I'm up") else tr("Open mission")
         ServiceCompat.startForeground(
             this, notificationId, Notifications.ringing(this, title, text, onScreen, action),
             ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK,

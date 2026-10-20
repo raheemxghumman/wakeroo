@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -80,13 +81,13 @@ fun MissionGateDialog(mission: MissionConfig, title: String, onPassed: () -> Uni
                         Icon(Icons.Rounded.Lock, null, tint = MorningGold)
                         Spacer(Modifier.padding(start = Space.sm))
                         Column(Modifier.weight(1f)) {
-                            Text("HARDER MODE", style = MaterialTheme.typography.labelSmall, color = MorningGold)
+                            Text(tr("HARDER MODE"), style = MaterialTheme.typography.labelSmall, color = MorningGold)
                             Text(title, style = MaterialTheme.typography.titleMedium, color = Paper)
                         }
-                        Icon(Icons.Rounded.Close, "Keep the alarm as it is", tint = Paper, modifier = Modifier.clip(CircleShape).clickable(onClick = onCancel).padding(Space.sm))
+                        Icon(Icons.Rounded.Close, tr("Keep the alarm as it is"), tint = Paper, modifier = Modifier.clip(CircleShape).clickable(onClick = onCancel).padding(Space.sm))
                     }
                     Text(
-                        "Finish the mission first. It's what stops a sleepy you from cancelling a wide-awake plan.",
+                        tr("Finish the mission first. It's what stops a sleepy you from cancelling a wide-awake plan."),
                         style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
                     )
                     Spacer(Modifier.height(Space.lg))
@@ -104,7 +105,7 @@ fun MissionGateDialog(mission: MissionConfig, title: String, onPassed: () -> Uni
                             MissionType.Hunt -> HuntMission(runnable, {}, {}, onPassed)
                         }
                     }
-                    Text("Changed your mind? Close it and nothing changes.", style = MaterialTheme.typography.labelSmall, color = DawnLavender, modifier = Modifier.padding(top = Space.sm))
+                    Text(tr("Changed your mind? Close it and nothing changes."), style = MaterialTheme.typography.labelSmall, color = DawnLavender, modifier = Modifier.padding(top = Space.sm))
                 }
             }
         }

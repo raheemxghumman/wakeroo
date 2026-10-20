@@ -1,5 +1,6 @@
 package com.wakeroo.app.reminders
 
+import com.wakeroo.app.ui.i18n.tr
 import android.Manifest
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -63,8 +64,8 @@ object Reminders {
 
     fun createChannel(context: Context) {
         context.getSystemService(NotificationManager::class.java).createNotificationChannel(
-            NotificationChannel(CHANNEL, "Reminders", NotificationManager.IMPORTANCE_DEFAULT).apply {
-                description = "Bedtime and \"no alarm for tomorrow\" reminders. Muting these never mutes alarms."
+            NotificationChannel(CHANNEL, tr("Reminders"), NotificationManager.IMPORTANCE_DEFAULT).apply {
+                description = tr("Bedtime and \"no alarm for tomorrow\" reminders. Muting these never mutes alarms.")
             },
         )
     }
@@ -119,11 +120,11 @@ object Reminders {
         )
         val n = NotificationCompat.Builder(context, CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_wakeroo)
-            .setContentTitle("Time to wind down")
-            .setContentText("Bed by ${bedTime.formatClock()} ${bedTime.formatMeridiem()} for $hoursText before your ${alarmTime.formatClock()} ${alarmTime.formatMeridiem()} alarm.")
+            .setContentTitle(tr("Time to wind down"))
+            .setContentText(tr("Bed by {0} {1} for {2} before your {3} {4} alarm.", bedTime.formatClock(), bedTime.formatMeridiem(), hoursText, alarmTime.formatClock(), alarmTime.formatMeridiem()))
             .setContentIntent(openTab(context, MainTab.Sleep, 54))
-            .addAction(0, "Start sleep sounds", startSounds)
-            .addAction(0, "In 15 min", snooze)
+            .addAction(0, tr("Start sleep sounds"), startSounds)
+            .addAction(0, tr("In 15 min"), snooze)
             .setAutoCancel(true)
             .build()
         NotificationManagerCompat.from(context).notify(ID_BEDTIME, n)
@@ -133,8 +134,8 @@ object Reminders {
         if (!canNotify(context)) return
         val builder = NotificationCompat.Builder(context, CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_wakeroo)
-            .setContentTitle("No alarm for tomorrow")
-            .setContentText(if (template != null) "Want your usual ${formatClock(template.hour, template.minute)} ${formatMeridiem(template.hour)}?" else "Set one in a few seconds.")
+            .setContentTitle(tr("No alarm for tomorrow"))
+            .setContentText(if (template != null) tr("Want your usual {0} {1}?", formatClock(template.hour, template.minute), formatMeridiem(template.hour)) else tr("Set one in a few seconds."))
             .setContentIntent(openTab(context, MainTab.Alarms, 55))
             .setAutoCancel(true)
         if (template != null) {
@@ -142,13 +143,13 @@ object Reminders {
                 context, 56, Intent(context, ReminderReceiver::class.java).setAction(ACTION_SET_TOMORROW),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
-            builder.addAction(0, "Set ${formatClock(template.hour, template.minute)} ${formatMeridiem(template.hour)}", set)
+            builder.addAction(0, tr("Set {0} {1}", formatClock(template.hour, template.minute), formatMeridiem(template.hour)), set)
         }
         val dismiss = PendingIntent.getBroadcast(
             context, 57, Intent(context, ReminderReceiver::class.java).setAction(ACTION_DISMISS),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
-        builder.addAction(0, "Not tomorrow", dismiss)
+        builder.addAction(0, tr("Not tomorrow"), dismiss)
         NotificationManagerCompat.from(context).notify(ID_NO_ALARM, builder.build())
     }
 

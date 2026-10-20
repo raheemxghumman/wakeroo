@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.morning
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import androidx.compose.animation.core.LinearEasing
@@ -183,8 +184,8 @@ fun WeatherCard(
                     WeatherGlyph(Condition.PartlyCloudy, true, Modifier.size(64.dp))
                     Spacer(Modifier.width(Space.md))
                     Column(Modifier.weight(1f)) {
-                        Text("Add your weather", style = MaterialTheme.typography.titleMedium, color = Paper)
-                        Text("Pick your city once. No location permission needed.", style = MaterialTheme.typography.bodySmall, color = PaperMuted)
+                        Text(tr("Add your weather"), style = MaterialTheme.typography.titleMedium, color = Paper)
+                        Text(tr("Pick your city once. No location permission needed."), style = MaterialTheme.typography.bodySmall, color = PaperMuted)
                     }
                 }
                 Spacer(Modifier.height(Space.md))
@@ -195,7 +196,7 @@ fun WeatherCard(
                     WeatherGlyph(Condition.Cloudy, true, Modifier.size(56.dp), animate = loading)
                     Spacer(Modifier.width(Space.md))
                     Text(
-                        if (loading) "Checking the sky over ${city.name}…" else "Weather for ${city.name} isn't available offline.",
+                        if (loading) tr("Checking the sky over {0}…", city.name) else tr("Weather for {0} isn't available offline.", city.name),
                         style = MaterialTheme.typography.bodyMedium, color = PaperMuted, modifier = Modifier.weight(1f),
                     )
                 }
@@ -216,7 +217,7 @@ fun WeatherCard(
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = Space.xs)) {
                                 Icon(Icons.Rounded.WaterDrop, null, tint = Color(0xFF8FB8FF), modifier = Modifier.size(14.dp))
                                 Spacer(Modifier.width(4.dp))
-                                Text("${forecast.rainChance}% chance of rain", style = MaterialTheme.typography.labelSmall, color = Color(0xFF8FB8FF))
+                                Text(tr("{0}% chance of rain", forecast.rainChance), style = MaterialTheme.typography.labelSmall, color = Color(0xFF8FB8FF))
                             }
                         }
                     }
@@ -229,7 +230,7 @@ fun WeatherCard(
                             Modifier.width(56.dp).clip(RoundedCornerShape(18.dp)).background(Night.copy(alpha = 0.3f)).padding(vertical = Space.sm),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            Text(if (h == forecast.hours.first()) "Now" else hourLabel(h.hour).replace(" ", ""), style = MaterialTheme.typography.labelSmall, color = PaperMuted)
+                            Text(if (h == forecast.hours.first()) tr("Now") else hourLabel(h.hour).replace(" ", ""), style = MaterialTheme.typography.labelSmall, color = PaperMuted)
                             val isDay = h.hour in 6..19
                             WeatherGlyph(h.condition, isDay, Modifier.size(32.dp), animate = false)
                             Text(h.temp.deg(), style = MaterialTheme.typography.labelLarge, color = Paper)
@@ -266,14 +267,14 @@ fun CitySheet(
     }
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Base, dragHandle = null) {
         Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl)) {
-            Text("Your city", style = MaterialTheme.typography.headlineMedium, color = Paper)
+            Text(tr("Your city"), style = MaterialTheme.typography.headlineMedium, color = Paper)
             Text(
-                "Only the city's coordinates are sent to Open-Meteo for the forecast. Nothing about you.",
+                tr("Only the city's coordinates are sent to Open-Meteo for the forecast. Nothing about you."),
                 style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.xs, bottom = Space.lg),
             )
             OutlinedTextField(
                 value = query, onValueChange = { query = it.take(40) },
-                placeholder = { Text("Search, e.g. Lahore or Lisbon", color = PaperMuted) },
+                placeholder = { Text(tr("Search, e.g. Lahore or Lisbon"), color = PaperMuted) },
                 leadingIcon = { Icon(Icons.Rounded.Search, null, tint = PaperMuted) },
                 singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -283,7 +284,7 @@ fun CitySheet(
                 ),
             )
             Spacer(Modifier.height(Space.md))
-            if (searching) Text("Searching…", style = MaterialTheme.typography.bodySmall, color = PaperMuted)
+            if (searching) Text(tr("Searching…"), style = MaterialTheme.typography.bodySmall, color = PaperMuted)
             results.forEach { c ->
                 Row(
                     Modifier.fillMaxWidth().padding(vertical = 4.dp).clip(RoundedCornerShape(16.dp)).background(NightSurface)
@@ -299,10 +300,10 @@ fun CitySheet(
                 }
             }
             if (!searching && query.trim().length >= 2 && results.isEmpty()) {
-                Text("No matches yet. Check the spelling or your connection.", style = MaterialTheme.typography.bodySmall, color = PaperMuted)
+                Text(tr("No matches yet. Check the spelling or your connection."), style = MaterialTheme.typography.bodySmall, color = PaperMuted)
             }
             Spacer(Modifier.height(Space.lg))
-            Text("Temperature", style = MaterialTheme.typography.bodyLarge, color = Paper)
+            Text(tr("Temperature"), style = MaterialTheme.typography.bodyLarge, color = Paper)
             Spacer(Modifier.height(Space.sm))
             ChipRow {
                 Chip("°C", unit == TempUnit.Celsius, { onUnit(TempUnit.Celsius) })

@@ -1,5 +1,6 @@
 package com.wakeroo.app.alarm
 
+import com.wakeroo.app.ui.i18n.tr
 import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
@@ -27,8 +28,8 @@ object Notifications {
     fun createChannels(context: Context) {
         val nm = context.getSystemService(NotificationManager::class.java)
         nm.createNotificationChannel(
-            NotificationChannel(CHANNEL_RINGING, "Ringing alarms", NotificationManager.IMPORTANCE_HIGH).apply {
-                description = "Shows the alarm screen when an alarm rings"
+            NotificationChannel(CHANNEL_RINGING, tr("Ringing alarms"), NotificationManager.IMPORTANCE_HIGH).apply {
+                description = tr("Shows the alarm screen when an alarm rings")
                 setSound(null, null) // Wakeroo plays its own sound on the alarm stream
                 enableVibration(false)
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
@@ -36,21 +37,21 @@ object Notifications {
             },
         )
         nm.createNotificationChannel(
-            NotificationChannel(CHANNEL_ON_SCREEN, "Alarm in progress", NotificationManager.IMPORTANCE_LOW).apply {
-                description = "Shown quietly while you're on the alarm screen"
+            NotificationChannel(CHANNEL_ON_SCREEN, tr("Alarm in progress"), NotificationManager.IMPORTANCE_LOW).apply {
+                description = tr("Shown quietly while you're on the alarm screen")
                 setSound(null, null)
                 enableVibration(false)
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             },
         )
         nm.createNotificationChannel(
-            NotificationChannel(CHANNEL_ALERTS, "Alarm health", NotificationManager.IMPORTANCE_HIGH).apply {
-                description = "Tells you if an alarm was missed and how to fix it"
+            NotificationChannel(CHANNEL_ALERTS, tr("Alarm health"), NotificationManager.IMPORTANCE_HIGH).apply {
+                description = tr("Tells you if an alarm was missed and how to fix it")
             },
         )
     }
 
-    fun ringing(context: Context, title: String, text: String, onScreen: Boolean = false, action: String = "Open mission"): Notification {
+    fun ringing(context: Context, title: String, text: String, onScreen: Boolean = false, action: String = tr("Open mission")): Notification {
         val fullScreen = PendingIntent.getActivity(
             context, 1, Intent(context, RingActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
@@ -79,8 +80,8 @@ object Notifications {
         )
         val n = NotificationCompat.Builder(context, CHANNEL_ALERTS)
             .setSmallIcon(R.drawable.ic_stat_wakeroo)
-            .setContentTitle("Your $whenText alarm didn't ring")
-            .setContentText(if (label.isBlank()) "Tap to see why and fix it in one minute." else "\"$label\". Tap to see why and fix it.")
+            .setContentTitle(tr("Your {0} alarm didn't ring", whenText))
+            .setContentText(if (label.isBlank()) tr("Tap to see why and fix it in one minute.") else tr("\"{0}\". Tap to see why and fix it.", label))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(open)
             .setAutoCancel(true)

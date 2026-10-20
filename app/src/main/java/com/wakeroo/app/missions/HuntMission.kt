@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -106,8 +107,8 @@ fun HuntMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Floa
             }
             Spacer(Modifier.width(Space.lg))
             Column(Modifier.weight(1f)) {
-                Text(if (count > 1) "Object ${index + 1} of $count" else "Find this", style = MaterialTheme.typography.labelMedium, color = DawnLavender)
-                Text("Show me ${target.name}", style = MaterialTheme.typography.titleLarge, color = Paper)
+                Text(if (count > 1) tr("Object {0} of {1}", index + 1, count) else tr("Find this"), style = MaterialTheme.typography.labelMedium, color = DawnLavender)
+                Text(tr("Show me {0}", target.name), style = MaterialTheme.typography.titleLarge, color = Paper)
             }
         }
         Spacer(Modifier.height(Space.lg))
@@ -140,17 +141,17 @@ fun HuntMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Floa
         }
         Text(
             when {
-                matched -> "Got it!"
-                shownWarmth > 0.75f -> "That's it, hold steady"
-                shownWarmth > 0.4f -> "Getting warmer"
-                else -> "Walk around and point the camera at it"
+                matched -> tr("Got it!")
+                shownWarmth > 0.75f -> tr("That's it, hold steady")
+                shownWarmth > 0.4f -> tr("Getting warmer")
+                else -> tr("Walk around and point the camera at it")
             },
             style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = Space.sm),
         )
         if (!skipped && !matched) {
             Text(
-                "Don't have one? Try another object",
+                tr("Don't have one? Try another object"),
                 style = MaterialTheme.typography.labelLarge, color = DawnLavender,
                 modifier = Modifier.padding(top = Space.sm).clip(CircleShape).clickable {
                     skipped = true

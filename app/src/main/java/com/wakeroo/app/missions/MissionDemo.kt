@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import androidx.compose.animation.core.LinearEasing
@@ -126,7 +127,7 @@ private fun DrawScope.mathDemo(t: Float, m: TextMeasurer) {
 private fun DrawScope.typingDemo(t: Float, m: TextMeasurer) {
     val c = Offset(size.width / 2, size.height / 2)
     val unit = u()
-    val phrase = "rise and shine"
+    val phrase = tr("rise and shine")
     val typed = (phrase.length * phase(t, 0.08f, 0.72f)).toInt()
     drawRoundRect(Panel, Offset(c.x - 46 * unit, c.y - 32 * unit), Size(92 * unit, 26 * unit), CornerRadius(8 * unit))
     val layout = m.measure(
@@ -328,7 +329,7 @@ private fun DrawScope.planDemo(t: Float, m: TextMeasurer) {
     val card = Rect(Offset(c.x - 40 * unit, c.y - 28 * unit), Size(80 * unit, 56 * unit))
     drawRoundRect(Panel, card.topLeft, card.size, CornerRadius(8 * unit))
     for (k in 0..2) drawLine(Dim, Offset(card.left + 8 * unit, card.top + (20 + k * 12) * unit), Offset(card.right - 8 * unit, card.top + (20 + k * 12) * unit), 1.2f * unit)
-    val plan = "Go for a run"
+    val plan = tr("Go for a run")
     val n = (plan.length * phase(t, 0.08f, 0.62f)).toInt()
     val layout = m.measure(plan.take(n), TextStyle(fontFamily = Outfit, fontWeight = FontWeight.SemiBold, fontSize = (12 * 0.7f * unit).toSp(), color = Ink))
     drawText(layout, topLeft = Offset(card.left + 9 * unit, card.top + 18 * unit - layout.size.height))

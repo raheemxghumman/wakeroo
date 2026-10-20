@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.morning
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.util.full
 import com.wakeroo.app.ui.util.formatSeconds
 import android.text.format.DateFormat
@@ -82,10 +83,10 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 fun greetingFor(time: LocalTime): String = when (time.hour) {
-    in 4..11 -> "Good morning"
-    in 12..16 -> "Good afternoon"
-    in 17..21 -> "Good evening"
-    else -> "Good night"
+    in 4..11 -> tr("Good morning")
+    in 12..16 -> tr("Good afternoon")
+    in 17..21 -> tr("Good evening")
+    else -> tr("Good night")
 }
 
 @Composable
@@ -160,14 +161,14 @@ fun MorningScreen(onSettings: () -> Unit) {
                     val line = when {
                         wokeToday != null -> {
                             val up = Instant.ofEpochMilli(wokeToday.endedAt!!).atZone(zone).toLocalTime()
-                            "Up since ${up.formatClock(use24h)} ${up.formatMeridiem(use24h)}" + (wokeToday.secondsToWake?.let { s -> " · " + "awake in ${formatSeconds(s)}" } ?: "")
+                            tr("Up since {0} {1}", up.formatClock(use24h), up.formatMeridiem(use24h)) + (wokeToday.secondsToWake?.let { s -> " · " + tr("awake in {0}", formatSeconds(s)) } ?: "")
                         }
                         nextAlarm != null -> {
                             val at = Instant.ofEpochMilli(nextAlarm).atZone(zone)
-                            val day = if (at.toLocalDate() == today) "today" else if (at.toLocalDate() == today.plusDays(1)) "tomorrow" else at.dayOfWeek.full()
-                            "Next alarm ${at.toLocalTime().formatClock(use24h)} ${at.toLocalTime().formatMeridiem(use24h)} $day"
+                            val day = if (at.toLocalDate() == today) tr("today") else if (at.toLocalDate() == today.plusDays(1)) tr("tomorrow") else at.dayOfWeek.full()
+                            tr("Next alarm {0} {1} {2}", at.toLocalTime().formatClock(use24h), at.toLocalTime().formatMeridiem(use24h), day)
                         }
-                        else -> "No alarm set"
+                        else -> tr("No alarm set")
                     }
                     Text(line, style = MaterialTheme.typography.bodyLarge, color = Paper.copy(alpha = 0.85f))
                     val plan = settings.plan?.takeIf { settings.planDate == today.toString() }
@@ -180,7 +181,7 @@ fun MorningScreen(onSettings: () -> Unit) {
                             Icon(Icons.Rounded.EditNote, null, tint = MorningGold)
                             Spacer(Modifier.width(Space.md))
                             Column {
-                                Text("TODAY'S PLAN", style = MaterialTheme.typography.labelSmall, color = MorningGold)
+                                Text(tr("TODAY'S PLAN"), style = MaterialTheme.typography.labelSmall, color = MorningGold)
                                 Text(plan, style = MaterialTheme.typography.titleMedium, color = Paper)
                             }
                         }
@@ -191,7 +192,7 @@ fun MorningScreen(onSettings: () -> Unit) {
                 WeatherCard(forecast, settings.weatherCity, loadingWeather, Modifier.entrance(2), onPickCity = { pickingCity = true })
             }
             item(key = "quote") {
-                SectionCard("Quote of the day", icon = Icons.Rounded.FormatQuote, modifier = Modifier.entrance(3)) {
+                SectionCard(tr("Quote of the day"), icon = Icons.Rounded.FormatQuote, modifier = Modifier.entrance(3)) {
                     if (quotes.isNotEmpty()) {
                         QuoteDeck(
                             quotes, settings.quoteThemes, saved.map { it.quoteId }.toSet(),
@@ -202,7 +203,7 @@ fun MorningScreen(onSettings: () -> Unit) {
                 }
             }
             item(key = "mood") {
-                SectionCard("How do you feel?", icon = Icons.Rounded.Mood, modifier = Modifier.entrance(4)) {
+                SectionCard(tr("How do you feel?"), icon = Icons.Rounded.Mood, modifier = Modifier.entrance(4)) {
                     MoodPicker(todayMood, onPick = { m -> scope.launch { app.morning.setMood(today, m) } })
                     if (todayMood != null) {
                         Text(moodNote(todayMood), style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.md))
@@ -210,7 +211,7 @@ fun MorningScreen(onSettings: () -> Unit) {
                 }
             }
             item(key = "routine") {
-                SectionCard("Morning routine", icon = Icons.Rounded.Checklist, modifier = Modifier.entrance(5)) {
+                SectionCard(tr("Morning routine"), icon = Icons.Rounded.Checklist, modifier = Modifier.entrance(5)) {
                     RoutineList(
                         routine, doneToday,
                         onToggle = { item, done -> scope.launch { app.morning.setDone(today, item.id, done) } },
@@ -236,11 +237,11 @@ fun MorningScreen(onSettings: () -> Unit) {
 }
 
 private fun moodNote(m: Mood) = when (m) {
-    Mood.Exhausted -> "Rough start. Water, light, and go easy on yourself today."
-    Mood.Tired -> "A bit slow. Some daylight in the next hour helps a lot."
-    Mood.Okay -> "Okay is a fine place to start."
-    Mood.Calm -> "Nice. Hold on to that calm."
-    Mood.Refreshed -> "Love that. Your sleep is paying off."
+    Mood.Exhausted -> tr("Rough start. Water, light, and go easy on yourself today.")
+    Mood.Tired -> tr("A bit slow. Some daylight in the next hour helps a lot.")
+    Mood.Okay -> tr("Okay is a fine place to start.")
+    Mood.Calm -> tr("Nice. Hold on to that calm.")
+    Mood.Refreshed -> tr("Love that. Your sleep is paying off.")
 }
 
 /** The streak, and seven little suns for the last week: gold for won mornings. */
@@ -259,7 +260,7 @@ private fun StreakCard(streak: Int, week: List<Boolean?>, modifier: Modifier) {
         Spacer(Modifier.width(Space.md))
         Column(Modifier.weight(1f)) {
             Text("$streak", style = ClockType.card, color = Night)
-            Text(if (streak == 1) "morning in a row" else "mornings in a row", style = MaterialTheme.typography.labelMedium, color = Night.copy(alpha = 0.75f))
+            Text(if (streak == 1) tr("morning in a row") else tr("mornings in a row"), style = MaterialTheme.typography.labelMedium, color = Night.copy(alpha = 0.75f))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
             week.forEach { s ->

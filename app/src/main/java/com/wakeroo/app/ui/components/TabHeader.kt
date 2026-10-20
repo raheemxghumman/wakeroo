@@ -1,5 +1,6 @@
 package com.wakeroo.app.ui.components
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -74,6 +75,6 @@ fun TabHeader(
         }
         actions()
         Spacer(Modifier.size(0.dp))
-        RoundIconButton(Icons.Rounded.Settings, "Settings", onSettings)
+        RoundIconButton(Icons.Rounded.Settings, tr("Settings"), onSettings)
     }
 }

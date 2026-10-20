@@ -1,5 +1,7 @@
 package com.wakeroo.app.feature.home
 
+import com.wakeroo.app.ui.util.formatMeridiem
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import androidx.compose.animation.core.LinearEasing
@@ -126,7 +128,7 @@ fun OrbitClock(nowMinutes: Float, alarmMinutes: Float?, tilt: Offset, modifier: 
             val near = ((p.y - (c.y - ry)) / (2 * ry)).coerceIn(0f, 1f)
             drawCircle(ink.copy(alpha = 0.15f + 0.35f * near), (if (h % 6 == 0) 2.5f else 1.2f).dp.toPx(), p)
         }
-        listOf(0 to "12AM", 6 to "6AM", 12 to "NOON", 18 to "6PM").forEach { (h, label) ->
+        listOf(0 to "12 ${formatMeridiem(0)}", 6 to "6 ${formatMeridiem(6)}", 12 to tr("NOON"), 18 to "6 ${formatMeridiem(18)}").forEach { (h, label) ->
             val p = orbitPoint(h * 60f, c, rx * 1.16f, ry * 1.45f, spin)
             val layout = text.measure(label, TextStyle(fontFamily = Inter, fontSize = 9.sp, color = muted))
             drawText(layout, topLeft = Offset(p.x - layout.size.width / 2f, p.y - layout.size.height / 2f))
@@ -203,15 +205,15 @@ fun OrbitHero(
         if (turn <= 90f) {
             OrbitClock(nowMinutes, alarmMinutes, tilt, Modifier.fillMaxSize().padding(horizontal = Space.md))
             Column(Modifier.fillMaxSize().padding(Space.xl)) {
-                Text(if (empty) "NO ALARM SET" else "NEXT ALARM", style = MaterialTheme.typography.labelSmall, color = DawnLavender)
+                Text(if (empty) tr("NO ALARM SET") else tr("NEXT ALARM"), style = MaterialTheme.typography.labelSmall, color = DawnLavender)
                 if (empty) {
                     Spacer(Modifier.weight(1f))
-                    Text("Your mornings start here", style = MaterialTheme.typography.headlineSmall, color = Paper)
+                    Text(tr("Your mornings start here"), style = MaterialTheme.typography.headlineSmall, color = Paper)
                     Spacer(Modifier.height(Space.md))
                     Box(
                         Modifier.fillMaxWidth().height(52.dp).press3d().clip(CircleShape).background(SunriseCoral).clickable(onClick = onCreate),
                         contentAlignment = Alignment.Center,
-                    ) { Text("Set an alarm", style = MaterialTheme.typography.labelLarge, color = Night) }
+                    ) { Text(tr("Set an alarm"), style = MaterialTheme.typography.labelLarge, color = Night) }
                 } else {
                     Text("in ${untilText.orEmpty()}", style = MaterialTheme.typography.headlineMedium, color = Paper)
                     Spacer(Modifier.weight(1f))
@@ -240,7 +242,7 @@ private fun HealthDot(health: Health, onClick: () -> Unit) {
     ) {
         Box(Modifier.size(8.dp).clip(CircleShape).background(color))
         Spacer(Modifier.width(6.dp))
-        Text(if (health == Health.Good) "Ready" else "Check", style = MaterialTheme.typography.labelSmall, color = Paper)
+        Text(if (health == Health.Good) tr("Ready") else tr("Check"), style = MaterialTheme.typography.labelSmall, color = Paper)
     }
 }
 
@@ -268,11 +270,11 @@ fun FixBanner(item: HealthItem, onFix: () -> Unit, onHide: (() -> Unit)?, modifi
             Text(item.detail, style = MaterialTheme.typography.bodySmall, color = PaperMuted, maxLines = 2)
         }
         Text(
-            "Fix", style = MaterialTheme.typography.labelLarge, color = Night,
+            tr("Fix"), style = MaterialTheme.typography.labelLarge, color = Night,
             modifier = Modifier.padding(start = Space.sm).press3d().clip(CircleShape).background(color).clickable(role = Role.Button, onClick = onFix).padding(horizontal = Space.lg, vertical = Space.sm),
         )
         if (onHide != null) {
-            Icon(Icons.Rounded.Close, "Hide for a week", tint = PaperMuted, modifier = Modifier.padding(start = 4.dp).clip(CircleShape).clickable(onClick = onHide).padding(6.dp))
+            Icon(Icons.Rounded.Close, tr("Hide for a week"), tint = PaperMuted, modifier = Modifier.padding(start = 4.dp).clip(CircleShape).clickable(onClick = onHide).padding(6.dp))
         }
     }
 }
@@ -300,7 +302,7 @@ fun BedtimeCard(bedText: String, sleepText: String, closeness: Float, onSleepSou
         }
         Spacer(Modifier.width(Space.md))
         Column(Modifier.weight(1f)) {
-            Text("Bed by $bedText", style = MaterialTheme.typography.titleMedium, color = Color(0xFFF5F3EE))
+            Text(tr("Bed by {0}", bedText), style = MaterialTheme.typography.titleMedium, color = Color(0xFFF5F3EE))
             Text(sleepText, style = MaterialTheme.typography.bodySmall, color = Color(0xFFA9ABB8))
         }
         Row(
@@ -309,7 +311,7 @@ fun BedtimeCard(bedText: String, sleepText: String, closeness: Float, onSleepSou
         ) {
             Icon(Icons.Rounded.GraphicEq, null, tint = DawnLavender, modifier = Modifier.size(16.dp))
             Spacer(Modifier.width(4.dp))
-            Text("Sounds", style = MaterialTheme.typography.labelMedium, color = DawnLavender)
+            Text(tr("Sounds"), style = MaterialTheme.typography.labelMedium, color = DawnLavender)
         }
     }
 }
@@ -329,7 +331,7 @@ fun StreakStrip(week: List<Pair<String, Boolean?>>, streak: Int, onClick: () -> 
     ) {
         Column(Modifier.width(76.dp)) {
             Text("$streak", style = MaterialTheme.typography.headlineSmall, color = Paper)
-            Text("day streak", style = MaterialTheme.typography.labelSmall, color = PaperMuted)
+            Text(tr("day streak"), style = MaterialTheme.typography.labelSmall, color = PaperMuted)
         }
         Row(Modifier.weight(1f), horizontalArrangement = Arrangement.SpaceBetween) {
             week.forEach { (day, won) ->

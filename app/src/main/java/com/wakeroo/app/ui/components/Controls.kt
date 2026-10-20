@@ -1,5 +1,6 @@
 package com.wakeroo.app.ui.components
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -114,9 +115,9 @@ fun ToggleRow(title: String, subtitle: String?, checked: Boolean, onChange: (Boo
 fun Stepper(label: String, value: String, onMinus: () -> Unit, onPlus: () -> Unit, minusEnabled: Boolean = true, plusEnabled: Boolean = true) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Text(label, style = MaterialTheme.typography.bodyLarge, color = Paper, modifier = Modifier.weight(1f))
-        StepButton(Icons.Rounded.Remove, "Less", onMinus, minusEnabled)
+        StepButton(Icons.Rounded.Remove, tr("Less"), onMinus, minusEnabled)
         Text(value, style = MaterialTheme.typography.titleMedium, color = Paper, modifier = Modifier.padding(horizontal = Space.lg))
-        StepButton(Icons.Rounded.Add, "More", onPlus, plusEnabled)
+        StepButton(Icons.Rounded.Add, tr("More"), onPlus, plusEnabled)
     }
 }
 

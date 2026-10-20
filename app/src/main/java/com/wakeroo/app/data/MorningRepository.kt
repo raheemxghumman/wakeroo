@@ -83,7 +83,7 @@ class MorningRepository(private val db: Lazy<WakerooDatabase>) {
     /** Three gentle defaults the first time; the user can change them. */
     suspend fun ensureDefaultRoutine() {
         if (dao.routineCount() > 0) return
-        listOf("Drink a glass of water", "Open the curtains", "Stretch for 2 minutes").forEachIndexed { i, t ->
+        listOf(tr("Drink a glass of water"), tr("Open the curtains"), tr("Stretch for 2 minutes")).forEachIndexed { i, t ->
             dao.upsertRoutine(RoutineItemEntity(title = t, position = i))
         }
     }

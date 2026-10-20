@@ -65,9 +65,9 @@ fun RowScope.KeyCap(
     }
     val description = when (key) {
         is Key.Char -> key.c.toString()
-        Key.Delete -> "Delete"
-        Key.Enter -> "Check answer"
-        Key.Space -> "Space"
+        Key.Delete -> tr("Delete")
+        Key.Enter -> tr("Check answer")
+        Key.Space -> tr("Space")
     }
     Box(
         Modifier

@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.home
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.util.full
 import com.wakeroo.app.ui.util.initial
 import com.wakeroo.app.ui.theme.MorningGoldFixed
@@ -171,7 +172,7 @@ fun HomeScreen(
         ) {
             item(key = "header") {
                 TabHeader(
-                    title = "Alarms", onSettings = onSettings, modifier = Modifier.entrance(0),
+                    title = tr("Alarms"), onSettings = onSettings, modifier = Modifier.entrance(0),
                     lead = { Wordmark(fontSize = MaterialTheme.typography.headlineMedium.fontSize) },
                 )
             }
@@ -188,7 +189,7 @@ fun HomeScreen(
                                 fix != null -> OemGuides.open(context, fix())
                                 problem.id == "test" -> {
                                     vm.ringTest()
-                                    scope.launch { snackbar.showSnackbar("Test alarm in 1 minute. Lock your phone and wait") }
+                                    scope.launch { snackbar.showSnackbar(tr("Test alarm in 1 minute. Lock your phone and wait")) }
                                 }
                                 else -> onHealth()
                             }
@@ -226,7 +227,7 @@ fun HomeScreen(
             item(key = "quick") {
                 QuickAlarms(modifier = Modifier.entrance(2), onQuick = { minutes ->
                     vm.quickAlarm(minutes, state.rows.lastOrNull()?.alarm)
-                    scope.launch { snackbar.showSnackbar("Alarm set for ${Duration.ofMinutes(minutes.toLong()).formatUntil()} from now") }
+                    scope.launch { snackbar.showSnackbar(tr("Alarm set for {0} from now", Duration.ofMinutes(minutes.toLong()).formatUntil())) }
                 })
             }
             bedtimeFor(state)?.let { bed ->
@@ -257,7 +258,7 @@ fun HomeScreen(
             if (state.rows.isNotEmpty()) {
                 item(key = "title") {
                     Text(
-                        "YOUR ALARMS", style = MaterialTheme.typography.labelSmall, color = PaperMuted,
+                        tr("YOUR ALARMS"), style = MaterialTheme.typography.labelSmall, color = PaperMuted,
                         modifier = Modifier.padding(top = Space.xxl, bottom = Space.md).entrance(3),
                     )
                 }
@@ -271,32 +272,32 @@ fun HomeScreen(
                     onClick = { onEdit(row.alarm.id) },
                     onToggle = { on ->
                         val toggle = { vm.toggle(row.alarm, on); Unit }
-                        if (!on && row.alarm.hardMode) gate = Triple(row.alarm, "Turn this alarm off", toggle) else toggle()
+                        if (!on && row.alarm.hardMode) gate = Triple(row.alarm, tr("Turn this alarm off"), toggle) else toggle()
                     },
                     onDelete = {
                         val delete = {
                             vm.delete(row.alarm)
                             scope.launch {
-                                val r = snackbar.showSnackbar("Alarm deleted", actionLabel = "Undo", duration = SnackbarDuration.Short)
+                                val r = snackbar.showSnackbar(tr("Alarm deleted"), actionLabel = tr("Undo"), duration = SnackbarDuration.Short)
                                 if (r == SnackbarResult.ActionPerformed) vm.restore(row.alarm)
                             }
                             Unit
                         }
-                        if (row.alarm.hardMode) gate = Triple(row.alarm, "Delete this alarm", delete) else delete()
+                        if (row.alarm.hardMode) gate = Triple(row.alarm, tr("Delete this alarm"), delete) else delete()
                     },
                     onSkip = {
                         val skip = {
                             vm.skipNext(row)
                             scope.launch {
-                                val msg = if (row.alarm.isRepeating) "Skipping the next one" else "Alarm turned off"
-                                val r = snackbar.showSnackbar(msg, actionLabel = "Undo", duration = SnackbarDuration.Short)
+                                val msg = if (row.alarm.isRepeating) tr("Skipping the next one") else tr("Alarm turned off")
+                                val r = snackbar.showSnackbar(msg, actionLabel = tr("Undo"), duration = SnackbarDuration.Short)
                                 if (r == SnackbarResult.ActionPerformed) {
                                     if (row.alarm.isRepeating) vm.undoSkip(row.alarm) else vm.toggle(row.alarm, true)
                                 }
                             }
                             Unit
                         }
-                        if (row.alarm.hardMode) gate = Triple(row.alarm, if (row.alarm.isRepeating) "Skip the next one" else "Turn this alarm off", skip) else skip()
+                        if (row.alarm.hardMode) gate = Triple(row.alarm, if (row.alarm.isRepeating) tr("Skip the next one") else tr("Turn this alarm off"), skip) else skip()
                     },
                 )
             }
@@ -314,23 +315,23 @@ fun HomeScreen(
 private fun HeroBack(row: AlarmRow, health: Health, onEdit: () -> Unit, onHealth: () -> Unit) {
     val a = row.alarm
     Column(Modifier.fillMaxSize()) {
-        Text("ABOUT THIS ALARM", style = MaterialTheme.typography.labelSmall, color = DawnLavender)
+        Text(tr("ABOUT THIS ALARM"), style = MaterialTheme.typography.labelSmall, color = DawnLavender)
         Spacer(Modifier.height(Space.md))
-        HeroFact("Missions", a.missions.joinToString(" · ") { if (it.needsSetup) "${it.type.title} (finish setup)" else it.type.title })
-        HeroFact("Sound", a.soundTitle() + when (a.soundMode) { SoundMode.Rotate -> " · rotating"; SoundMode.Escalate -> " · escalates"; else -> "" })
-        HeroFact("Scene", Scene.byId(a.scene).title)
-        HeroFact("Snooze", if (a.snoozeLimit == 0) "Off" else "${a.snoozeMinutes} min, ${a.snoozeLimit} times")
-        HeroFact("Wake-up check", if (a.wakeCheckMinutes == 0) "Off" else "After ${a.wakeCheckMinutes} min")
-        if (a.hardMode) HeroFact("Harder Mode", "On")
+        HeroFact(tr("Missions"), a.missions.joinToString(" · ") { if (it.needsSetup) tr("{0} (finish setup)", it.type.title) else it.type.title })
+        HeroFact(tr("Sound"), a.soundTitle() + when (a.soundMode) { SoundMode.Rotate -> tr(" · rotating"); SoundMode.Escalate -> tr(" · escalates"); else -> "" })
+        HeroFact(tr("Scene"), Scene.byId(a.scene).title)
+        HeroFact(tr("Snooze"), if (a.snoozeLimit == 0) tr("Off") else tr("{0} min, {1} times", a.snoozeMinutes, a.snoozeLimit))
+        HeroFact(tr("Wake-up check"), if (a.wakeCheckMinutes == 0) tr("Off") else tr("After {0} min", a.wakeCheckMinutes))
+        if (a.hardMode) HeroFact(tr("Harder Mode"), tr("On"))
         Spacer(Modifier.weight(1f))
         Row {
             Text(
-                "Edit alarm", style = MaterialTheme.typography.labelLarge, color = Night,
+                tr("Edit alarm"), style = MaterialTheme.typography.labelLarge, color = Night,
                 modifier = Modifier.clip(CircleShape).background(SunriseCoral).clickable(onClick = onEdit).padding(horizontal = Space.lg, vertical = Space.sm),
             )
             Spacer(Modifier.width(Space.sm))
             Text(
-                when (health) { Health.Good -> "Ready to ring"; Health.Warn -> "Check health"; Health.Bad -> "Needs a fix" },
+                when (health) { Health.Good -> tr("Ready to ring"); Health.Warn -> tr("Check health"); Health.Bad -> tr("Needs a fix") },
                 style = MaterialTheme.typography.labelLarge, color = Paper,
                 modifier = Modifier.clip(CircleShape).background(Glass).clickable(onClick = onHealth).padding(horizontal = Space.lg, vertical = Space.sm),
             )
@@ -349,8 +350,8 @@ private fun HeroFact(name: String, value: String) {
 private fun dayName(date: java.time.LocalDate, now: Long): String {
     val today = Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDate()
     return when (date) {
-        today -> "Today"
-        today.plusDays(1) -> "Tomorrow"
+        today -> tr("Today")
+        today.plusDays(1) -> tr("Tomorrow")
         else -> date.dayOfWeek.full()
     }
 }
@@ -366,8 +367,8 @@ private fun bedtimeFor(state: HomeState): Triple<String, String, Float>? {
     val hours = state.settings.sleepGoalMinutes / 60f
     val left = bed.bedAt - state.now
     val closeness = (1f - left / (4 * 3_600_000f)).coerceIn(0f, 1f)
-    val sleep = if (left > 0) "${if (hours % 1f == 0f) "${hours.toInt()} h" else "%.1f h".format(hours)} of sleep before your alarm"
-        else "Past bedtime. Every minute of sleep still counts"
+    val sleep = if (left > 0) tr("{0} of sleep before your alarm", if (hours % 1f == 0f) "${hours.toInt()} h" else "%.1f h".format(hours))
+        else tr("Past bedtime. Every minute of sleep still counts")
     return Triple("${bedTime.formatClock(use24)} ${bedTime.formatMeridiem(use24)}", sleep, closeness)
 }
 
@@ -395,11 +396,11 @@ private fun MondayRecap(recap: WeekRecap, onOpen: () -> Unit, onDismiss: () -> U
     ) {
         recap.medal?.let { Medal(it, unlocked = true, size = 44.dp); Spacer(Modifier.width(Space.md)) }
         Column(Modifier.weight(1f)) {
-            Text("LAST WEEK", style = MaterialTheme.typography.labelSmall, color = MorningGold)
-            Text("${recap.won} of 7 mornings won", style = MaterialTheme.typography.titleSmall, color = Color(0xFFF5F3EE))
-            recap.averageWake?.let { Text("Usually up at $it", style = MaterialTheme.typography.bodySmall, color = Color(0xFFF5F3EE).copy(alpha = 0.75f)) }
+            Text(tr("LAST WEEK"), style = MaterialTheme.typography.labelSmall, color = MorningGold)
+            Text(tr("{0} of 7 mornings won", recap.won), style = MaterialTheme.typography.titleSmall, color = Color(0xFFF5F3EE))
+            recap.averageWake?.let { Text(tr("Usually up at {0}", it), style = MaterialTheme.typography.bodySmall, color = Color(0xFFF5F3EE).copy(alpha = 0.75f)) }
         }
-        Icon(Icons.Rounded.Close, "Dismiss", tint = Color(0xFFF5F3EE).copy(alpha = 0.7f), modifier = Modifier.clip(CircleShape).clickable(onClick = onDismiss).padding(6.dp))
+        Icon(Icons.Rounded.Close, tr("Dismiss"), tint = Color(0xFFF5F3EE).copy(alpha = 0.7f), modifier = Modifier.clip(CircleShape).clickable(onClick = onDismiss).padding(6.dp))
     }
 }
 
@@ -410,9 +411,9 @@ private fun QuickAlarms(modifier: Modifier = Modifier, onQuick: (Int) -> Unit) {
         modifier.fillMaxWidth().padding(top = Space.lg).horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(Space.sm),
     ) {
-        val presets = listOf(10 to "+10 min", 20 to "+20 min", 30 to "+30 min", 60 to "+1 h", 480 to "In 8 h")
+        val presets = listOf(10 to tr("+10 min"), 20 to tr("+20 min"), 30 to tr("+30 min"), 60 to "+1 h", 480 to tr("In 8 h"))
         // Debug builds get a one-minute alarm for testing the full ring flow.
-        (if (BuildConfig.DEBUG) listOf(1 to "+1 min") + presets else presets).forEach { (m, label) ->
+        (if (BuildConfig.DEBUG) listOf(1 to tr("+1 min")) + presets else presets).forEach { (m, label) ->
             Row(
                 Modifier
                     .press3d()
@@ -485,7 +486,7 @@ private fun AlarmCard(
             ) {
                 Icon(if (toStart) Icons.Rounded.DeleteOutline else Icons.Rounded.SkipNext, null, tint = Night)
                 Spacer(Modifier.width(Space.sm))
-                Text(if (toStart) "Delete" else if (alarm.isRepeating) "Skip next" else "Turn off", style = MaterialTheme.typography.labelLarge, color = Night)
+                Text(if (toStart) tr("Delete") else if (alarm.isRepeating) tr("Skip next") else tr("Turn off"), style = MaterialTheme.typography.labelLarge, color = Night)
             }
         },
     ) {
@@ -508,7 +509,7 @@ private fun AlarmCard(
                         Text(" ${formatMeridiem(alarm.hour, use24h)}", style = MaterialTheme.typography.titleMedium, color = PaperMuted, modifier = Modifier.padding(bottom = 6.dp))
                     }
                     Text(
-                        listOfNotNull(alarm.label.takeIf { it.isNotBlank() }, if (passed) "Passed" else alarm.repeatSummary()).joinToString("  ·  "),
+                        listOfNotNull(alarm.label.takeIf { it.isNotBlank() }, if (passed) tr("Passed") else alarm.repeatSummary()).joinToString("  ·  "),
                         style = MaterialTheme.typography.bodyMedium, color = PaperMuted, maxLines = 1,
                     )
                 }
@@ -532,17 +533,17 @@ private fun AlarmCard(
                     ) {
                         Icon(m.type.icon, null, tint = tint, modifier = Modifier.size(16.dp))
                         Spacer(Modifier.width(6.dp))
-                        Text(if (m.needsSetup) "${m.type.title} · finish setup" else m.type.title, style = MaterialTheme.typography.labelSmall, color = tint)
+                        Text(if (m.needsSetup) tr("{0} · finish setup", m.type.title) else m.type.title, style = MaterialTheme.typography.labelSmall, color = tint)
                     }
                 }
                 if (alarm.hardMode) {
                     Row(
                         Modifier.clip(CircleShape).background(DawnLavender.copy(alpha = 0.16f)).padding(horizontal = Space.sm, vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                    ) { Icon(Icons.Rounded.Lock, "Harder Mode", tint = DawnLavender, modifier = Modifier.size(14.dp)) }
+                    ) { Icon(Icons.Rounded.Lock, tr("Harder Mode"), tint = DawnLavender, modifier = Modifier.size(14.dp)) }
                 }
                 if (alarm.skipDate != null) {
-                    Text("Next one skipped", style = MaterialTheme.typography.labelSmall, color = DawnLavender, modifier = Modifier.align(Alignment.CenterVertically))
+                    Text(tr("Next one skipped"), style = MaterialTheme.typography.labelSmall, color = DawnLavender, modifier = Modifier.align(Alignment.CenterVertically))
                 }
             }
         }
@@ -563,7 +564,7 @@ private fun NewAlarmButton(modifier: Modifier, onClick: () -> Unit) {
     ) {
         Icon(Icons.Rounded.Add, null, tint = Night)
         Spacer(Modifier.width(Space.sm))
-        Text("Alarm", style = MaterialTheme.typography.titleMedium, color = Night)
+        Text(tr("Alarm"), style = MaterialTheme.typography.titleMedium, color = Night)
     }
 }
 

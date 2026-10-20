@@ -1,5 +1,6 @@
 package com.wakeroo.app.alarm.ring
 
+import com.wakeroo.app.ui.i18n.tr
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioDeviceInfo

@@ -1,5 +1,6 @@
 package com.wakeroo.app.alarm.health
 
+import com.wakeroo.app.ui.i18n.tr
 import android.app.NotificationManager
 import android.app.usage.UsageStatsManager
 import android.content.ActivityNotFoundException
@@ -54,8 +55,8 @@ class HealthChecker(private val context: Context) {
     private fun exactAlarms(): HealthItem {
         val ok = context.container.scheduler.canScheduleExact()
         return HealthItem(
-            "exact", "On-time alarms", if (ok) Health.Good else Health.Bad,
-            if (ok) "Allowed. Alarms ring to the minute." else "Blocked. Alarms may ring late.",
+            "exact", tr("On-time alarms"), if (ok) Health.Good else Health.Bad,
+            if (ok) tr("Allowed. Alarms ring to the minute.") else tr("Blocked. Alarms may ring late."),
             fix = if (ok || Build.VERSION.SDK_INT < Build.VERSION_CODES.S) null else {
                 { Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:${context.packageName}")) }
             },
@@ -67,8 +68,8 @@ class HealthChecker(private val context: Context) {
         val channel = nm.getNotificationChannel(Notifications.CHANNEL_RINGING)
         val ok = nm.areNotificationsEnabled() && (channel == null || channel.importance >= NotificationManager.IMPORTANCE_HIGH)
         return HealthItem(
-            "notifications", "Alarm alerts", if (ok) Health.Good else Health.Bad,
-            if (ok) "On." else "Off. The alarm screen can't appear.",
+            "notifications", tr("Alarm alerts"), if (ok) Health.Good else Health.Bad,
+            if (ok) tr("On.") else tr("Off. The alarm screen can't appear."),
             fix = if (ok) null else {
                 { Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName) }
             },
@@ -79,8 +80,8 @@ class HealthChecker(private val context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return null
         val ok = context.getSystemService(NotificationManager::class.java).canUseFullScreenIntent()
         return HealthItem(
-            "fullscreen", "Full-screen alarm", if (ok) Health.Good else Health.Bad,
-            if (ok) "The alarm takes over the lock screen." else "Off. You'd only get a small banner.",
+            "fullscreen", tr("Full-screen alarm"), if (ok) Health.Good else Health.Bad,
+            if (ok) tr("The alarm takes over the lock screen.") else tr("Off. You'd only get a small banner."),
             fix = if (ok) null else {
                 { Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, Uri.parse("package:${context.packageName}")) }
             },
@@ -91,8 +92,8 @@ class HealthChecker(private val context: Context) {
         val ok = context.getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(context.packageName)
         val guide = OemGuides.forThisPhone()
         return HealthItem(
-            "battery", "Battery saver", if (ok) Health.Good else Health.Warn,
-            if (ok) "Unrestricted. ${guide.brand} won't put Wakeroo to sleep." else "${guide.brand} may pause Wakeroo to save battery. Set it to Unrestricted.",
+            "battery", tr("Battery saver"), if (ok) Health.Good else Health.Warn,
+            if (ok) tr("Unrestricted. {0} won't put Wakeroo to sleep.", guide.brand) else tr("{0} may pause Wakeroo to save battery. Set it to Unrestricted.", guide.brand),
             fix = if (ok) null else { { OemGuides.batteryIntent(context) } },
         )
     }
@@ -103,7 +104,7 @@ class HealthChecker(private val context: Context) {
         val restricted = bucket >= UsageStatsManager.STANDBY_BUCKET_RESTRICTED
         if (!restricted) return null
         return HealthItem(
-            "standby", "App sleeping", Health.Bad, "Android marked Wakeroo as rarely used. Open it daily or add the widget.",
+            "standby", tr("App sleeping"), Health.Bad, tr("Android marked Wakeroo as rarely used. Open it daily or add the widget."),
             fix = { appDetails(context) },
         )
     }
@@ -112,8 +113,8 @@ class HealthChecker(private val context: Context) {
         val audio = context.getSystemService(AudioManager::class.java)
         val level = audio.getStreamVolume(AudioManager.STREAM_ALARM)
         return HealthItem(
-            "volume", "Alarm volume", if (level > 0) Health.Good else Health.Warn,
-            if (level > 0) "Wakeroo raises it to your alarm's level when ringing." else "At zero. Wakeroo raises it when ringing, but check your phone's settings.",
+            "volume", tr("Alarm volume"), if (level > 0) Health.Good else Health.Warn,
+            if (level > 0) tr("Wakeroo raises it to your alarm's level when ringing.") else tr("At zero. Wakeroo raises it when ringing, but check your phone's settings."),
         )
     }
 
@@ -122,8 +123,8 @@ class HealthChecker(private val context: Context) {
         if (!AlarmPlayer.externalOutputConnected(context)) return null
         val speaker = context.container.directBoot.ringPrefs.alwaysSpeaker
         return HealthItem(
-            "output", "Headphones connected", if (speaker) Health.Good else Health.Warn,
-            if (speaker) "Alarms still ring on the phone speaker." else "Alarms may only play in your headphones. Turn on \"Always ring on the phone speaker\" in Settings.",
+            "output", tr("Headphones connected"), if (speaker) Health.Good else Health.Warn,
+            if (speaker) tr("Alarms still ring on the phone speaker.") else tr("Alarms may only play in your headphones. Turn on \"Always ring on the phone speaker\" in Settings."),
         )
     }
 
@@ -133,8 +134,8 @@ class HealthChecker(private val context: Context) {
         val alarmsAllowed = nm.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_NONE &&
             (nm.notificationPolicy.priorityCategories and NotificationManager.Policy.PRIORITY_CATEGORY_ALARMS) != 0
         return HealthItem(
-            "dnd", "Do Not Disturb", if (alarmsAllowed) Health.Good else Health.Bad,
-            if (alarmsAllowed) "On, and alarms are allowed through." else "On, and it blocks alarms. Allow alarms in Do Not Disturb.",
+            "dnd", tr("Do Not Disturb"), if (alarmsAllowed) Health.Good else Health.Bad,
+            if (alarmsAllowed) tr("On, and alarms are allowed through.") else tr("On, and it blocks alarms. Allow alarms in Do Not Disturb."),
             fix = if (alarmsAllowed) null else { { Intent(Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS) } },
         )
     }
@@ -146,11 +147,11 @@ class HealthChecker(private val context: Context) {
             else -> Health.Good
         }
         val text = when (status) {
-            Health.Warn -> "Not tried yet. One minute proves your alarms work."
-            Health.Bad -> "The last test didn't finish. Try again."
-            Health.Good -> "Passed. Your phone rings Wakeroo alarms properly."
+            Health.Warn -> tr("Not tried yet. One minute proves your alarms work.")
+            Health.Bad -> tr("The last test didn't finish. Try again.")
+            Health.Good -> tr("Passed. Your phone rings Wakeroo alarms properly.")
         }
-        return HealthItem("test", "Test alarm", status, text)
+        return HealthItem("test", tr("Test alarm"), status, text)
     }
 
     companion object {
@@ -167,33 +168,33 @@ data class OemGuide(val brand: String, val steps: List<String>)
  */
 object OemGuides {
     fun forThisPhone(manufacturer: String = Build.MANUFACTURER): OemGuide = when (manufacturer.lowercase()) {
-        "samsung" -> OemGuide("Samsung", listOf(
-            "Settings › Apps › Wakeroo › Battery › Unrestricted",
-            "Settings › Battery › Background usage limits › Never sleeping apps › add Wakeroo",
-            "Turn off \"Put unused apps to sleep\"",
+        "samsung" -> OemGuide(tr("Samsung"), listOf(
+            tr("Settings › Apps › Wakeroo › Battery › Unrestricted"),
+            tr("Settings › Battery › Background usage limits › Never sleeping apps › add Wakeroo"),
+            tr("Turn off \"Put unused apps to sleep\""),
         ))
-        "xiaomi", "redmi", "poco" -> OemGuide("Xiaomi", listOf(
-            "Settings › Apps › Manage apps › Wakeroo › Autostart: on",
-            "Battery saver › No restrictions",
-            "In Recents, pull Wakeroo down to lock it",
+        "xiaomi", "redmi", "poco" -> OemGuide(tr("Xiaomi"), listOf(
+            tr("Settings › Apps › Manage apps › Wakeroo › Autostart: on"),
+            tr("Battery saver › No restrictions"),
+            tr("In Recents, pull Wakeroo down to lock it"),
         ))
         "oppo", "realme", "oneplus" -> OemGuide(manufacturer.replaceFirstChar { it.uppercase() }, listOf(
-            "Settings › Apps › Wakeroo › Battery usage › Allow background activity",
-            "Allow auto launch",
-            "Turn off \"Optimize battery use\" for Wakeroo",
+            tr("Settings › Apps › Wakeroo › Battery usage › Allow background activity"),
+            tr("Allow auto launch"),
+            tr("Turn off \"Optimize battery use\" for Wakeroo"),
         ))
-        "vivo", "iqoo" -> OemGuide("Vivo", listOf(
-            "Settings › Battery › Background power consumption › Wakeroo › Allow",
-            "i Manager › App manager › Autostart › Wakeroo: on",
+        "vivo", "iqoo" -> OemGuide(tr("Vivo"), listOf(
+            tr("Settings › Battery › Background power consumption › Wakeroo › Allow"),
+            tr("i Manager › App manager › Autostart › Wakeroo: on"),
         ))
         "huawei", "honor" -> OemGuide(manufacturer.replaceFirstChar { it.uppercase() }, listOf(
-            "Settings › Battery › App launch › Wakeroo › Manage manually",
-            "Turn on Auto-launch, Secondary launch and Run in background",
+            tr("Settings › Battery › App launch › Wakeroo › Manage manually"),
+            tr("Turn on Auto-launch, Secondary launch and Run in background"),
         ))
-        "motorola" -> OemGuide("Motorola", listOf("Settings › Apps › Wakeroo › Battery › Unrestricted"))
+        "motorola" -> OemGuide(tr("Motorola"), listOf(tr("Settings › Apps › Wakeroo › Battery › Unrestricted")))
         else -> OemGuide(
-            manufacturer.replaceFirstChar { it.uppercase() }.ifBlank { "Your phone" },
-            listOf("Settings › Apps › Wakeroo › Battery › Unrestricted"),
+            manufacturer.replaceFirstChar { it.uppercase() }.ifBlank { tr("Your phone") },
+            listOf(tr("Settings › Apps › Wakeroo › Battery › Unrestricted")),
         )
     }
 

@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
@@ -42,9 +43,9 @@ import com.wakeroo.app.ui.theme.Space
 import kotlinx.coroutines.launch
 
 private val PROMPTS get() = listOf(
-    "What's the first thing you'll do today?",
-    "What would make today a good day?",
-    "What are you getting up for?",
+    tr("What's the first thing you'll do today?"),
+    tr("What would make today a good day?"),
+    tr("What are you getting up for?"),
 )
 
 /**
@@ -67,7 +68,7 @@ fun PlanMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Floa
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(prompt, style = MaterialTheme.typography.headlineSmall, color = Paper)
-        Text("At least 3 real words", style = MaterialTheme.typography.bodyMedium, color = DawnLavender, modifier = Modifier.padding(top = Space.xs))
+        Text(tr("At least 3 real words"), style = MaterialTheme.typography.bodyMedium, color = DawnLavender, modifier = Modifier.padding(top = Space.xs))
         Spacer(Modifier.weight(1f))
         Column(
             Modifier
@@ -80,7 +81,7 @@ fun PlanMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Floa
                 .padding(Space.xl),
         ) {
             Text(
-                typed.ifEmpty { "Make coffee and go for a walk" },
+                typed.ifEmpty { tr("Make coffee and go for a walk") },
                 style = MaterialTheme.typography.headlineSmall,
                 color = if (typed.isEmpty()) PaperMuted.copy(alpha = 0.5f) else Paper,
             )
@@ -89,9 +90,9 @@ fun PlanMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Floa
         AnimatedContent(problem, transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "planHint") { p ->
             Text(
                 when (p) {
-                    PlanValidator.Problem.TooShort -> "A little more: three words or so"
-                    PlanValidator.Problem.NotWords -> "That doesn't look like words. Try a real plan"
-                    null -> if (progress >= 1f) "Looks good. Tap ✓ to start your day" else "$words of 3 words"
+                    PlanValidator.Problem.TooShort -> tr("A little more: three words or so")
+                    PlanValidator.Problem.NotWords -> tr("That doesn't look like words. Try a real plan")
+                    null -> if (progress >= 1f) tr("Looks good. Tap ✓ to start your day") else tr("{0} of 3 words", words)
                 },
                 style = MaterialTheme.typography.bodyMedium, color = if (p != null) Alert else PaperMuted,
             )

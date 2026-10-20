@@ -1,5 +1,6 @@
 package com.wakeroo.app.alarm.ring
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.util.formatSeconds
 import com.wakeroo.app.ui.theme.MorningGoldFixed
 import androidx.compose.animation.AnimatedVisibility
@@ -182,12 +183,12 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
             Spacer(Modifier.weight(0.6f))
             WakerooMark(Modifier.size(if (test) 180.dp else 120.dp), horizonColor = ink, sunColor = PaperFixed, leapColor = ink.copy(alpha = 0.7f), dotColor = PaperFixed)
             Text(
-                if (test) "Test passed" else greetingFor(time),
+                if (test) tr("Test passed") else greetingFor(time),
                 style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold), color = ink, textAlign = TextAlign.Center,
             )
             Text(
-                if (test) "Your alarms will ring like this, even when the phone is locked."
-                else "Up at ${time.formatClock()} ${time.formatMeridiem()}  ·  awake in ${formatSeconds(result.secondsToWake)}",
+                if (test) tr("Your alarms will ring like this, even when the phone is locked.")
+                else tr("Up at {0} {1}  ·  awake in {2}", time.formatClock(), time.formatMeridiem(), formatSeconds(result.secondsToWake)),
                 style = MaterialTheme.typography.titleMedium, color = ink.copy(alpha = 0.8f),
                 textAlign = TextAlign.Center, modifier = Modifier.padding(top = Space.sm),
             )
@@ -200,7 +201,7 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
                         SpinnableMedal(medal, unlocked = true, size = 56.dp)
                         Spacer(Modifier.width(Space.md))
                         Column {
-                            Text("NEW MEDAL", style = MaterialTheme.typography.labelSmall, color = ink.copy(alpha = 0.6f))
+                            Text(tr("NEW MEDAL"), style = MaterialTheme.typography.labelSmall, color = ink.copy(alpha = 0.6f))
                             Text(medal.title, style = MaterialTheme.typography.titleMedium, color = ink)
                         }
                     }
@@ -208,7 +209,7 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
                         Icon(Icons.Rounded.EditNote, null, tint = ink)
                         Spacer(Modifier.width(Space.md))
                         Column {
-                            Text("TODAY", style = MaterialTheme.typography.labelSmall, color = ink.copy(alpha = 0.6f))
+                            Text(tr("TODAY"), style = MaterialTheme.typography.labelSmall, color = ink.copy(alpha = 0.6f))
                             Text(briefing.plan.orEmpty(), style = MaterialTheme.typography.titleMedium, color = ink)
                         }
                     }
@@ -219,7 +220,7 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
                         Column {
                             Text("${Math.round(f.currentTemp)}° · ${f.condition.label}", style = MaterialTheme.typography.titleMedium, color = ink)
                             Text(
-                                f.notableToday() ?: "High ${Math.round(f.high)}°, low ${Math.round(f.low)}°",
+                                f.notableToday() ?: tr("High {0}°, low {1}°", Math.round(f.high), Math.round(f.low)),
                                 style = MaterialTheme.typography.bodySmall, color = ink.copy(alpha = 0.7f),
                             )
                         }
@@ -228,13 +229,13 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
                         Icon(Icons.Rounded.LocalFireDepartment, null, tint = ink)
                         Spacer(Modifier.width(Space.md))
                         Text(
-                            "${briefing.streak} ${if (briefing.streak == 1) "morning" else "mornings"} in a row",
+                            if (briefing.streak == 1) tr("1 morning in a row") else tr("{0} mornings in a row", briefing.streak),
                             style = MaterialTheme.typography.titleMedium, color = ink,
                         )
                     }
                 }
                 Spacer(Modifier.height(Space.lg))
-                Text("How do you feel?", style = MaterialTheme.typography.labelLarge, color = ink.copy(alpha = 0.75f))
+                Text(tr("How do you feel?"), style = MaterialTheme.typography.labelLarge, color = ink.copy(alpha = 0.75f))
                 Spacer(Modifier.height(Space.sm))
                 MoodPicker(
                     briefing.mood, size = 44, showLabels = false,
@@ -260,10 +261,10 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
             Box(
                 Modifier.fillMaxWidth().height(60.dp).clip(RoundedCornerShape(30.dp)).background(ink).clickable(onClick = onDone),
                 contentAlignment = Alignment.Center,
-            ) { Text("Start my day", style = MaterialTheme.typography.titleMedium, color = PaperFixed) }
+            ) { Text(tr("Start my day"), style = MaterialTheme.typography.titleMedium, color = PaperFixed) }
             if (!test) {
                 Text(
-                    "Don't show this after alarms",
+                    tr("Don't show this after alarms"),
                     style = MaterialTheme.typography.labelMedium, color = ink.copy(alpha = 0.6f),
                     modifier = Modifier.padding(vertical = Space.sm).clip(CircleShape).clickable {
                         scope.launch {

@@ -1,5 +1,7 @@
 package com.wakeroo.app
 
+import android.content.Context
+import com.wakeroo.app.ui.i18n.AppLocale
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,6 +26,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: Context) = super.attachBaseContext(AppLocale.wrap(newBase))
+
     private val settings = MutableStateFlow<Settings?>(null)
     /** Null until checked; true when this launch follows a restore onto a new phone. */
     private val restored = MutableStateFlow<Boolean?>(null)

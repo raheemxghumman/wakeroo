@@ -1,5 +1,6 @@
 package com.wakeroo.app.sleep
 
+import com.wakeroo.app.ui.i18n.tr
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -156,13 +157,13 @@ class SleepSoundService : Service() {
         val names = layers.joinToString(" + ") { it.first.title }
         return NotificationCompat.Builder(this, CHANNEL_SLEEP)
             .setSmallIcon(R.drawable.ic_stat_wakeroo)
-            .setContentTitle(if (paused) "Paused · $names" else names)
-            .setContentText(if (endsForAlarm) "Fades out before your alarm · $minutesLeft min" else "$minutesLeft min left, then a gentle fade")
+            .setContentTitle(if (paused) tr("Paused · {0}", names) else names)
+            .setContentText(if (endsForAlarm) tr("Fades out before your alarm · {0} min", minutesLeft) else tr("{0} min left, then a gentle fade", minutesLeft))
             .setOngoing(!paused)
             .setSilent(true)
             .setContentIntent(open)
-            .addAction(0, if (paused) "Resume" else "Pause", action(31, ACTION_PAUSE))
-            .addAction(0, "Stop", action(32, ACTION_STOP))
+            .addAction(0, if (paused) tr("Resume") else tr("Pause"), action(31, ACTION_PAUSE))
+            .addAction(0, tr("Stop"), action(32, ACTION_STOP))
             .build()
     }
 
@@ -196,8 +197,8 @@ class SleepSoundService : Service() {
 
         fun createChannel(context: Context) {
             context.getSystemService(NotificationManager::class.java).createNotificationChannel(
-                NotificationChannel(CHANNEL_SLEEP, "Sleep sounds", NotificationManager.IMPORTANCE_LOW).apply {
-                    description = "Controls for sleep sounds while they play"
+                NotificationChannel(CHANNEL_SLEEP, tr("Sleep sounds"), NotificationManager.IMPORTANCE_LOW).apply {
+                    description = tr("Controls for sleep sounds while they play")
                     setSound(null, null)
                 },
             )

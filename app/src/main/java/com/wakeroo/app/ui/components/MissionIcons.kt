@@ -1,5 +1,6 @@
 package com.wakeroo.app.ui.components
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.DirectionsWalk
 import androidx.compose.material.icons.rounded.Calculate
@@ -30,25 +31,25 @@ val MissionType.icon: ImageVector
 
 val MissionType.blurb: String
     get() = when (this) {
-        MissionType.Math -> "Solve quick sums. Wakes your brain."
-        MissionType.Typing -> "Type a short phrase, letter by letter."
-        MissionType.Shake -> "Shake the phone until the sun fills."
-        MissionType.Scan -> "Scan a code you leave in another room."
-        MissionType.Photo -> "Photograph a spot, like your sink."
-        MissionType.Steps -> "Walk until the track fills up."
-        MissionType.Memory -> "Repeat the pattern of glowing tiles."
-        MissionType.Nfc -> "Tap your phone on a sticker by the mirror."
-        MissionType.Plan -> "Type the first thing you'll do today."
-        MissionType.Hunt -> "Find an everyday object, like a cup."
+        MissionType.Math -> tr("Solve quick sums. Wakes your brain.")
+        MissionType.Typing -> tr("Type a short phrase, letter by letter.")
+        MissionType.Shake -> tr("Shake the phone until the sun fills.")
+        MissionType.Scan -> tr("Scan a code you leave in another room.")
+        MissionType.Photo -> tr("Photograph a spot, like your sink.")
+        MissionType.Steps -> tr("Walk until the track fills up.")
+        MissionType.Memory -> tr("Repeat the pattern of glowing tiles.")
+        MissionType.Nfc -> tr("Tap your phone on a sticker by the mirror.")
+        MissionType.Plan -> tr("Type the first thing you'll do today.")
+        MissionType.Hunt -> tr("Find an everyday object, like a cup.")
     }
 
 /** A few words for the small mission tiles. */
 val MissionType.tagline: String
     get() = when (this) {
-        MissionType.Math -> "Quick sums"
-        MissionType.Typing -> "Type a phrase"
-        MissionType.Shake -> "Shake to fill"
-        MissionType.Memory -> "Remember the tiles"
-        MissionType.Plan -> "Write today's plan"
-        else -> "Gets you out of bed"
+        MissionType.Math -> tr("Quick sums")
+        MissionType.Typing -> tr("Type a phrase")
+        MissionType.Shake -> tr("Shake to fill")
+        MissionType.Memory -> tr("Remember the tiles")
+        MissionType.Plan -> tr("Write today's plan")
+        else -> tr("Gets you out of bed")
     }

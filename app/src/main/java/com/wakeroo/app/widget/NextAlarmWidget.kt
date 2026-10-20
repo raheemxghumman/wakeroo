@@ -1,5 +1,6 @@
 package com.wakeroo.app.widget
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.util.full
 import android.content.Context
 import android.text.format.DateFormat
@@ -83,7 +84,7 @@ class NextAlarmWidget : GlanceAppWidget() {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(ImageProvider(R.drawable.ic_launcher_foreground), contentDescription = null, modifier = GlanceModifier.size(28.dp))
                 Spacer(GlanceModifier.width(6.dp))
-                Text(if (time == null) "No alarm set" else "Next alarm", style = TextStyle(color = muted, fontSize = 12.sp))
+                Text(if (time == null) tr("No alarm set") else tr("Next alarm"), style = TextStyle(color = muted, fontSize = 12.sp))
             }
             if (time != null) {
                 Row(verticalAlignment = Alignment.Bottom) {
@@ -95,7 +96,7 @@ class NextAlarmWidget : GlanceAppWidget() {
                     style = TextStyle(color = muted, fontSize = 12.sp), maxLines = 1,
                 )
             } else {
-                Text("Tap to set one", style = TextStyle(color = paper, fontSize = 16.sp))
+                Text(tr("Tap to set one"), style = TextStyle(color = paper, fontSize = 16.sp))
             }
         }
     }

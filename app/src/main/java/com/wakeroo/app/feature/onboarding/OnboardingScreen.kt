@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.onboarding
 
+import com.wakeroo.app.ui.i18n.tr
 import android.text.format.DateFormat
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
@@ -171,13 +172,13 @@ private fun TopRow(state: OnboardingState, canGoBack: Boolean, onBack: () -> Uni
     ) {
         Box(Modifier.size(48.dp)) {
             androidx.compose.animation.AnimatedVisibility(canGoBack, enter = fadeIn(), exit = fadeOut()) {
-                RoundIconButton(Icons.AutoMirrored.Rounded.ArrowBack, "Back", onBack)
+                RoundIconButton(Icons.AutoMirrored.Rounded.ArrowBack, tr("Back"), onBack)
             }
         }
         Spacer(Modifier.size(Space.md))
         if (position >= 0) {
             Column(Modifier.weight(1f)) {
-                Text("Step ${position + 1} of ${numbered.size}", style = MaterialTheme.typography.labelMedium, color = Paper.copy(alpha = 0.8f))
+                Text(tr("Step {0} of {1}", position + 1, numbered.size), style = MaterialTheme.typography.labelMedium, color = Paper.copy(alpha = 0.8f))
                 Spacer(Modifier.height(6.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     numbered.forEachIndexed { i, _ ->

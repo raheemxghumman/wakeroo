@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -101,7 +102,7 @@ fun Viewfinder(matched: Boolean, torch: Boolean, onTorch: () -> Unit, onFrame: (
                 .clickable(onClick = onTorch),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(if (torch) Icons.Rounded.FlashlightOn else Icons.Rounded.FlashlightOff, "Torch", tint = if (torch) MorningGold else Paper)
+            Icon(if (torch) Icons.Rounded.FlashlightOn else Icons.Rounded.FlashlightOff, tr("Torch"), tint = if (torch) MorningGold else Paper)
         }
     }
 }
@@ -119,7 +120,7 @@ fun ScanMission(config: MissionConfig, onActivity: () -> Unit, onFailedAttempt: 
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            config.codeLabel?.let { "Scan the code on your $it" } ?: "Scan your registered code",
+            config.codeLabel?.let { tr("Scan the code on your {0}", it) } ?: tr("Scan your registered code"),
             style = MaterialTheme.typography.headlineSmall, color = Paper, textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(Space.lg))
@@ -133,7 +134,7 @@ fun ScanMission(config: MissionConfig, onActivity: () -> Unit, onFailedAttempt: 
                     done()
                 } else if (System.currentTimeMillis() - lastWrong > 2500) {
                     lastWrong = System.currentTimeMillis()
-                    hint = "That's a different code. Find the one you registered."
+                    hint = tr("That's a different code. Find the one you registered.")
                     haptics.performHapticFeedback(HapticFeedbackType.Reject)
                     onFailedAttempt()
                 }
@@ -141,7 +142,7 @@ fun ScanMission(config: MissionConfig, onActivity: () -> Unit, onFailedAttempt: 
             }
         }
         Spacer(Modifier.height(Space.lg))
-        Text(hint ?: "Hold it steady inside the frame", style = MaterialTheme.typography.bodyLarge, color = if (hint != null) MorningGold else PaperMuted, textAlign = TextAlign.Center)
+        Text(hint ?: tr("Hold it steady inside the frame"), style = MaterialTheme.typography.bodyLarge, color = if (hint != null) MorningGold else PaperMuted, textAlign = TextAlign.Center)
     }
 }
 
@@ -160,8 +161,8 @@ fun PhotoMission(config: MissionConfig, onActivity: () -> Unit, onDone: () -> Un
     val done by rememberUpdatedState(onDone)
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Point at your photo spot", style = MaterialTheme.typography.headlineSmall, color = Paper)
-        Text("Same angle as when you set it up", style = MaterialTheme.typography.bodyMedium, color = DawnLavender)
+        Text(tr("Point at your photo spot"), style = MaterialTheme.typography.headlineSmall, color = Paper)
+        Text(tr("Same angle as when you set it up"), style = MaterialTheme.typography.bodyMedium, color = DawnLavender)
         Spacer(Modifier.height(Space.lg))
         Viewfinder(matched, torch, onTorch = { torch = !torch }) { frame ->
             val now = System.currentTimeMillis()
@@ -187,7 +188,7 @@ fun PhotoMission(config: MissionConfig, onActivity: () -> Unit, onDone: () -> Un
             Box(Modifier.fillMaxWidth(closeness).height(10.dp).clip(CircleShape).background(if (matched) Calm else MorningGold))
         }
         Text(
-            when { reference == null -> "No reference photo saved, use the backup mission"; closeness > 0.7f -> "Almost there, hold still"; closeness > 0.45f -> "Getting warmer"; else -> "Look around for your spot" },
+            when { reference == null -> tr("No reference photo saved, use the backup mission"); closeness > 0.7f -> tr("Almost there, hold still"); closeness > 0.45f -> tr("Getting warmer"); else -> tr("Look around for your spot") },
             style = MaterialTheme.typography.bodyMedium, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
         )
     }

@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.sleep
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.theme.DawnLavenderFixed
 import android.text.format.DateFormat
 import androidx.compose.animation.AnimatedContent
@@ -175,16 +176,16 @@ fun SleepScreen(onSettings: () -> Unit, onNewAlarm: () -> Unit, onPro: () -> Uni
             contentPadding = PaddingValues(start = Space.xl, end = Space.xl, bottom = TabContentBottomPadding),
             verticalArrangement = Arrangement.spacedBy(Space.lg),
         ) {
-            item(key = "header") { TabHeader("Sleep", onSettings = onSettings, eyebrow = "Tonight", modifier = Modifier.entrance(0)) }
+            item(key = "header") { TabHeader(tr("Sleep"), onSettings = onSettings, eyebrow = tr("Tonight"), modifier = Modifier.entrance(0)) }
             item(key = "moon") {
                 Box(Modifier.entrance(1, EntranceStyle.Pop)) {
                     MoonHero(bedtime, nextAlarm, now, use24h, settings.sleepGoalMinutes, playing = player.playing && !player.paused, onNewAlarm = onNewAlarm)
                 }
             }
             item(key = "sounds") {
-                SectionCard("Sleep sounds", icon = Icons.Rounded.GraphicEq, modifier = Modifier.entrance(2)) {
+                SectionCard(tr("Sleep sounds"), icon = Icons.Rounded.GraphicEq, modifier = Modifier.entrance(2)) {
                     Text(
-                        if (settings.pro) "Pick up to two to mix." else "Pick one. Mix two sounds with Pro.",
+                        if (settings.pro) tr("Pick up to two to mix.") else tr("Pick one. Mix two sounds with Pro."),
                         style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(bottom = Space.md),
                     )
                     SleepSound.entries.chunked(3).forEach { row ->
@@ -214,10 +215,10 @@ fun SleepScreen(onSettings: () -> Unit, onNewAlarm: () -> Unit, onPro: () -> Uni
                             }
                         }
                     }
-                    Text("Timer", style = MaterialTheme.typography.bodyLarge, color = Paper, modifier = Modifier.padding(top = Space.sm, bottom = Space.sm))
+                    Text(tr("Timer"), style = MaterialTheme.typography.bodyLarge, color = Paper, modifier = Modifier.padding(top = Space.sm, bottom = Space.sm))
                     ChipRow {
                         TIMERS.forEach { m ->
-                            Chip(if (m < 0) "Until my alarm" else "$m min", settings.sleepTimerMinutes == m, {
+                            Chip(if (m < 0) tr("Until my alarm") else tr("{0} min", m), settings.sleepTimerMinutes == m, {
                                 scope.launch { app.settings.update { it.copy(sleepTimerMinutes = m) } }
                             })
                         }
@@ -229,36 +230,36 @@ fun SleepScreen(onSettings: () -> Unit, onNewAlarm: () -> Unit, onPro: () -> Uni
                         onStop = { SleepPlayer.stop(context) },
                     )
                     Text(
-                        "Plays on media volume and always fades out a minute before your alarm, so it never covers it.",
+                        tr("Plays on media volume and always fades out a minute before your alarm, so it never covers it."),
                         style = MaterialTheme.typography.bodySmall, color = PaperMuted, textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth().padding(top = Space.md),
                     )
                 }
             }
             item(key = "bedtime") {
-                SectionCard("Bedtime", icon = Icons.Rounded.Bedtime, modifier = Modifier.entrance(3)) {
+                SectionCard(tr("Bedtime"), icon = Icons.Rounded.Bedtime, modifier = Modifier.entrance(3)) {
                     val goal = settings.sleepGoalMinutes
                     Stepper(
-                        "Sleep goal", "${goal / 60} h${if (goal % 60 != 0) " ${goal % 60}" else ""}",
+                        tr("Sleep goal"), "${goal / 60} h${if (goal % 60 != 0) " ${goal % 60}" else ""}",
                         onMinus = { scope.launch { app.settings.update { it.copy(sleepGoalMinutes = (it.sleepGoalMinutes - 30).coerceAtLeast(360)) } } },
                         onPlus = { scope.launch { app.settings.update { it.copy(sleepGoalMinutes = (it.sleepGoalMinutes + 30).coerceAtMost(600)) } } },
                         minusEnabled = goal > 360, plusEnabled = goal < 600,
                     )
                     Spacer(Modifier.height(Space.md))
-                    ToggleRow("Wind-down reminder", "A nudge before bedtime, with sleep sounds one tap away.", settings.bedtimeReminder) { on ->
+                    ToggleRow(tr("Wind-down reminder"), tr("A nudge before bedtime, with sleep sounds one tap away."), settings.bedtimeReminder) { on ->
                         scope.launch { app.settings.update { it.copy(bedtimeReminder = on) } }
                     }
                     AnimatedVisibility(settings.bedtimeReminder) {
                         ChipRow {
-                            listOf(0 to "At bedtime", 15 to "15 min before", 30 to "30 min before", 60 to "1 h before").forEach { (m, label) ->
+                            listOf(0 to tr("At bedtime"), 15 to tr("15 min before"), 30 to tr("30 min before"), 60 to tr("1 h before")).forEach { (m, label) ->
                                 Chip(label, settings.windDownMinutes == m, { scope.launch { app.settings.update { it.copy(windDownMinutes = m) } } })
                             }
                         }
                     }
                     Spacer(Modifier.height(Space.md))
                     ToggleRow(
-                        "No alarm for tomorrow",
-                        "At ${formatClock(settings.noAlarmReminderAt / 60, settings.noAlarmReminderAt % 60, use24h)} ${formatMeridiem(settings.noAlarmReminderAt / 60, use24h)}, a reminder if nothing is set for the morning.",
+                        tr("No alarm for tomorrow"),
+                        tr("At {0} {1}, a reminder if nothing is set for the morning.", formatClock(settings.noAlarmReminderAt / 60, settings.noAlarmReminderAt % 60, use24h), formatMeridiem(settings.noAlarmReminderAt / 60, use24h)),
                         settings.noAlarmReminder,
                     ) { on -> scope.launch { app.settings.update { it.copy(noAlarmReminder = on) } } }
                 }
@@ -330,25 +331,25 @@ private fun MoonHero(
             // The alarm is close: no bedtime to plan, just encouragement.
             val at = Instant.ofEpochMilli(nextAlarm).atZone(ZoneId.systemDefault()).toLocalTime()
             val mins = (nextAlarm - now) / 60_000
-            Text("Your alarm is in ${if (mins >= 60) "${mins / 60} h ${mins % 60} min" else "$mins min"}", style = MaterialTheme.typography.headlineSmall, color = Paper, textAlign = TextAlign.Center)
-            Text("${at.formatClock(use24h)} ${at.formatMeridiem(use24h)}. Close your eyes and get what rest you can.", style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center)
+            Text(tr("Your alarm is in {0}", if (mins >= 60) tr("{0} h {1} min", mins / 60, mins % 60) else tr("{0} min", mins)), style = MaterialTheme.typography.headlineSmall, color = Paper, textAlign = TextAlign.Center)
+            Text(tr("{0} {1}. Close your eyes and get what rest you can.", at.formatClock(use24h), at.formatMeridiem(use24h)), style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center)
         } else if (bedtime == null) {
-            Text("No alarm set for the morning", style = MaterialTheme.typography.headlineSmall, color = Paper)
-            Text("Set one and Wakeroo works out your bedtime.", style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center)
+            Text(tr("No alarm set for the morning"), style = MaterialTheme.typography.headlineSmall, color = Paper)
+            Text(tr("Set one and Wakeroo works out your bedtime."), style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center)
             Spacer(Modifier.height(Space.lg))
             PillButton("Set an alarm", onClick = onNewAlarm)
         } else {
             val zone = ZoneId.systemDefault()
             val bed = Instant.ofEpochMilli(bedtime.bedAt).atZone(zone).toLocalTime()
             val alarm = Instant.ofEpochMilli(bedtime.alarmAt).atZone(zone).toLocalTime()
-            Text("BED BY", style = MaterialTheme.typography.labelSmall, color = DawnLavender)
+            Text(tr("BED BY"), style = MaterialTheme.typography.labelSmall, color = DawnLavender)
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(bed.formatClock(use24h), style = MaterialTheme.typography.displayMedium, color = Paper)
                 Text(" ${bed.formatMeridiem(use24h)}", style = MaterialTheme.typography.titleMedium, color = PaperMuted, modifier = Modifier.padding(bottom = 8.dp))
             }
             val hours = goalMinutes / 60f
             Text(
-                "for ${if (hours % 1f == 0f) "${hours.toInt()} h" else "%.1f h".format(hours)} of sleep before your ${alarm.formatClock(use24h)} ${alarm.formatMeridiem(use24h)} alarm",
+                tr("for {0} of sleep before your {1} {2} alarm", if (hours % 1f == 0f) "${hours.toInt()} h" else "%.1f h".format(hours), alarm.formatClock(use24h), alarm.formatMeridiem(use24h)),
                 style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center,
             )
         }
@@ -394,7 +395,7 @@ private fun SoundTile(sound: SleepSound, selected: Boolean, playing: Boolean, lo
         Box(
             Modifier.align(Alignment.TopEnd).padding(8.dp).size(22.dp).clip(CircleShape).background(Night.copy(alpha = 0.6f)),
             contentAlignment = Alignment.Center,
-        ) { Icon(Icons.Rounded.Lock, "Pro", tint = MorningGold, modifier = Modifier.size(12.dp)) }
+        ) { Icon(Icons.Rounded.Lock, tr("Pro"), tint = MorningGold, modifier = Modifier.size(12.dp)) }
     }
     }
 }
@@ -412,7 +413,7 @@ private fun PlayControl(playing: Boolean, paused: Boolean, endsAt: Long, forAlar
             Box(
                 Modifier.padding(end = Space.xl).size(56.dp).press3d().clip(CircleShape).background(Paper.copy(alpha = 0.1f)).clickable(onClick = onPause),
                 contentAlignment = Alignment.Center,
-            ) { Icon(if (paused) Icons.Rounded.PlayArrow else Icons.Rounded.Pause, if (paused) "Resume" else "Pause", tint = Paper) }
+            ) { Icon(if (paused) Icons.Rounded.PlayArrow else Icons.Rounded.Pause, if (paused) tr("Resume") else tr("Pause"), tint = Paper) }
         }
         Box(Modifier.size(110.dp), contentAlignment = Alignment.Center) {
             if (playing && !paused) {
@@ -433,7 +434,7 @@ private fun PlayControl(playing: Boolean, paused: Boolean, endsAt: Long, forAlar
                 contentAlignment = Alignment.Center,
             ) {
                 AnimatedContent(playing, transitionSpec = { scaleIn() + fadeIn() togetherWith scaleOut() + fadeOut() }, label = "playIcon") { p ->
-                    Icon(if (p) Icons.Rounded.Stop else Icons.Rounded.PlayArrow, if (p) "Stop sleep sounds" else "Play sleep sounds", tint = Night, modifier = Modifier.size(40.dp))
+                    Icon(if (p) Icons.Rounded.Stop else Icons.Rounded.PlayArrow, if (p) tr("Stop sleep sounds") else tr("Play sleep sounds"), tint = Night, modifier = Modifier.size(40.dp))
                 }
             }
         }
@@ -442,7 +443,7 @@ private fun PlayControl(playing: Boolean, paused: Boolean, endsAt: Long, forAlar
     AnimatedVisibility(playing) {
         val left = ((endsAt - now) / 60_000).coerceAtLeast(0)
         Text(
-            if (forAlarm) "Fades out before your alarm · ${left / 60} h ${left % 60} min" else "$left min left, then a gentle fade",
+            if (forAlarm) tr("Fades out before your alarm · {0} h {1} min", left / 60, left % 60) else tr("{0} min left, then a gentle fade", left),
             style = MaterialTheme.typography.labelLarge, color = DawnLavender, textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth().padding(top = Space.sm),
         )

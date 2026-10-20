@@ -152,15 +152,15 @@ fun PermissionsStep(onNext: () -> Unit) {
     }
 
     StepScaffold(
-        title = "Make sure it rings",
-        subtitle = "Phones block alarms in sneaky ways. Turn these on once and you're covered.",
+        title = tr("Make sure it rings"),
+        subtitle = tr("Phones block alarms in sneaky ways. Turn these on once and you're covered."),
         primary = when {
-            nextMissing == null -> "Continue"
-            nextMissing == Permission.Battery && openedBattery -> "I've set it to Unrestricted"
+            nextMissing == null -> tr("Continue")
+            nextMissing == Permission.Battery && openedBattery -> tr("I've set it to Unrestricted")
             else -> nextMissing.action
         },
         onPrimary = { if (nextMissing == null) onNext() else request(nextMissing) },
-        secondary = if (nextMissing != null) "Skip for now" else null,
+        secondary = if (nextMissing != null) tr("Skip for now") else null,
         onSecondary = onNext,
         darkButton = true,
     ) {
@@ -184,7 +184,7 @@ fun PermissionsStep(onNext: () -> Unit) {
                 Modifier.padding(top = Space.lg).fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(Night.copy(alpha = 0.45f)).padding(Space.lg),
                 verticalArrangement = Arrangement.spacedBy(Space.xs),
             ) {
-                Text("On ${guide.brand}", style = MaterialTheme.typography.titleSmall, color = MorningGold)
+                Text(tr("On {0}", guide.brand), style = MaterialTheme.typography.titleSmall, color = MorningGold)
                 guide.steps.forEachIndexed { i, step ->
                     Row {
                         Text("${i + 1}", style = MaterialTheme.typography.labelLarge, color = MorningGold, modifier = Modifier.width(22.dp))
@@ -216,7 +216,7 @@ private fun PermissionRow(p: Permission, granted: Boolean, highlighted: Boolean,
         Spacer(Modifier.width(Space.md))
         Column(Modifier.weight(1f)) {
             Text(p.title, style = MaterialTheme.typography.titleSmall, color = Paper)
-            Text(if (granted) "Done" else p.why, style = MaterialTheme.typography.bodySmall, color = if (granted) Calm else PaperMuted)
+            Text(if (granted) tr("Done") else p.why, style = MaterialTheme.typography.bodySmall, color = if (granted) Calm else PaperMuted)
         }
     }
 }
@@ -254,22 +254,22 @@ private fun PermissionMock(kind: MockKind) {
             MockKind.Dialog -> {
                 // Android's own layout: a bell, the question, then stacked Allow / Don't allow.
                 drawCircle(Color(0xFF4A5BD6), 7.dp.toPx(), Offset(size.width / 2, pad + 6.dp.toPx()))
-                val q = text.measure("Allow Wakeroo to send you notifications?", title.copy(fontSize = 12.dp.toSp()))
+                val q = text.measure(tr("Allow Wakeroo to send you notifications?"), title.copy(fontSize = 12.dp.toSp()))
                 drawText(q, topLeft = Offset((size.width - q.size.width) / 2, pad + 18.dp.toPx()))
                 val bw = size.width - pad * 2
                 val bh = 26.dp.toPx()
                 val allowY = pad + 46.dp.toPx()
                 drawRoundRect(if (on) Calm else Color(0xFFD6E4FF), Offset(pad, allowY), Size(bw, bh), CornerRadius(bh / 2))
                 drawRoundRect(Color(0xFFD6E4FF), Offset(pad, allowY + bh + 6.dp.toPx()), Size(bw, bh), CornerRadius(bh / 2))
-                val a = text.measure("Allow", title.copy(fontSize = 11.dp.toSp()))
+                val a = text.measure(tr("Allow"), title.copy(fontSize = 11.dp.toSp()))
                 drawText(a, topLeft = Offset((size.width - a.size.width) / 2, allowY + (bh - a.size.height) / 2))
-                val d = text.measure("Don't allow", body.copy(color = MockInk))
+                val d = text.measure(tr("Don't allow"), body.copy(color = MockInk))
                 drawText(d, topLeft = Offset((size.width - d.size.width) / 2, allowY + bh + 6.dp.toPx() + (bh - d.size.height) / 2))
                 Offset(size.width / 2, allowY + bh / 2)
             }
             MockKind.Toggle -> {
-                drawText(text, "Wakeroo", Offset(pad, pad), title)
-                drawText(text, "Allow full screen notifications", Offset(pad, pad + 44.dp.toPx()), body.copy(color = MockInk, fontSize = 12.dp.toSp()))
+                drawText(text, tr("Wakeroo"), Offset(pad, pad), title)
+                drawText(text, tr("Allow full screen notifications"), Offset(pad, pad + 44.dp.toPx()), body.copy(color = MockInk, fontSize = 12.dp.toSp()))
                 val tw = 46.dp.toPx(); val th = 26.dp.toPx()
                 val tx = size.width - pad - tw; val ty = pad + 40.dp.toPx()
                 drawRoundRect(if (on) Calm else MockInk.copy(alpha = 0.25f), Offset(tx, ty), Size(tw, th), CornerRadius(th / 2))
@@ -277,8 +277,8 @@ private fun PermissionMock(kind: MockKind) {
                 Offset(tx + tw / 2, ty + th / 2)
             }
             MockKind.Radio -> {
-                drawText(text, "App battery usage", Offset(pad, pad), title)
-                listOf("Unrestricted", "Optimized", "Restricted").forEachIndexed { i, label ->
+                drawText(text, tr("App battery usage"), Offset(pad, pad), title)
+                listOf(tr("Unrestricted"), tr("Optimized"), tr("Restricted")).forEachIndexed { i, label ->
                     val y = pad + 30.dp.toPx() + i * 30.dp.toPx()
                     val selected = if (on) i == 0 else i == 1
                     drawCircle(MockInk.copy(alpha = 0.5f), 8.dp.toPx(), Offset(pad + 8.dp.toPx(), y + 8.dp.toPx()), style = androidx.compose.ui.graphics.drawscope.Stroke(2.dp.toPx()))
@@ -303,6 +303,6 @@ private fun PermissionMock(kind: MockKind) {
 private fun AllSet() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(Icons.Rounded.CheckCircle, null, tint = Calm, modifier = Modifier.size(84.dp))
-        Text("All set. Your alarms will ring.", style = MaterialTheme.typography.titleMedium, color = Paper, modifier = Modifier.padding(top = Space.sm))
+        Text(tr("All set. Your alarms will ring."), style = MaterialTheme.typography.titleMedium, color = Paper, modifier = Modifier.padding(top = Space.sm))
     }
 }

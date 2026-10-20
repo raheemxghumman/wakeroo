@@ -1,5 +1,6 @@
 package com.wakeroo.app.ui.scenes
 
+import com.wakeroo.app.ui.i18n.tr
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -172,7 +173,7 @@ private fun SceneCard(
                 Box(Modifier.fillMaxSize().background(Brush2.photoEmpty), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(Icons.Rounded.AddPhotoAlternate, null, tint = Paper)
-                        Text("Pick a photo", style = MaterialTheme.typography.labelSmall, color = Paper, modifier = Modifier.padding(top = Space.xs))
+                        Text(tr("Pick a photo"), style = MaterialTheme.typography.labelSmall, color = Paper, modifier = Modifier.padding(top = Space.xs))
                     }
                 }
             } else {
@@ -193,7 +194,7 @@ private fun SceneCard(
                 Box(
                     Modifier.align(Alignment.TopEnd).padding(8.dp).size(26.dp).clip(CircleShape).background(Night.copy(alpha = 0.7f)),
                     contentAlignment = Alignment.Center,
-                ) { Icon(Icons.Rounded.Lock, "Pro", tint = MorningGold, modifier = Modifier.size(14.dp)) }
+                ) { Icon(Icons.Rounded.Lock, tr("Pro"), tint = MorningGold, modifier = Modifier.size(14.dp)) }
             }
         }
         Text(
@@ -229,18 +230,18 @@ fun ScenePreviewDialog(
                 state = state, scene = scene, onStartMission = {}, onSnooze = {}, clock = java.time.LocalTime.of(hour, minute),
                 topBar = {
                     Row(Modifier.fillMaxWidth().padding(top = Space.md), verticalAlignment = Alignment.CenterVertically) {
-                        Text("Preview · ${scene.title}", style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.weight(1f))
+                        Text(tr("Preview · {0}", scene.title), style = MaterialTheme.typography.titleMedium, color = DawnLavender, modifier = Modifier.weight(1f))
                         Box(
                             Modifier.size(44.dp).clip(CircleShape).background(Night.copy(alpha = 0.4f)).clickable(onClick = onClose),
                             contentAlignment = Alignment.Center,
-                        ) { Icon(Icons.Rounded.Close, "Close preview", tint = Paper) }
+                        ) { Icon(Icons.Rounded.Close, tr("Close preview"), tint = Paper) }
                     }
                 },
                 actions = {
                     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.md)) {
                         if (locked) {
                             PillButton("Unlock with Pro", Modifier.fillMaxWidth(), icon = Icons.Rounded.Lock, onClick = onUpgrade)
-                            Text("${scene.title} is one of the Pro scenes.", style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.align(Alignment.CenterHorizontally))
+                            Text(tr("{0} is one of the Pro scenes.", scene.title), style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.align(Alignment.CenterHorizontally))
                         } else {
                             PillButton("Use this scene", Modifier.fillMaxWidth(), onClick = onUse)
                             if (onChangePhoto != null) PillButton("Choose another photo", Modifier.fillMaxWidth(), outlined = true, onClick = onChangePhoto)

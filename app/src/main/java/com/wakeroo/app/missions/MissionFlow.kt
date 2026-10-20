@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -190,13 +191,13 @@ fun MissionFlow(
             Row(Modifier.fillMaxWidth().padding(top = Space.lg), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        if (missions.size > 1) "Mission ${index + 1} of ${missions.size}" else "Your mission",
+                        if (missions.size > 1) tr("Mission {0} of {1}", index + 1, missions.size) else tr("Your mission"),
                         style = MaterialTheme.typography.labelMedium, color = PaperMuted,
                     )
                     Text(current.type.title, style = MaterialTheme.typography.headlineMedium, color = Paper)
                 }
                 Text(
-                    "Emergency",
+                    tr("Emergency"),
                     style = MaterialTheme.typography.labelMedium, color = PaperMuted,
                     modifier = Modifier.clip(CircleShape).clickable { showEmergency = true }.padding(Space.md),
                 )
@@ -219,7 +220,7 @@ fun MissionFlow(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        if (idleReset) "Too quiet! Full volume's back. Start again" else "Too quiet! Full volume's back. Keep going",
+                        if (idleReset) tr("Too quiet! Full volume's back. Start again") else tr("Too quiet! Full volume's back. Keep going"),
                         style = MaterialTheme.typography.labelLarge, color = Night,
                     )
                 }
@@ -267,7 +268,7 @@ fun MissionFlow(
                         },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text("Can't do this one? Switch to the backup mission", style = MaterialTheme.typography.labelLarge, color = DawnLavender)
+                    Text(tr("Can't do this one? Switch to the backup mission"), style = MaterialTheme.typography.labelLarge, color = DawnLavender)
                 }
             }
             Spacer(Modifier.height(Space.lg))
@@ -305,9 +306,9 @@ private fun EmergencyExit(holdSeconds: Int, onCancel: () -> Unit, onEscape: () -
             Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(Space.xl),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text("Only for real emergencies", style = MaterialTheme.typography.headlineMedium, color = Paper)
+            Text(tr("Only for real emergencies"), style = MaterialTheme.typography.headlineMedium, color = Paper)
             Text(
-                "The alarm keeps ringing. This breaks your streak and is logged.",
+                tr("The alarm keeps ringing. This breaks your streak and is logged."),
                 style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = Space.sm),
             )
@@ -340,13 +341,13 @@ private fun EmergencyExit(holdSeconds: Int, onCancel: () -> Unit, onEscape: () -
                     }
                     Box(Modifier.size(170.dp).clip(CircleShape).background(NightSurface), contentAlignment = Alignment.Center) {
                         Text(
-                            if (hold.value > 0f) "${(holdSeconds - hold.value * holdSeconds).toInt() + 1}" else "Hold",
+                            if (hold.value > 0f) "${(holdSeconds - hold.value * holdSeconds).toInt() + 1}" else tr("Hold"),
                             style = MaterialTheme.typography.displaySmall, color = Paper,
                         )
                     }
                 }
             } else {
-                Text("Type: $phrase", style = MaterialTheme.typography.titleMedium, color = DawnLavender)
+                Text(tr("Type: {0}", phrase), style = MaterialTheme.typography.titleMedium, color = DawnLavender)
                 Text(
                     typed.ifEmpty { " " }, style = MaterialTheme.typography.headlineLarge, color = MorningGold,
                     modifier = Modifier.padding(vertical = Space.lg),
@@ -364,7 +365,7 @@ private fun EmergencyExit(holdSeconds: Int, onCancel: () -> Unit, onEscape: () -
             Spacer(Modifier.weight(1f))
             Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    "Back to my mission",
+                    tr("Back to my mission"),
                     style = MaterialTheme.typography.titleMedium, color = SunriseCoral,
                     modifier = Modifier.clip(CircleShape).clickable(onClick = onCancel).padding(Space.lg),
                 )

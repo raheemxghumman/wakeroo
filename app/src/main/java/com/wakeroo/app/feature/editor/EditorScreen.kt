@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.editor
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.util.initial
 import com.wakeroo.app.ui.util.twoDigits
 import android.app.Activity
@@ -113,6 +114,7 @@ import com.wakeroo.app.ui.theme.PaperMuted
 import com.wakeroo.app.ui.theme.Sky
 import com.wakeroo.app.ui.theme.Space
 import com.wakeroo.app.ui.theme.SunriseCoral
+import com.wakeroo.app.ui.util.formatMeridiem
 import com.wakeroo.app.ui.util.formatUntil
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -147,13 +149,13 @@ fun EditorScreen(
                     Modifier.statusBarsPadding().fillMaxWidth().padding(horizontal = Space.lg, vertical = Space.sm),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    IconCircle(Icons.Rounded.Close, "Close", onClose)
+                    IconCircle(Icons.Rounded.Close, tr("Close"), onClose)
                     Spacer(Modifier.weight(1f))
-                    Text(if (state.isNew) "New alarm" else "Edit alarm", style = MaterialTheme.typography.titleMedium, color = Paper)
+                    Text(if (state.isNew) tr("New alarm") else tr("Edit alarm"), style = MaterialTheme.typography.titleMedium, color = Paper)
                     Spacer(Modifier.weight(1f))
-                    if (!state.isNew) IconCircle(Icons.Rounded.DeleteOutline, "Delete alarm") {
+                    if (!state.isNew) IconCircle(Icons.Rounded.DeleteOutline, tr("Delete alarm")) {
                         val delete = { scope.launch { vm.delete(); onClose() }; Unit }
-                        if (original?.hardMode == true) gated = "Delete this alarm" to delete else delete()
+                        if (original?.hardMode == true) gated = tr("Delete this alarm") to delete else delete()
                     } else Spacer(Modifier.size(48.dp))
                 }
                 if (!state.loaded) return@Column
@@ -181,11 +183,11 @@ fun EditorScreen(
                         scope.launch {
                             vm.save()
                             val until = state.nextRing?.let { Duration.between(ZonedDateTime.now(), it).formatUntil() }
-                            onSaved(if (until != null) "Alarm set for $until from now" else "Alarm saved")
+                            onSaved(if (until != null) tr("Alarm set for {0} from now", until) else tr("Alarm saved"))
                         }
                         Unit
                     }
-                    if (original != null && HarderMode.weakens(original, draft.copy(enabled = true))) gated = "Save these changes" to save else save()
+                    if (original != null && HarderMode.weakens(original, draft.copy(enabled = true))) gated = tr("Save these changes") to save else save()
                 },
             )
         }
@@ -246,7 +248,7 @@ private fun TimeCard(draft: Alarm, use24h: Boolean, state: EditorState, onTime: 
                 DrumWheel(values = minutes, selected = draft.minute, style = wheelStyle, label = "Minute", onSelected = { m -> onTime(draft.hour, m) })
                 if (!use24h) {
                     DrumWheel(
-                        values = listOf("AM", "PM"), selected = if (pm) 1 else 0, cyclic = false, width = 80.dp,
+                        values = listOf(formatMeridiem(0), formatMeridiem(12)), selected = if (pm) 1 else 0, cyclic = false, width = 80.dp,
                         style = MaterialTheme.typography.headlineSmall, label = "AM or PM",
                         onSelected = { i -> onTime(draft.hour % 12 + if (i == 1) 12 else 0, draft.minute) },
                     )
@@ -256,7 +258,7 @@ private fun TimeCard(draft: Alarm, use24h: Boolean, state: EditorState, onTime: 
         val until = state.nextRing?.let { Duration.between(ZonedDateTime.now(), it).formatUntil() }
         AnimatedContent(until, transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "until") { text ->
             Text(
-                if (text == null) "This date has passed" else "Rings in $text",
+                if (text == null) tr("This date has passed") else tr("Rings in {0}", text),
                 style = MaterialTheme.typography.titleMedium, color = MorningGold,
             )
         }
@@ -264,7 +266,7 @@ private fun TimeCard(draft: Alarm, use24h: Boolean, state: EditorState, onTime: 
             Modifier.padding(top = Space.md).horizontalScroll(rememberScrollState()).padding(horizontal = Space.lg),
             horizontalArrangement = Arrangement.spacedBy(Space.sm),
         ) {
-            listOf(5 to "+5 min", 30 to "+30 min", 450 to "7.5 h sleep", 480 to "8 h sleep").forEach { (m, label) ->
+            listOf(5 to tr("+5 min"), 30 to tr("+30 min"), 450 to tr("7.5 h sleep"), 480 to tr("8 h sleep")).forEach { (m, label) ->
                 Chip(label, selected = false, onClick = {
                     val at = ZonedDateTime.now().plusMinutes(m.toLong())
                     onTime(at.hour, at.minute)
@@ -278,7 +280,7 @@ private fun TimeCard(draft: Alarm, use24h: Boolean, state: EditorState, onTime: 
 @Composable
 private fun RepeatSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
     var picking by remember { mutableStateOf(false) }
-    SectionCard("Repeat", icon = Icons.Rounded.EventRepeat) {
+    SectionCard(tr("Repeat"), icon = Icons.Rounded.EventRepeat) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             DayOfWeek.entries.forEach { day ->
                 val on = day in draft.days && draft.date == null
@@ -301,9 +303,9 @@ private fun RepeatSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
         Spacer(Modifier.height(Space.md))
         val weekdays = DayOfWeek.entries.take(5).toSet()
         ChipRow {
-            Chip("Once", draft.days.isEmpty() && draft.date == null, { update { it.copy(days = emptySet(), date = null) } })
-            Chip("Weekdays", draft.days == weekdays && draft.date == null, { update { it.copy(days = weekdays, date = null) } })
-            Chip("Every day", draft.days.size == 7 && draft.date == null, { update { it.copy(days = DayOfWeek.entries.toSet(), date = null) } })
+            Chip(tr("Once"), draft.days.isEmpty() && draft.date == null, { update { it.copy(days = emptySet(), date = null) } })
+            Chip(tr("Weekdays"), draft.days == weekdays && draft.date == null, { update { it.copy(days = weekdays, date = null) } })
+            Chip(tr("Every day"), draft.days.size == 7 && draft.date == null, { update { it.copy(days = DayOfWeek.entries.toSet(), date = null) } })
             Chip(
                 draft.date?.let { DateTimeFormatter.ofPattern("EEE d MMM").format(it) } ?: "Pick a date",
                 draft.date != null, { picking = true },
@@ -323,20 +325,20 @@ private fun RepeatSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
                         update { it.copy(date = date, days = emptySet()) }
                     }
                     picking = false
-                }) { Text("Set date") }
+                }) { Text(tr("Set date")) }
             },
-            dismissButton = { TextButton(onClick = { picking = false }) { Text("Cancel") } },
+            dismissButton = { TextButton(onClick = { picking = false }) { Text(tr("Cancel")) } },
         ) { DatePicker(picker) }
     }
 }
 
 @Composable
 private fun LabelSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
-    SectionCard("Why are you getting up?", icon = Icons.Rounded.EditNote) {
+    SectionCard(tr("Why are you getting up?"), icon = Icons.Rounded.EditNote) {
         OutlinedTextField(
             value = draft.label,
             onValueChange = { v -> update { it.copy(label = v.take(60)) } },
-            placeholder = { Text("Gym before class, exam at 9…", color = PaperMuted) },
+            placeholder = { Text(tr("Gym before class, exam at 9…"), color = PaperMuted) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(18.dp),
@@ -347,7 +349,7 @@ private fun LabelSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
             ),
         )
         Text(
-            "It shows big on the alarm screen. A reason beats a snooze.",
+            tr("It shows big on the alarm screen. A reason beats a snooze."),
             style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
         )
     }
@@ -355,7 +357,7 @@ private fun LabelSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
 
 @Composable
 private fun MissionsSection(draft: Alarm, max: Int, onEdit: (Int) -> Unit, onRemove: (Int) -> Unit, onUpgrade: () -> Unit) {
-    SectionCard("Missions", icon = Icons.Rounded.Flag) {
+    SectionCard(tr("Missions"), icon = Icons.Rounded.Flag) {
         draft.missions.forEachIndexed { i, m ->
             Row(
                 Modifier
@@ -378,7 +380,7 @@ private fun MissionsSection(draft: Alarm, max: Int, onEdit: (Int) -> Unit, onRem
                 }
                 if (draft.missions.size > 1) {
                     Icon(
-                        Icons.Rounded.Close, "Remove mission", tint = PaperMuted,
+                        Icons.Rounded.Close, tr("Remove mission"), tint = PaperMuted,
                         modifier = Modifier.clip(CircleShape).clickable { onRemove(i) }.padding(Space.sm),
                     )
                 }
@@ -398,7 +400,7 @@ private fun MissionsSection(draft: Alarm, max: Int, onEdit: (Int) -> Unit, onRem
             Icon(Icons.Rounded.Add, null, tint = if (canAdd) DawnLavender else MorningGold)
             Spacer(Modifier.width(Space.sm))
             Text(
-                if (canAdd) "Add a mission" else "Up to 5 missions with Pro",
+                if (canAdd) tr("Add a mission") else tr("Up to 5 missions with Pro"),
                 style = MaterialTheme.typography.labelLarge, color = if (canAdd) DawnLavender else MorningGold,
             )
         }
@@ -406,24 +408,24 @@ private fun MissionsSection(draft: Alarm, max: Int, onEdit: (Int) -> Unit, onRem
 }
 
 fun MissionConfig.summary(): String = when (type) {
-    MissionType.Math -> "$count problems · ${difficultyName(difficulty)}"
-    MissionType.Typing -> if (count == 1) "1 phrase" else "$count phrases"
-    MissionType.Shake -> "$count shakes"
-    MissionType.Scan -> codeLabel?.let { "Code on your $it" } ?: if (codeValue == null) "Any code" else "Registered code"
-    MissionType.Photo -> if (photoHash == null) "Spot not set" else "Your photo spot · ${difficultyName(difficulty)} match"
-    MissionType.Steps -> "$count steps"
-    MissionType.Memory -> "$count rounds · ${gridSize}×$gridSize"
-    MissionType.Nfc -> nfcLabel?.let { "Sticker by the $it" } ?: "Sticker not registered"
-    MissionType.Plan -> "Three words about your day"
-    MissionType.Hunt -> (if (count == 1) "1 object" else "$count objects") + " · " + listOf("Everyday", "Varied", "Strict")[(difficulty - 1).coerceIn(0, 2)]
-}.let { if (needsSetup) "Set up tonight · math until then" else it }
+    MissionType.Math -> tr("{0} problems · {1}", count, difficultyName(difficulty))
+    MissionType.Typing -> if (count == 1) tr("1 phrase") else tr("{0} phrases", count)
+    MissionType.Shake -> tr("{0} shakes", count)
+    MissionType.Scan -> codeLabel?.let { tr("Code on your {0}", it) } ?: if (codeValue == null) tr("Any code") else tr("Registered code")
+    MissionType.Photo -> if (photoHash == null) tr("Spot not set") else tr("Your photo spot · {0} match", difficultyName(difficulty))
+    MissionType.Steps -> tr("{0} steps", count)
+    MissionType.Memory -> tr("{0} rounds · {1}×{2}", count, gridSize, gridSize)
+    MissionType.Nfc -> nfcLabel?.let { tr("Sticker by the {0}", it) } ?: tr("Sticker not registered")
+    MissionType.Plan -> tr("Three words about your day")
+    MissionType.Hunt -> (if (count == 1) tr("1 object") else tr("{0} objects", count)) + " · " + listOf(tr("Everyday"), tr("Varied"), tr("Strict"))[(difficulty - 1).coerceIn(0, 2)]
+}.let { if (needsSetup) tr("Set up tonight · math until then") else it }
 
-fun difficultyName(d: Int) = when (d) { 1 -> "Easy"; 2 -> "Medium"; else -> "Hard" }
+fun difficultyName(d: Int) = when (d) { 1 -> "Easy"; 2 -> tr("Medium"); else -> tr("Hard") }
 
 @Composable
 private fun SoundSection(draft: Alarm, pro: Boolean, onUpgrade: () -> Unit, update: ((Alarm) -> Alarm) -> Unit) {
     var picking by remember { mutableStateOf(false) }
-    SectionCard("Sound", icon = Icons.Rounded.MusicNote) {
+    SectionCard(tr("Sound"), icon = Icons.Rounded.MusicNote) {
         Row(
             Modifier
                 .fillMaxWidth()
@@ -443,51 +445,51 @@ private fun SoundSection(draft: Alarm, pro: Boolean, onUpgrade: () -> Unit, upda
                 Text(draft.soundTitle(), style = MaterialTheme.typography.titleMedium, color = Paper, maxLines = 1)
                 Text(draft.soundCategoryTitle(), style = MaterialTheme.typography.bodySmall, color = PaperMuted)
             }
-            Text("Change", style = MaterialTheme.typography.labelLarge, color = DawnLavender)
+            Text(tr("Change"), style = MaterialTheme.typography.labelLarge, color = DawnLavender)
         }
         Spacer(Modifier.height(Space.lg))
-        Text("Each morning", style = MaterialTheme.typography.bodyLarge, color = Paper)
+        Text(tr("Each morning"), style = MaterialTheme.typography.bodyLarge, color = Paper)
         Spacer(Modifier.height(Space.sm))
         ChipRow {
-            Chip("Same sound", draft.soundMode == SoundMode.Single, { update { it.copy(soundMode = SoundMode.Single) } })
-            Chip("Rotate", draft.soundMode == SoundMode.Rotate, {
+            Chip(tr("Same sound"), draft.soundMode == SoundMode.Single, { update { it.copy(soundMode = SoundMode.Single) } })
+            Chip(tr("Rotate"), draft.soundMode == SoundMode.Rotate, {
                 // Rotation draws from Wakeroo's tones, so a custom sound gives way to its category.
                 update { it.copy(soundMode = SoundMode.Rotate, soundUri = null, soundName = null) }
             })
-            Chip("Escalate", draft.soundMode == SoundMode.Escalate, { update { it.copy(soundMode = SoundMode.Escalate) } })
+            Chip(tr("Escalate"), draft.soundMode == SoundMode.Escalate, { update { it.copy(soundMode = SoundMode.Escalate) } })
         }
         AnimatedContent(draft.soundMode, transitionSpec = { fadeIn() togetherWith fadeOut() }, label = "soundMode") { mode ->
             Text(
                 when (mode) {
-                    SoundMode.Single -> "The same sound every time."
-                    SoundMode.Rotate -> "A different ${Tones.byId(draft.tone).category.title.lowercase()} tone each morning, so you never get used to it."
-                    SoundMode.Escalate -> "Starts with this sound. No response in a minute and it switches to an extreme tone at full volume."
+                    SoundMode.Single -> tr("The same sound every time.")
+                    SoundMode.Rotate -> tr("A different {0} tone each morning, so you never get used to it.", Tones.byId(draft.tone).category.title.lowercase())
+                    SoundMode.Escalate -> tr("Starts with this sound. No response in a minute and it switches to an extreme tone at full volume.")
                 },
                 style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(top = Space.sm),
             )
         }
         Spacer(Modifier.height(Space.lg))
-        LabeledSlider("Volume", "${draft.volume}%", draft.volume / 100f, 0.1f..1f) { v -> update { it.copy(volume = (v * 100).toInt()) } }
-        val rampLabels = listOf(0 to "Off", 15 to "15 s", 30 to "30 s", 60 to "1 min", 120 to "2 min", 300 to "5 min", 600 to "10 min", 900 to "15 min")
+        LabeledSlider(tr("Volume"), "${draft.volume}%", draft.volume / 100f, 0.1f..1f) { v -> update { it.copy(volume = (v * 100).toInt()) } }
+        val rampLabels = listOf(0 to tr("Off"), 15 to "15 s", 30 to "30 s", 60 to tr("1 min"), 120 to tr("2 min"), 300 to tr("5 min"), 600 to tr("10 min"), 900 to tr("15 min"))
         val rampIndex = rampLabels.indexOfFirst { it.first >= draft.rampSeconds }.coerceAtLeast(0)
         LabeledSlider(
-            "Gentle start", rampLabels[rampIndex].second, rampIndex / (rampLabels.size - 1f), 0f..1f, steps = rampLabels.size - 2,
+            tr("Gentle start"), rampLabels[rampIndex].second, rampIndex / (rampLabels.size - 1f), 0f..1f, steps = rampLabels.size - 2,
         ) { v -> update { it.copy(rampSeconds = rampLabels[(v * (rampLabels.size - 1)).toInt().coerceIn(0, rampLabels.lastIndex)].first) } }
-        ToggleRow("Vibrate", null, draft.vibrate) { on -> update { it.copy(vibrate = on) } }
+        ToggleRow(tr("Vibrate"), null, draft.vibrate) { on -> update { it.copy(vibrate = on) } }
     }
     if (picking) SoundSheet(draft, pro, onDismiss = { picking = false }, onUpgrade = { picking = false; onUpgrade() }, update = update)
 }
 
 @Composable
 private fun SceneSection(draft: Alarm, state: EditorState, onUpgrade: () -> Unit, update: ((Alarm) -> Alarm) -> Unit) {
-    SectionCard("Wake-up scene", icon = Icons.Rounded.Wallpaper) {
+    SectionCard(tr("Wake-up scene"), icon = Icons.Rounded.Wallpaper) {
         Text(
-            "What the alarm screen looks like. Tap one to see it full screen.",
+            tr("What the alarm screen looks like. Tap one to see it full screen."),
             style = MaterialTheme.typography.bodySmall, color = PaperMuted, modifier = Modifier.padding(bottom = Space.md),
         )
         ScenePicker(
             selected = draft.scene, pro = state.pro, hour = draft.hour, minute = draft.minute,
-            defaultLabel = "App default", defaultScene = state.defaultScene,
+            defaultLabel = tr("App default"), defaultScene = state.defaultScene,
             onSelect = { id -> update { it.copy(scene = id) } }, onUpgrade = onUpgrade,
         )
         val scene = Scene.byId(draft.scene ?: state.defaultScene)
@@ -502,8 +504,8 @@ private fun SceneSection(draft: Alarm, state: EditorState, onUpgrade: () -> Unit
             ) {
                 Icon(Icons.Rounded.GraphicEq, null, tint = MorningGold, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(Space.sm))
-                Text("${scene.title} pairs well with ${suggested.name}", style = MaterialTheme.typography.bodySmall, color = Paper, modifier = Modifier.weight(1f))
-                Text("Use it", style = MaterialTheme.typography.labelLarge, color = SunriseCoral)
+                Text(tr("{0} pairs well with {1}", scene.title, suggested.name), style = MaterialTheme.typography.bodySmall, color = Paper, modifier = Modifier.weight(1f))
+                Text(tr("Use it"), style = MaterialTheme.typography.labelLarge, color = SunriseCoral)
             }
         }
     }
@@ -523,11 +525,11 @@ private fun LabeledSlider(title: String, value: String, fraction: Float, range: 
 
 @Composable
 private fun SnoozeSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
-    SectionCard("Snooze", icon = Icons.Rounded.Snooze) {
+    SectionCard(tr("Snooze"), icon = Icons.Rounded.Snooze) {
         ChipRow {
-            Chip("Off", draft.snoozeLimit == 0, { update { it.copy(snoozeLimit = 0) } })
+            Chip(tr("Off"), draft.snoozeLimit == 0, { update { it.copy(snoozeLimit = 0) } })
             listOf(3, 5, 9, 10, 15).forEach { m ->
-                Chip("$m min", draft.snoozeLimit > 0 && draft.snoozeMinutes == m, {
+                Chip(tr("{0} min", m), draft.snoozeLimit > 0 && draft.snoozeMinutes == m, {
                     update { it.copy(snoozeMinutes = m, snoozeLimit = if (it.snoozeLimit == 0) 2 else it.snoozeLimit) }
                 })
             }
@@ -535,7 +537,7 @@ private fun SnoozeSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
         AnimatedVisibility(draft.snoozeLimit > 0, enter = fadeIn() + slideInVertically(), exit = fadeOut() + slideOutVertically()) {
             Column(Modifier.padding(top = Space.md)) {
                 Stepper(
-                    "Snoozes allowed", "${draft.snoozeLimit}",
+                    tr("Snoozes allowed"), "${draft.snoozeLimit}",
                     onMinus = { update { it.copy(snoozeLimit = (it.snoozeLimit - 1).coerceAtLeast(1)) } },
                     onPlus = { update { it.copy(snoozeLimit = (it.snoozeLimit + 1).coerceAtMost(5)) } },
                     minusEnabled = draft.snoozeLimit > 1, plusEnabled = draft.snoozeLimit < 5,
@@ -547,15 +549,15 @@ private fun SnoozeSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
 
 @Composable
 private fun WakeCheckSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
-    SectionCard("Wake-up check", icon = Icons.Rounded.Verified) {
+    SectionCard(tr("Wake-up check"), icon = Icons.Rounded.Verified) {
         ToggleRow(
-            "Make sure I stay up", "A few minutes later Wakeroo asks \"Still up?\". No answer, and the alarm comes back.",
+            tr("Make sure I stay up"), tr("A few minutes later Wakeroo asks \"Still up?\". No answer, and the alarm comes back."),
             draft.wakeCheckMinutes > 0,
         ) { on -> update { it.copy(wakeCheckMinutes = if (on) 3 else 0) } }
         AnimatedVisibility(draft.wakeCheckMinutes > 0) {
             ChipRow {
                 listOf(1, 3, 5, 10).forEach { m ->
-                    Chip("After $m min", draft.wakeCheckMinutes == m, { update { it.copy(wakeCheckMinutes = m) } })
+                    Chip(tr("After {0} min", m), draft.wakeCheckMinutes == m, { update { it.copy(wakeCheckMinutes = m) } })
                 }
             }
         }
@@ -565,10 +567,10 @@ private fun WakeCheckSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
 @Composable
 private fun HardModeSection(draft: Alarm, state: EditorState, onUpgrade: () -> Unit, update: ((Alarm) -> Alarm) -> Unit) {
     val soon = state.nextRing?.let { Duration.between(ZonedDateTime.now(), it).toMillis() < HarderMode.MIN_LEAD_MS } == true
-    SectionCard("Harder Mode", icon = Icons.Rounded.Lock) {
+    SectionCard(tr("Harder Mode"), icon = Icons.Rounded.Lock) {
         if (!state.pro) {
             Text(
-                "Turning this alarm off, deleting it, skipping it or snoozing takes a mission first. Part of Pro.",
+                tr("Turning this alarm off, deleting it, skipping it or snoozing takes a mission first. Part of Pro."),
                 style = MaterialTheme.typography.bodyMedium, color = PaperMuted,
             )
             Spacer(Modifier.height(Space.md))
@@ -576,8 +578,8 @@ private fun HardModeSection(draft: Alarm, state: EditorState, onUpgrade: () -> U
             return@SectionCard
         }
         ToggleRow(
-            "Protect this alarm",
-            "Off, delete, skip, snooze or moving it 2+ hours later all need a mission first. The emergency exit still works.",
+            tr("Protect this alarm"),
+            tr("Off, delete, skip, snooze or moving it 2+ hours later all need a mission first. The emergency exit still works."),
             draft.hardMode,
         ) { on ->
             // Switching it off is a weakening change, handled at save time like any other.
@@ -585,7 +587,7 @@ private fun HardModeSection(draft: Alarm, state: EditorState, onUpgrade: () -> U
         }
         if (soon && !draft.hardMode) {
             Text(
-                "Can't be switched on for an alarm less than 10 minutes away, so nobody locks themselves in by accident.",
+                tr("Can't be switched on for an alarm less than 10 minutes away, so nobody locks themselves in by accident."),
                 style = MaterialTheme.typography.bodySmall, color = MorningGold, modifier = Modifier.padding(top = Space.sm),
             )
         }
@@ -610,6 +612,6 @@ private fun SaveBar(modifier: Modifier, enabled: Boolean, onSave: () -> Unit) {
                 .background(Brush.horizontalGradient(listOf(SunriseCoral, Color(0xFFFF9466))))
                 .clickable(enabled = enabled, role = Role.Button, onClick = onSave),
             contentAlignment = Alignment.Center,
-        ) { Text("Save alarm", style = MaterialTheme.typography.titleMedium, color = Night) }
+        ) { Text(tr("Save alarm"), style = MaterialTheme.typography.titleMedium, color = Night) }
     }
 }

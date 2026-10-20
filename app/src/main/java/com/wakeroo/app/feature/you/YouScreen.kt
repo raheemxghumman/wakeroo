@@ -1,5 +1,6 @@
 package com.wakeroo.app.feature.you
 
+import com.wakeroo.app.ui.i18n.tr
 import com.wakeroo.app.ui.util.initial
 import com.wakeroo.app.ui.util.formatSeconds
 import com.wakeroo.app.ui.theme.MorningGoldFixed
@@ -134,30 +135,30 @@ fun YouScreen(onSettings: () -> Unit, onPro: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(Space.md),
         ) {
             item(key = "header") {
-                TabHeader("Your mornings", onSettings = onSettings, eyebrow = "You", modifier = Modifier.entrance(0)) {
-                    RoundIconButton(Icons.Rounded.IosShare, "Share your streak", { sharing = true })
+                TabHeader(tr("Your mornings"), onSettings = onSettings, eyebrow = tr("You"), modifier = Modifier.entrance(0)) {
+                    RoundIconButton(Icons.Rounded.IosShare, tr("Share your streak"), { sharing = true })
                 }
             }
             item(key = "tiles") {
                 Row(Modifier.entrance(1), horizontalArrangement = Arrangement.spacedBy(Space.md)) {
                     StreakTile(stats.streak, stats.bestStreak, Modifier.weight(1.2f).height(200.dp))
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.md)) {
-                        NumberTile("On time", stats.successRate?.let { "$it%" } ?: "–", "last 30 days", Modifier.height(94.dp))
+                        NumberTile(tr("On time"), stats.successRate?.let { "$it%" } ?: "–", tr("last 30 days"), Modifier.height(94.dp))
                         NumberTile(
-                            "Up in", stats.averageSecondsToWake?.let { formatSeconds(it) } ?: "–",
-                            "on average", Modifier.height(94.dp),
+                            tr("Up in"), stats.averageSecondsToWake?.let { formatSeconds(it) } ?: "–",
+                            tr("on average"), Modifier.height(94.dp),
                         )
                     }
                 }
             }
             item(key = "recap") { Box(Modifier.entrance(2)) { RecapCard(recap) } }
             item(key = "calendar") {
-                SectionCard("Wake-up calendar", icon = Icons.Rounded.CalendarMonth, modifier = Modifier.entrance(3)) {
+                SectionCard(tr("Wake-up calendar"), icon = Icons.Rounded.CalendarMonth, modifier = Modifier.entrance(3)) {
                     WakeCalendar(events, settings.pro, onDay = { openDay = it }, onPro = onPro)
                 }
             }
             item(key = "medals") {
-                SectionCard("Medals · ${medals.count { it.unlocked }} of ${medals.size}", icon = Icons.Rounded.MilitaryTech, modifier = Modifier.entrance(4)) {
+                SectionCard(tr("Medals · {0} of {1}", medals.count { it.unlocked }, medals.size), icon = Icons.Rounded.MilitaryTech, modifier = Modifier.entrance(4)) {
                     medals.chunked(3).forEach { row ->
                         Row(Modifier.fillMaxWidth().padding(bottom = Space.md), horizontalArrangement = Arrangement.spacedBy(Space.md)) {
                             row.forEach { m ->
@@ -182,15 +183,15 @@ fun YouScreen(onSettings: () -> Unit, onPro: () -> Unit) {
             item(key = "week") { Box(Modifier.entrance(5)) { WeekChart(stats) } }
             item(key = "numbers") {
                 Row(Modifier.entrance(6), horizontalArrangement = Arrangement.spacedBy(Space.md)) {
-                    NumberTile("Usual wake time", stats.averageWakeTime?.let { "${it.formatClock()} ${it.formatMeridiem()}" } ?: "–", "last 2 weeks", Modifier.weight(1f).height(94.dp))
-                    NumberTile("Wake-ups", "${stats.totalWakeUps}", "all time", Modifier.weight(1f).height(94.dp))
+                    NumberTile(tr("Usual wake time"), stats.averageWakeTime?.let { "${it.formatClock()} ${it.formatMeridiem()}" } ?: "–", tr("last 2 weeks"), Modifier.weight(1f).height(94.dp))
+                    NumberTile(tr("Wake-ups"), "${stats.totalWakeUps}", tr("all time"), Modifier.weight(1f).height(94.dp))
                 }
             }
             item(key = "logTitle") {
                 Column {
-                    Text("RING LOG", style = MaterialTheme.typography.labelSmall, color = PaperMuted, modifier = Modifier.padding(top = Space.lg))
+                    Text(tr("RING LOG"), style = MaterialTheme.typography.labelSmall, color = PaperMuted, modifier = Modifier.padding(top = Space.lg))
                     Text(
-                        "Proof of every ring. If an alarm ever didn't fire, it shows here in red.",
+                        tr("Proof of every ring. If an alarm ever didn't fire, it shows here in red."),
                         style = MaterialTheme.typography.bodySmall, color = PaperMuted,
                     )
                 }
@@ -198,7 +199,7 @@ fun YouScreen(onSettings: () -> Unit, onPro: () -> Unit) {
             if (log.isEmpty()) {
                 item(key = "empty") {
                     Text(
-                        "Your first morning shows up here.", style = MaterialTheme.typography.bodyLarge, color = Paper,
+                        tr("Your first morning shows up here."), style = MaterialTheme.typography.bodyLarge, color = Paper,
                         modifier = Modifier.fillMaxWidth().padding(vertical = Space.xl), textAlign = TextAlign.Center,
                     )
                 }
@@ -207,7 +208,7 @@ fun YouScreen(onSettings: () -> Unit, onPro: () -> Unit) {
             if (!settings.pro && events.size > 14) {
                 item(key = "more") {
                     Text(
-                        "See your full history with Pro", style = MaterialTheme.typography.labelLarge, color = MorningGold,
+                        tr("See your full history with Pro"), style = MaterialTheme.typography.labelLarge, color = MorningGold,
                         modifier = Modifier.fillMaxWidth().clip(CircleShape).clickable(onClick = onPro).padding(Space.lg), textAlign = TextAlign.Center,
                     )
                 }
@@ -238,13 +239,13 @@ private fun RecapCard(recap: WeekRecap) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
-            Text("THIS WEEK", style = MaterialTheme.typography.labelSmall, color = MorningGold)
-            Text("${recap.won} of ${recap.days} mornings won", style = MaterialTheme.typography.titleMedium, color = PaperFixed)
+            Text(tr("THIS WEEK"), style = MaterialTheme.typography.labelSmall, color = MorningGold)
+            Text(tr("{0} of {1} mornings won", recap.won, recap.days), style = MaterialTheme.typography.titleMedium, color = PaperFixed)
             Text(
                 listOfNotNull(
-                    recap.averageWake?.let { "Usually up at $it" },
-                    recap.fastest?.let { "Fastest: ${formatSeconds(it)}" },
-                ).joinToString(" · ").ifEmpty { "Your first mornings will show here" },
+                    recap.averageWake?.let { tr("Usually up at {0}", it) },
+                    recap.fastest?.let { tr("Fastest: {0}", formatSeconds(it)) },
+                ).joinToString(" · ").ifEmpty { tr("Your first mornings will show here") },
                 style = MaterialTheme.typography.bodySmall, color = PaperFixed.copy(alpha = 0.75f),
             )
         }
@@ -259,13 +260,13 @@ private fun MedalSheet(state: AchievementState, unlockedAt: Long?, onDismiss: ()
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Base, dragHandle = null) {
         Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl), horizontalAlignment = Alignment.CenterHorizontally) {
             SpinnableMedal(state.def, state.unlocked, 190.dp)
-            Text(if (state.unlocked) "Flick it to spin" else "Locked", style = MaterialTheme.typography.labelSmall, color = PaperMuted, modifier = Modifier.padding(top = Space.md))
+            Text(if (state.unlocked) tr("Flick it to spin") else tr("Locked"), style = MaterialTheme.typography.labelSmall, color = PaperMuted, modifier = Modifier.padding(top = Space.md))
             Text(state.def.title, style = MaterialTheme.typography.headlineMedium, color = Paper, modifier = Modifier.padding(top = Space.md))
             Text(state.def.description, style = MaterialTheme.typography.bodyLarge, color = PaperMuted, textAlign = TextAlign.Center, modifier = Modifier.padding(top = Space.xs))
             Spacer(Modifier.height(Space.lg))
             if (state.unlocked) {
                 val date = unlockedAt?.let { DateTimeFormatter.ofPattern("d MMMM yyyy").format(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())) }
-                Text(if (date != null) "Earned on $date" else "Earned", style = MaterialTheme.typography.labelLarge, color = MorningGold)
+                Text(if (date != null) tr("Earned on {0}", date) else tr("Earned"), style = MaterialTheme.typography.labelLarge, color = MorningGold)
             } else {
                 Box(Modifier.fillMaxWidth(0.7f).height(8.dp).clip(CircleShape).background(Paper.copy(alpha = 0.12f))) {
                     Box(Modifier.fillMaxWidth(state.progress).height(8.dp).clip(CircleShape).background(MorningGold))
@@ -319,11 +320,11 @@ private fun StreakTile(streak: Int, best: Int, modifier: Modifier) {
             .padding(Space.lg),
     ) {
         Column(Modifier.graphicsLayer { rotationY = if (rotation > 90f) 180f else 0f }) {
-            Text(if (rotation > 90f) "Best streak" else "Streak", style = MaterialTheme.typography.labelLarge, color = Night)
+            Text(if (rotation > 90f) tr("Best streak") else tr("Streak"), style = MaterialTheme.typography.labelLarge, color = Night)
             Spacer(Modifier.weight(1f))
             Text("$shown", style = ClockType.hero, color = Night)
-            Text(if (shown == 1) "morning in a row" else "mornings in a row", style = MaterialTheme.typography.bodyMedium, color = Night.copy(alpha = 0.8f))
-            Text(if (rotation > 90f) "Tap to flip back" else "Tap to see your best", style = MaterialTheme.typography.labelSmall, color = Night.copy(alpha = 0.6f), modifier = Modifier.padding(top = Space.xs))
+            Text(if (shown == 1) tr("morning in a row") else tr("mornings in a row"), style = MaterialTheme.typography.bodyMedium, color = Night.copy(alpha = 0.8f))
+            Text(if (rotation > 90f) tr("Tap to flip back") else tr("Tap to see your best"), style = MaterialTheme.typography.labelSmall, color = Night.copy(alpha = 0.6f), modifier = Modifier.padding(top = Space.xs))
         }
     }
 }
@@ -336,7 +337,7 @@ private fun WeekChart(stats: WakeStats) {
     val maxSeconds = (stats.lastSevenDays.mapNotNull { it.secondsToWake }.maxOrNull() ?: 60).coerceAtLeast(60)
     Tile(Modifier.height(210.dp)) {
         Column {
-            Text("Time to get up, last 7 days", style = MaterialTheme.typography.labelMedium, color = DawnLavender)
+            Text(tr("Time to get up, last 7 days"), style = MaterialTheme.typography.labelMedium, color = DawnLavender)
             Spacer(Modifier.height(Space.md))
             Row(Modifier.weight(1f).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom) {
                 stats.lastSevenDays.forEach { day ->
@@ -362,10 +363,10 @@ private fun LogRow(event: RingEventEntity, modifier: Modifier) {
     val scheduled = Instant.ofEpochMilli(event.scheduledAt).atZone(zone)
     val ended = event.endedAt?.let { Instant.ofEpochMilli(it).atZone(zone).toLocalTime() }
     val (color, outcome) = when (event.outcome) {
-        RingOutcome.Dismissed -> if (event.wakeCheckPassed == true) Calm to "Wake-up check passed" else Calm to "Up at ${ended?.let { "${it.formatClock()} ${it.formatMeridiem()}" } ?: "–"}"
-        RingOutcome.Escaped -> MorningGold to "Emergency exit"
-        RingOutcome.Missed -> Alert to if (event.wakeCheckPassed == false) "Fell back asleep, alarm re-rang" else "Didn't ring: phone off or app paused"
-        RingOutcome.Snoozed -> DawnLavender to "Snoozed"
+        RingOutcome.Dismissed -> if (event.wakeCheckPassed == true) Calm to tr("Wake-up check passed") else Calm to tr("Up at {0}", ended?.let { "${it.formatClock()} ${it.formatMeridiem()}" } ?: "–")
+        RingOutcome.Escaped -> MorningGold to tr("Emergency exit")
+        RingOutcome.Missed -> Alert to if (event.wakeCheckPassed == false) tr("Fell back asleep, alarm re-rang") else tr("Didn't ring: phone off or app paused")
+        RingOutcome.Snoozed -> DawnLavender to tr("Snoozed")
     }
     Row(
         modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(NightSurface.copy(alpha = 0.7f)).padding(Space.lg),
@@ -379,7 +380,7 @@ private fun LogRow(event: RingEventEntity, modifier: Modifier) {
                 style = MaterialTheme.typography.bodyMedium, color = Paper,
             )
             Text(
-                listOfNotNull(outcome, event.label.takeIf { it.isNotBlank() }, if (event.snoozes == 1) "1 snooze" else if (event.snoozes > 1) "${event.snoozes} snoozes" else null).joinToString(" · "),
+                listOfNotNull(outcome, event.label.takeIf { it.isNotBlank() }, if (event.snoozes == 1) tr("1 snooze") else if (event.snoozes > 1) tr("{0} snoozes", event.snoozes) else null).joinToString(" · "),
                 style = MaterialTheme.typography.bodySmall, color = PaperMuted,
             )
         }

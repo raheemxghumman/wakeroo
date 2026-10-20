@@ -1,5 +1,6 @@
 package com.wakeroo.app.missions
 
+import com.wakeroo.app.ui.i18n.tr
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
@@ -135,7 +136,7 @@ fun MemoryMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Fl
     }
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Round ${round + 1} of $rounds", style = MaterialTheme.typography.labelLarge, color = DawnLavender)
+        Text(tr("Round {0} of {1}", round + 1, rounds), style = MaterialTheme.typography.labelLarge, color = DawnLavender)
         Spacer(Modifier.height(Space.sm))
         RoundDots(rounds, round, phase == Phase.Won)
         Spacer(Modifier.weight(1f))
@@ -160,10 +161,10 @@ fun MemoryMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Fl
         Spacer(Modifier.height(Space.xl))
         Text(
             when (phase) {
-                Phase.Watch -> "Watch the tiles that light up"
-                Phase.Repeat -> "Now tap the same ${pattern.size} tiles · ${found.size} found"
-                Phase.Won -> if (round + 1 >= rounds) "Sharp! You're awake" else "Nice. One more tile next round"
-                Phase.Oops -> "Not that one. Watch again"
+                Phase.Watch -> tr("Watch the tiles that light up")
+                Phase.Repeat -> tr("Now tap the same {0} tiles · {1} found", pattern.size, found.size)
+                Phase.Won -> if (round + 1 >= rounds) tr("Sharp! You're awake") else tr("Nice. One more tile next round")
+                Phase.Oops -> tr("Not that one. Watch again")
             },
             style = MaterialTheme.typography.bodyLarge, color = if (phase == Phase.Oops) Alert else PaperMuted,
         )
@@ -205,7 +206,7 @@ private fun Tile(rotation: Float, face: Face, modifier: Modifier, onTap: () -> U
             .background(if (showingFront) front else back)
             .border(1.dp, edge, RoundedCornerShape(20.dp))
             .clickable(remember { MutableInteractionSource() }, null, onClick = onTap)
-            .semantics { contentDescription = "Tile" },
+            .semantics { contentDescription = tr("Tile") },
         contentAlignment = Alignment.Center,
     ) {
         if (showingFront && face == Face.Lit) {

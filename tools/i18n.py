@@ -20,7 +20,7 @@ LANGS = ['hi', 'ur', 'es', 'pt', 'id', 'ar', 'tr', 'fr']
 
 # Calls whose string arguments are code, not copy.
 SKIP_PREFIX = re.compile(
-    r'(Log\.[a-z]\(|@ColumnInfo|valueOf\(|ofPattern\(|setRequestProperty\(|Regex\(|getSharedPreferences\(|PreferencesKey\(|'
+    r'(Log\.[a-z]\(|@ColumnInfo|@Suppress\(|@\w+\(|valueOf\(|ofPattern\(|setRequestProperty\(|Regex\(|getSharedPreferences\(|PreferencesKey\(|'
     r'error\(|setOf\(|label = $|const val |Uri\.parse\(|startsWith\(|endsWith\(|contains\(|getString\(|split\(|substringBefore|'
     r'\bn\($|\btr\($|Exception\(|require\(|check\(|TODO\(|putExtra\(|getStringExtra\(|setAction\(|replace\()'
 )
@@ -87,6 +87,9 @@ def is_copy(parts):
     if DATE_PATTERN.match(text): return False
     if re.match(r'^[a-z0-9_.:/-]+$', text): return False  # ids, keys, paths, urls
     if text.startswith(('http', 'android.', 'com.', 'package:', 'content:')): return False
+    if re.search(r'[&=]', text) or text in ('SIM', 'UTF-8'): return False  # query strings, ids, charsets
+    # A template with real words around its values ("$count objects") is copy too.
+    if any(kind == 'expr' for kind, _ in parts) and re.search(r'[A-Za-z]{3,}', text): return True
     return text[:1].isupper() or ' ' in text.strip() or text.strip()[:1] in '"“#'
 
 
@@ -136,6 +139,7 @@ def keys():
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")
     cmd = sys.argv[1]
     if cmd == 'wrap':
         total = sum(wrap_file(p) for p in sys.argv[2:])
