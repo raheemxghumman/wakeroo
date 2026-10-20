@@ -39,7 +39,7 @@ An Android alarm clock for heavy sleepers and serial snoozers. To turn it off, y
 | **Package** | `com.wakeroo.app` |
 | **SDK levels** | min 26 · target 36 · compile 37 |
 | **Progress** | All milestones (M1–M13) are done and the release build is tested. What's left is account setup and Play's closed test; see [`docs/play-console.md`](docs/play-console.md). |
-| **Deferred** | Real AdMob banner ID and a website (after launch); support email to be created |
+| **Deferred** | Real AdMob banner ID and a website (after launch) |
 
 ---
 
@@ -440,7 +440,7 @@ The reliability matrix (Doze, standby buckets, reboot before unlock, process kil
 
 - [ ] Finish the reliability matrix on the emulator and a real Samsung or Xiaomi phone. Real devices are needed for camera missions, NFC, Bluetooth and OEM battery killers.
 - [ ] Native-speaker review of the translations, at least Hindi, Urdu, Spanish and Portuguese.
-- [ ] Create the support email and set `wakeroo.supportEmail` in `gradle.properties`.
+- [x] Support email `qubiq.wakeroo@gmail.com` set as `wakeroo.supportEmail` in `gradle.properties`.
 - [ ] Publish the privacy policy at a public URL (a Google Doc is fine).
 - [ ] Play Console: developer account, declarations and data safety (answers in [`docs/play-console.md`](docs/play-console.md)), store listing, `wakeroo_pro` product.
 - [ ] Closed test with 12 testers for 14 days.

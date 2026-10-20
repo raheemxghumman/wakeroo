@@ -9,7 +9,7 @@ Everything needed to publish Wakeroo from the **Qubiq Studios** developer accoun
 | Item | Status | Notes |
 |---|:---:|---|
 | Developer account "Qubiq Studios" | ⏳ | $25 one-time, plus identity verification |
-| Support email | ⏳ | Create it, then set `wakeroo.supportEmail=` in `gradle.properties`. The Play bundle won't build without it |
+| Support email | ✅ | `qubiq.wakeroo@gmail.com`, set as `wakeroo.supportEmail` in `gradle.properties` |
 | Upload key | ✅ | `C:\Users\rahee\keystores\qubiq-wakeroo-upload.jks`, with its password in `qubiq-wakeroo-upload.properties` next to it. **Back up both** (cloud drive or USB). Play App Signing holds the real signing key |
 | Privacy policy URL | ⏳ | Required. The text is in [`privacy-policy.md`](privacy-policy.md). No website is needed: publish it as a public Google Doc or Google Sites page and paste the link |
 | AdMob app and banner ID | ⏳ Later | The app ships with Google's test banner until you replace it |
@@ -136,7 +136,7 @@ Available in English, हिन्दी, اردو, Español, Português, Bahasa
 | Phone screenshots (2–8, 9:16) | Capture from the emulator: Home, ring screen, mission, mission picker, scenes, Morning, You |
 | Promo video (optional) | The brag video `brag-output/brag.mp4`, uploaded to YouTube |
 | Category | Tools (or Productivity) |
-| Contact email | Your support email |
+| Contact email | qubiq.wakeroo@gmail.com |
 
 Translate the listing for each language. Ask Claude to produce them from this text.
 

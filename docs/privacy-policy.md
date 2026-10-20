@@ -70,4 +70,4 @@ If this policy changes, the new version will appear in the app and on its store 
 
 ## Contact
 
-Questions about privacy? Email us at [your support email].
+Questions about privacy? Email us at [qubiq.wakeroo@gmail.com](mailto:qubiq.wakeroo@gmail.com).
