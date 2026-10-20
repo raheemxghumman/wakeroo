@@ -22,6 +22,7 @@ import com.wakeroo.app.data.model.MissionType
 import com.wakeroo.app.data.model.SoundMode
 import com.wakeroo.app.alarm.sound.Tone
 import com.wakeroo.app.sleep.SleepPlayer
+import com.wakeroo.app.tile.PowerNapTileService
 import com.wakeroo.app.weather.WeatherNotifier
 import androidx.core.os.UserManagerCompat
 import com.wakeroo.app.alarm.sound.Tones
@@ -252,6 +253,7 @@ class RingService : Service() {
     }
 
     private fun stopRinging() {
+        PowerNapTileService.requestRefresh(this)
         handler.removeCallbacksAndMessages(null)
         player.stop()
         RingSession.publish(null)
