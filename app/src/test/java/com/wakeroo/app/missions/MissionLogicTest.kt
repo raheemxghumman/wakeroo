@@ -19,6 +19,23 @@ class MissionLogicTest {
         assertTrue(TypingPhrases.matches("my feet are on the floor", "  My Feet  are on THE floor "))
     }
 
+    @Test fun typingIgnoresAccentsSoTheLatinPadCanTypeAnyLanguage() {
+        assertTrue(TypingPhrases.matches("hoy va a ser un gran día", "hoy va a ser un gran dia"))
+        assertTrue(TypingPhrases.matches("günaydın uykucu", "gunaydin uykucu"))
+        assertTrue(TypingPhrases.matches("encore un jour de progrès", "encore un jour de progres"))
+        assertEquals("perdeleri ac", TypingPhrases.fold("perdeleri aç"))
+    }
+
+    @Test fun everyLanguagesPhrasesAreTypableOnTheLetterPad() {
+        for (lang in listOf("en", "es", "pt", "fr", "id", "tr", "hi", "ur", "ar")) {
+            for (phrase in TypingPhrases.pick(99, Random(1), lang)) {
+                val folded = TypingPhrases.fold(phrase)
+                assertEquals(phrase.length, folded.length)
+                assertTrue("$lang: $phrase", folded.all { it in 'a'..'z' || it == ' ' })
+            }
+        }
+    }
+
     @Test fun hashOfSameImageIsIdentical() {
         val img = { x: Int, y: Int -> (x * 3 + y * 5) % 256 }
         assertEquals(0, ImageHash.distance(ImageHash.dHash(img, 320, 240), ImageHash.dHash(img, 320, 240)))

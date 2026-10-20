@@ -109,6 +109,7 @@ import kotlinx.coroutines.delay
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.ZonedDateTime
+import com.wakeroo.app.ui.util.Ltr
 
 private val WEEKDAYS = DayOfWeek.entries.take(5).toSet()
 private val WEEKEND = setOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY)
@@ -180,20 +181,22 @@ fun TimeStep(state: OnboardingState, use24h: Boolean, update: ((Alarm) -> Alarm)
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Box(Modifier.fillMaxWidth(0.86f).height(72.dp).clip(RoundedCornerShape(22.dp)).background(Night.copy(alpha = 0.35f)))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    DrumWheel(
-                        values = hours, selected = if (use24h) draft.hour else draft.hour % 12, style = wheelStyle, label = "Hour",
-                        itemHeight = 72.dp, width = 104.dp,
-                        onSelected = { i -> setTime(if (use24h) i else i + if (pm) 12 else 0, draft.minute) },
-                    )
-                    Text(":", style = wheelStyle, color = Paper)
-                    DrumWheel(values = minutes, selected = draft.minute, style = wheelStyle, label = "Minute", itemHeight = 72.dp, width = 104.dp, onSelected = { m -> setTime(draft.hour, m) })
-                    if (!use24h) {
+                Ltr {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         DrumWheel(
-                            values = listOf(formatMeridiem(0), formatMeridiem(12)), selected = if (pm) 1 else 0, cyclic = false, width = 80.dp, itemHeight = 72.dp,
-                            style = MaterialTheme.typography.headlineSmall, label = "AM or PM",
-                            onSelected = { i -> setTime(draft.hour % 12 + if (i == 1) 12 else 0, draft.minute) },
+                            values = hours, selected = if (use24h) draft.hour else draft.hour % 12, style = wheelStyle, label = tr("Hour"),
+                            itemHeight = 72.dp, width = 104.dp,
+                            onSelected = { i -> setTime(if (use24h) i else i + if (pm) 12 else 0, draft.minute) },
                         )
+                        Text(":", style = wheelStyle, color = Paper)
+                        DrumWheel(values = minutes, selected = draft.minute, style = wheelStyle, label = tr("Minute"), itemHeight = 72.dp, width = 104.dp, onSelected = { m -> setTime(draft.hour, m) })
+                        if (!use24h) {
+                            DrumWheel(
+                                values = listOf(formatMeridiem(0), formatMeridiem(12)), selected = if (pm) 1 else 0, cyclic = false, width = 80.dp, itemHeight = 72.dp,
+                                style = MaterialTheme.typography.headlineSmall, label = tr("AM or PM"),
+                                onSelected = { i -> setTime(draft.hour % 12 + if (i == 1) 12 else 0, draft.minute) },
+                            )
+                        }
                     }
                 }
             }

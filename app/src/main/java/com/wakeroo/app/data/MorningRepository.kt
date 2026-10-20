@@ -48,7 +48,7 @@ object QuoteBook {
     @Volatile private var cache: Pair<String, List<Quote>>? = null
 
     suspend fun all(context: Context): List<Quote> = withContext(Dispatchers.IO) {
-        val lang = Locale.getDefault().language
+        val lang = Locale.getDefault().language.let { if (it == "in") "id" else it }
         cache?.takeIf { it.first == lang }?.let { return@withContext it.second }
         val text = runCatching { context.assets.open("quotes/$lang.json") }.getOrNull()
             ?: context.assets.open("quotes/en.json")

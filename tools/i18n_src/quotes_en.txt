@@ -1,0 +1,150 @@
+p01|You beat the snooze button. The rest of today is easier than that.
+p02|Good mornings are made, not found.
+p03|The sun came up for you again. Return the favour.
+p04|Today is a blank page. Write something you'd want to read tonight.
+p05|Small wins count. Getting up was the first one.
+p06|Smile at someone before noon. It works on you too.
+p07|Your best days usually start like this one: on purpose.
+p08|Not every day is great, but every day has something good in it.
+p09|Bring the energy you'd like to receive.
+p10|Make today the kind of day you'll brag about later.
+p11|The morning doesn't know about yesterday. Neither do you have to.
+p12|Be the reason someone has a better morning.
+p13|Joy is often just attention, paid on purpose.
+p14|You're allowed to be proud of ordinary things.
+p15|Hope is the thing with feathers that perches in the soul.   [— Emily Dickinson]
+p16|Write it on your heart that every day is the best day in the year.   [— Ralph Waldo Emerson]
+p17|Morning is when I am awake and there is a dawn in me.   [— Henry David Thoreau]
+p18|Every morning was a cheerful invitation to make my life of equal simplicity, and I may say innocence, with Nature herself.   [— Henry David Thoreau]
+p19|Good things grow from early hours.
+p20|Look up at least once today. The sky is free.
+p21|There's no such thing as a wasted sunrise.
+p22|Today's mood: unreasonably hopeful.
+p23|Kindness is a morning habit too.
+p24|You showed up. That's most of it.
+p25|Let today surprise you in a good way.
+w01|Do the hard thing first. The day gets lighter after.
+w02|One important task before lunch beats ten busy ones after.
+w03|Starting is the hardest part, and you've already started.
+w04|Clear desk, clear head, clear plan.
+w05|Momentum is a morning thing. Build some.
+w06|Decide what matters today. Ignore the rest politely.
+w07|Twenty focused minutes can do what two distracted hours can't.
+w08|Done is a beautiful word. Collect a few today.
+w09|Your phone can wait. Your goals have been waiting longer.
+w10|Plans are better on paper than in your head.
+w11|Progress, not perfection. Ship the draft.
+w12|The best time to start was yesterday. The second best is now.
+w13|Make your bed. Your first task of the day, done.
+w14|Busy is not the goal. Finished is.
+w15|Tiny steps, taken daily, cover huge distances.
+w16|Well begun is half done.   [— Aristotle]
+w17|Lost time is never found again.   [— Benjamin Franklin]
+w18|Early to bed and early to rise, makes a man healthy, wealthy, and wise.   [— Benjamin Franklin]
+w19|While we are postponing, life speeds by.   [— Seneca]
+w20|First say to yourself what you would be; and then do what you have to do.   [— Epictetus]
+w21|In the morning when thou risest unwillingly, let this thought be present: I am rising to the work of a human being.   [— Marcus Aurelius]
+w22|Win the morning, and the afternoon tends to follow.
+w23|Write down three things. Do the first one now.
+w24|Hard work beats talent when talent sleeps in.
+w25|A quiet hour before the world wakes is a superpower.
+c01|Breathe in for four, out for six. Again. There. Better.
+c02|Not everything needs an answer before breakfast.
+c03|Slow mornings still count as mornings.
+c04|Drink your coffee while it's warm. That's the whole plan.
+c05|Let the day come to you for a minute.
+c06|Notice the light. It's doing something lovely right now.
+c07|You don't have to rush to be on time.
+c08|Peace is a pace, not a place.
+c09|Five quiet minutes now saves an hour of noise later.
+c10|Open the window. Let some of the morning in.
+c11|Your to-do list will still be there after you stretch.
+c12|Calm is a skill. Mornings are good practice.
+c13|Do one thing at a time, and do it all the way.
+c14|A journey of a thousand miles begins with a single step.   [— Lao Tzu]
+c15|Trees grow without hurrying. So can you.
+c16|Begin at once to live, and count each separate day as a separate life.   [— Seneca]
+c17|Some mornings are for doing. Some are for just being. Both are fine.
+c18|Feet on the floor. Shoulders down. You've got this.
+c19|The day is long. You don't have to spend it all at once.
+c20|Listen for one quiet sound before you check your phone.
+c21|Unclench your jaw. Seriously, check.
+c22|A gentle start is still a start.
+c23|Make room for a little stillness. It pays you back.
+c24|Rest is part of the work, not a break from it.
+c25|There is always time to take one good breath.
+h01|Hard mornings end too. This one already started to.
+h02|Getting up on a bad day is a win most people never see. We see it.
+h03|You don't have to feel ready to begin.
+h04|Today you only need to do today.
+h05|Even the darkest night ends with a sunrise. You're up for it.
+h06|Strong isn't never falling. It's getting up, like you just did.
+h07|Be gentle with yourself. You're doing better than you think.
+h08|Some days the bravest thing is simply showing up.
+h09|Storms don't last. Neither does this.
+h10|It's okay to ask for help. Today is a good day to.
+h11|Progress can be quiet. It still counts.
+h12|One step. Then another. That's how mountains get climbed.
+h13|Our doubts are traitors, and make us lose the good we oft might win, by fearing to attempt.   [— William Shakespeare]
+h14|You've survived every hard day so far. Your record is perfect.
+h15|Rough night? The morning still owes you a fresh start.
+h16|Feelings are visitors. Let them come and go.
+h17|Nothing grows without a little rain.
+h18|Do the next right thing. Just the next one.
+h19|This chapter isn't the whole book.
+h20|Courage is often just a quiet voice saying: try again tomorrow. Well, it's tomorrow.
+h21|Rome wasn't built in a day. Neither are you.
+h22|Being kind to yourself is not giving up.
+h23|Pause if you need to. Then pick it back up.
+h24|Hard is not the same as impossible.
+h25|Today, aim for okay. Okay is plenty.
+f01|A glass of water before coffee. Your body will notice.
+f02|Move a little now. Your afternoon self says thanks.
+f03|Morning light is free medicine. Step outside for five minutes.
+f04|Stretch like nobody's watching. Nobody is.
+f05|Breakfast is a vote for the person you're becoming.
+f06|Sleep is the best workout recovery there is. Guard it tonight.
+f07|Ten squats while the kettle boils. Easy win.
+f08|Your body carried you here. Treat it well today.
+f09|Walk where you'd normally scroll.
+f10|The same bedtime every night makes mornings like this easier.
+f11|A walk counts. It always counts.
+f12|Eat something green before the day gets loud.
+f13|Strong mornings are built the night before.
+f14|Rise, hydrate, move. Repeat tomorrow.
+f15|Fresh air is the cheapest energy drink.
+f16|Sit tall. Your back has been waiting for this.
+f17|Two minutes of stretching beats zero minutes of perfect yoga.
+f18|Every healthy choice is a small favour to future you.
+f19|Screens off an hour before bed. Tomorrow's alarm will feel kinder.
+f20|Take the stairs today. Just once.
+f21|Your heart likes it when you move. Give it something to like.
+f22|Feeling foggy? Splash cold water on your face. Instant reboot.
+f23|Consistency beats intensity, every single time.
+f24|A healthy habit is just a choice you made enough times.
+f25|Get some sun on your face. Then get on with it.
+l01|Learn one new thing today. Anything at all.
+l02|Curiosity is the best alarm clock.
+l03|Ten pages a day is a book a month.
+l04|Ask a question you'd normally keep to yourself.
+l05|Mistakes are just lessons you paid for in advance.
+l06|The brain is sharpest in the morning. Feed it something good.
+l07|Practice makes progress.
+l08|Every expert was once a beginner who kept getting up early.
+l09|Read something that makes you think, not just scroll.
+l10|Explain something to someone today. You'll learn it twice.
+l11|Study before the notifications start.
+l12|Don't wait to feel motivated. Start, and motivation follows.
+l13|A little every day beats a lot once a week.
+l14|Being wrong is how you get right.
+l15|Exams are passed in the mornings before them.
+l16|The early bird catches the worm.
+l17|Stay curious. It keeps the mind awake.
+l18|Write down what you learn. Memory is a leaky bucket.
+l19|Hard problems are just puzzles that haven't met you yet.
+l20|The more you learn, the more interesting the world gets.
+l21|Pick up where you left off. That's how skills are made.
+l22|Teach yourself something you'll use this week.
+l23|One focused hour of study beats three distracted ones.
+l24|Your future self is quietly cheering you on right now.
+l25|Knowledge compounds. Start the interest today.

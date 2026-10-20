@@ -1,0 +1,806 @@
+0|\n\nMe desperté con Wakeroo
+1|Un teléfono nuevo restablece los permisos de alarma, así que asegurémonos de que suenen aquí también.
+2|· sube de volumen
+3|· va rotando
+4|"{0}". Toca para ver por qué y arreglarlo.
+5|+1 min
+6|+10 min
+7|+20 min
+8|+30 min
+9|+5 min
+10|1 h antes
+11|1 min
+12|1 mañana seguida
+13|1 objeto
+14|1 frase
+15|1 posposición
+16|10 min
+17|15 min
+18|15 min antes
+19|2 min
+20|Reloj de 24 horas
+21|30 min antes
+22|5 min
+23|7,5 h de sueño
+24|8 h de sueño
+25|Algo lento. Un poco de luz natural en la próxima hora ayuda mucho.
+26|Un tono {0} distinto cada mañana, para que nunca te acostumbres.
+27|Unos minutos después, Wakeroo pregunta "¿Sigues despierto?". Si no respondes, la alarma vuelve.
+28|Un poco más: unas tres palabras
+29|Un aviso antes de dormir, con los sonidos para dormir a un toque.
+30|Una alarma de prueba suena en un minuto con una misión fácil. Bloquea el teléfono y espera: si suena sobre la pantalla de bloqueo, todo listo.
+31|SOBRE ESTA ALARMA
+32|Acerca de
+33|Añade un hábito, como 'Hacer la cama'
+34|Añadir una misión
+35|Añadir misión
+36|Añade hasta cinco hábitos pequeños.
+37|Añade el tiempo
+38|Después de una alarma: tu plan, el tiempo, tu racha y una frase. Se cierra sola.
+39|Tras este tiempo sin tocar nada, vuelve el volumen máximo y la misión empieza de nuevo.
+40|Al despertar, un aviso si viene lluvia, helada o calor en {0}.
+41|A los {0} min
+42|Alarma
+43|Avisos de alarma
+44|Las pantallas de alarma y misión siempre son oscuras, suaves para los ojos a las 6 AM.
+45|Comportamiento de la alarma
+46|Alarma eliminada
+47|Estado de las alarmas
+48|Alarma en curso
+49|Alarma guardada
+50|Alarma programada para dentro de {0}
+51|Sonido de alarma
+52|Alarma desactivada
+53|Volumen de alarma
+54|Alarmas
+55|Puede que las alarmas solo suenen en tus auriculares. Activa "Sonar siempre en el altavoz del teléfono" en Ajustes.
+56|Las alarmas siguen sonando en el altavoz del teléfono.
+57|Las alarmas, misiones y fotos se quedan en tu teléfono. Sin cuenta y sin rastreo en la alarma.
+58|¡Todo listo!
+59|Todo listo. Tus alarmas sonarán.
+60|Permitir
+61|¿Permitir que Wakeroo te envíe notificaciones?
+62|Permitir avisos de alarma
+63|Permitir inicio automático
+64|Permitir notificaciones a pantalla completa
+65|Permitir acceso al movimiento
+66|Permitido. Las alarmas suenan al minuto.
+67|Casi, quédate quieto
+68|Sonar también en los auriculares
+69|Sonar siempre en el altavoz del teléfono
+70|Un aviso por la noche si no hay nada programado para la mañana.
+71|Android marcó Wakeroo como poco usada. Ábrela a diario o añade el widget.
+72|Animaciones
+73|Otra
+74|Cualquier código
+75|Cualquier objeto, y la cámara tiene que estar muy segura.
+76|Cualquiera de 30 objetos, desde una chaqueta hasta una sartén.
+77|Cualquier foto, moviéndose despacio
+78|Cualquier canción o archivo de audio
+79|Uso de batería de la app
+80|Predeterminado de la app
+81|App en reposo
+82|Apariencia
+83|A la hora de la alarma, el sonido para cuando terminas.
+84|A la hora de dormir
+85|Al menos 3 palabras reales
+86|En cero. Wakeroo lo sube al sonar, pero revisa los ajustes del teléfono.
+87|A las {0} {1}, un recordatorio si no hay nada programado para la mañana.
+88|Aurora
+89|Aurora, Amanecer en el mar, DESPIERTA y tu propia foto, más cuatro tonos más.
+90|A LA CAMA A LAS
+91|Atrás
+92|Volver a las misiones
+93|Volver a mi misión
+94|Ahorro de batería
+95|Ahorro de batería › Sin restricciones
+96|A la cama a las {0}
+97|A la cama a las {0} {1} para dormir {2} antes de tu alarma de las {3} {4}.
+98|Hora de dormir
+99|Recordatorios de hora de dormir y de "no hay alarma para mañana". Silenciarlos nunca silencia las alarmas.
+100|Antes de dormir, calculado a partir de tu próxima alarma.
+101|Tormenta de campanas
+102|Mejor racha
+103|Campanas y pájaros
+104|Bloqueado. Las alarmas pueden sonar tarde.
+105|Pulso brillante
+106|Alegre y enérgico
+107|Ruido marrón
+108|Zumbador
+109|Calma
+110|No se puede activar en una alarma a menos de 10 minutos, para que nadie se quede atrapado sin querer.
+111|¿No puedes con esta? Cambia a la misión de respaldo
+112|Cancelar
+113|Centenario
+114|Cambiar
+115|¿Cambiaste de idea? Ciérralo y no cambia nada.
+116|Revisar
+117|Comprobar respuesta
+118|Ver estado
+119|Mirando el cielo de {0}…
+120|Primero elige tu ciudad en la pestaña Mañana.
+121|Elige tu misión para despertar
+122|Elegida: {0}
+123|Despejado
+124|Cerrar
+125|Cerrar vista previa
+126|Nublado
+127|Código en {0}
+128|Hoy hace frío, hasta {0}°. Abrígate bien.
+129|Completa cinco tipos distintos de misión.
+130|Continuar
+131|Continuar con {0}
+132|Controles de los sonidos para dormir mientras suenan
+133|No se pudo conectar con Google Play. Inténtalo de nuevo en un momento.
+134|Grillos
+135|Oscuro
+136|Campanillas del alba
+137|Eliminar
+138|Eliminar alarma
+139|Eliminar esta alarma
+140|Detalles
+141|No sonó (teléfono apagado o app en pausa)
+142|No sonó: teléfono apagado o app en pausa
+143|Descartar
+144|No molestar
+145|No permitir
+146|¿No tienes uno? Prueba otro objeto
+147|No mostrar esto después de las alarmas
+148|Hecho
+149|Bebe un vaso de agua
+150|Llovizna
+151|Cada mañana
+152|Madrugador
+153|Conseguida
+154|Conseguida el {0}
+155|Editar
+156|Editar alarma
+157|Emergencia
+158|Salida de emergencia
+159|Enérgico
+160|Subir
+161|Todos los días
+162|Todas las misiones y funciones de fiabilidad siguen siendo gratis. Siempre.
+163|Todos los meses en el calendario y cada alarma en el registro.
+164|Todas las escenas para despertar
+165|Cotidiano
+166|Todo listo. Tus alarmas sonarán.
+167|Agotado
+168|Extremo
+169|Se apaga antes de tu alarma · {0} h {1} min
+170|Se apaga antes de tu alarma · {0} min
+171|Ventilador
+172|Fanfarria
+173|Más rápido: {0}
+174|Te volviste a dormir, la alarma volvió a sonar
+175|Te volviste a dormir, la alarma volvió
+176|Encuentra un objeto cotidiano, como una taza.
+177|Encuentra esto
+178|Termina diez misiones en otra habitación (QR, foto, NFC, búsqueda de objetos o pasos).
+179|Primero termina la misión. Así un tú adormilado no cancela un plan bien despierto.
+180|Termina tu primera misión para despertar.
+181|Termina tu misión en menos de un minuto, cinco veces.
+182|Termina tu misión para parar la alarma
+183|Primer amanecer
+184|Arreglar
+185|Deslízala para girarla
+186|Niebla
+187|Igual que tu teléfono
+188|Para los de sueño profundo. Muy fuerte
+189|Quincena
+190|Completas
+191|Semana completa
+192|Volumen máximo. Empieza tu misión para callarla
+193|Alarma a pantalla completa
+194|LEVÁNTATE
+195|VAMOS
+196|Suave
+197|Inicio suave
+198|Levántate 30 minutos antes de media que en tu primera semana.
+199|Levántate y camina
+200|Levántate antes de las 6 AM cinco veces.
+201|Te saca de la cama
+202|Más fuerte en %d:%02d
+203|Caliente, caliente
+204|Agítalo con ganas
+205|Salir a correr
+206|Buenas tardes
+207|Buenas tardes
+208|Buenos días
+209|Buenas noches
+210|Bien, con una o dos cosas por mejorar
+211|¡Listo!
+212|Gimnasio antes de clase, examen a las 9…
+213|MODO DIFÍCIL
+214|Hábito creado
+215|Difícil
+216|Tiempos difíciles
+217|Modo difícil
+218|Auriculares conectados
+219|Salud
+220|Ocultar
+221|Ocultar una semana
+222|Máx. {0}°, mín. {1}°
+223|Mantén pulsado
+224|Mantenlo quieto dentro del marco
+225|Acerca la parte de arriba del teléfono a la pegatina. Ponla donde no llegues desde la cama.
+226|Apoya la parte de arriba del teléfono un segundo
+227|Hoy hará calor, hasta {0}°. Bebe mucha agua.
+228|Cuánto debe parecerse la vista
+229|¿Cómo te sientes?
+230|Estoy despierto
+231|Ya lo puse en Sin restricciones
+232|Si paro durante una misión
+233|Si tu archivo se mueve o se borra, sonará Wakeroo Rise. Una alarma nunca se queda muda.
+234|En 15 min
+235|En 8 h
+236|En Recientes, baja Wakeroo para bloquearla
+237|Hacia el espacio
+238|Se ve en grande en la pantalla de alarma. Un motivo vence a posponer.
+239|Búsqueda de objetos
+240|La búsqueda de objetos usa la cámara solo mientras la pantalla de alarma está abierta.
+241|Solo una vez
+242|Sigue. Si paras, se vacía
+243|Dejar la alarma como está
+244|Sigue caminando. Si te paras, la pista se vacía
+245|Claxon
+246|LA SEMANA PASADA
+247|Idioma
+248|Más tarde, llévame a mi alarma
+249|Combina lluvia y ventilador, y desbloquea el ruido rosa y los grillos.
+250|Aprendizaje
+251|Menos
+252|Configuremos tu primera alarma. Tarda como un minuto.
+253|Claro
+254|Como 17 × 6 + 38
+255|Como 24 + 7
+256|Como 34 × 11 + 245
+257|Igual que mi teléfono
+258|Cargando tu misión…
+259|Bloqueada
+260|Busca tu lugar
+261|Muy bien. Toca ✓ para empezar el día
+262|Letras gigantes que no te dejan dormir
+263|Genial. Tu descanso está dando frutos.
+264|Hacer café y salir a caminar
+265|Asegúrate de que sigo despierto
+266|Asegúrate de que suene
+267|Asegúrate de que suenen
+268|Matemáticas
+269|Medallas · {0} de {1}
+270|Media
+271|Fichas de memoria
+272|Negro mínimo
+273|Explorador de misiones
+274|Misión hecha
+275|Misión hecha en {0}
+276|Misión {0} de {1}
+277|Misiones
+278|Las misiones en otra habitación funcionan mejor: tienes que salir de la cama.
+279|Mezcla sonidos para dormir
+280|Más
+281|Mañana
+282|Mañana y notificaciones
+283|Resumen de la mañana
+284|Rutina de la mañana
+285|Motorola
+286|NUEVA MEDALLA
+287|PRÓXIMA ALARMA
+288|El NFC está desactivado
+289|Etiqueta NFC
+290|SIN ALARMA
+291|MEDIODÍA
+292|Necesita arreglo
+293|Hacen falta tres semanas de mañanas
+294|Nunca
+295|Nueva alarma
+296|Próxima alarma
+297|Próxima alarma {0} {1} {2}
+298|Mes siguiente
+299|Próxima omitida
+300|Buen ritmo. Sigue así
+301|Bien. Conserva esa calma.
+302|Bien. Una ficha más en la próxima ronda
+303|Búho reformado
+304|Cielo nocturno
+305|Aquí no hay NFC. Toca la pegatina para simularla (versión de depuración).
+306|Este teléfono no tiene NFC
+307|No se encontró ninguna compra de Pro en esta cuenta de Google.
+308|Semana sin posponer
+309|No hay alarma para mañana
+310|Este día no sonó ninguna alarma.
+311|Sin alarma
+312|No hay alarma para la mañana
+313|Sin anuncios, y apoyas una alarma independiente
+314|Sin límites de batería
+315|Aún no hay resultados. Revisa la ortografía o tu conexión.
+316|Sin sensor de movimiento
+317|No hay foto de referencia guardada, usa la misión de respaldo
+318|No hace falta configurar nada. A la hora de la alarma escribes al menos tres palabras sobre tu día. Tu plan aparece luego en la pestaña Mañana.
+319|Esta no se puede posponer. Tú puedes.
+320|Normal
+321|Auroras boreales sobre ti
+322|Ahora no
+323|Esa no. Mira otra vez
+324|Mañana no
+325|Aún sin probar. Un minuto demuestra que tus alarmas funcionan.
+326|Ahora
+327|Ahora toca las mismas {0} fichas · {1} encontradas
+328|Objeto {0} de {1}
+329|Objetos que encontrar
+330|Amanecer en el mar
+331|Olas del mar
+332|No
+333|Apagar, eliminar, omitir y posponer necesitan antes una misión. Sin trampas medio dormido.
+334|Apagarla, eliminarla, omitirla, posponerla o atrasarla 2 h o más necesita antes una misión. La salida de emergencia sigue funcionando.
+335|Desactivado. La pantalla de alarma no puede aparecer.
+336|Desactivado. Solo verías un pequeño aviso.
+337|Bien
+338|Bien es un buen punto de partida.
+339|Activado
+340|A tiempo
+341|En {0}
+342|Activado, y las alarmas pueden pasar.
+343|Activado, y bloquea las alarmas. Permite las alarmas en No molestar.
+344|Alarmas puntuales
+345|Activadas.
+346|Una vez
+347|Uno de los sonidos de alarma de tu teléfono
+348|Solo para emergencias reales
+349|Solo se envían a Open-Meteo las coordenadas de la ciudad para el pronóstico. Nada sobre ti.
+350|Abrir misión
+351|Abre las cortinas
+352|Optimizado
+353|Fuera de la cama
+354|Parcialmente nublado
+355|Pasada
+356|Superada. Tu teléfono hace sonar bien las alarmas de Wakeroo.
+357|Ya es tarde. Cada minuto de sueño cuenta
+358|Pausa
+359|En pausa · {0}
+360|Pagas una vez. Sin suscripción, sin renovaciones, sin sorpresas.
+361|Tono del teléfono
+362|Los teléfonos bloquean las alarmas de formas sigilosas. Actívalos una vez y listo.
+363|Lugar de la foto
+364|Fotografía un lugar, como tu lavabo.
+365|Frase {0} de {1}
+366|Frases
+367|Elige una misión
+368|Elige una foto
+369|Elige uno. Mezcla dos sonidos con Pro.
+370|Elige algo en otra habitación con código de barras o QR (pasta de dientes, café, un libro) y escanéalo ahora.
+371|Elige hasta dos para mezclar.
+372|Elige tu ciudad una vez. Sin permiso de ubicación.
+373|Elige tu sonido
+374|Elige tu escena para despertar
+375|Ruido rosa
+376|Reproducir sonidos para dormir
+377|Suena con el volumen multimedia y siempre se apaga un minuto antes de tu alarma, así nunca la tapa.
+378|Apunta a tu lugar de la foto
+379|Positividad
+380|Siesta
+381|Siesta, {0}
+382|Prueba de práctica
+383|Simular Pro (depuración)
+384|Vista previa · {0}
+385|Mes anterior
+386|Opciones de privacidad
+387|Pro
+388|Pro está activo. ¡Gracias!
+389|Pro ya está activo.
+390|Pro restaurado. ¡Bienvenido de nuevo!
+391|Las escenas Pro se pueden desbloquear cuando quieras. Sin prisa.
+392|Problema {0} de {1}
+393|Problemas
+394|Productividad
+395|Prueba de cada alarma. Si alguna vez no sonó, aparece aquí en rojo.
+396|Proteger esta alarma
+397|Las compras no están disponibles ahora. Revisa tu conexión e inténtalo de nuevo.
+398|Negro puro. Suave para OLED y para los ojos
+399|QR / Código de barras
+400|Despertar rápido
+401|Sumas rápidas
+402|Frase del día
+403|REGISTRO DE ALARMAS
+404|ARRIBA
+405|Lluvia
+406|Probable lluvia hacia las {0}. Lleva paraguas.
+407|Lista
+408|Lista para sonar
+409|Reducidas
+410|Renovado
+411|Registrar otra pegatina
+412|Registra tu código
+413|Registra tu pegatina
+414|Código registrado
+415|Registrado: el código de {0}
+416|Registrada: la pegatina en {0}
+417|Flexible
+418|Recuerda las fichas
+419|Recordatorios
+420|Los recordatorios usan su propio canal de notificaciones. Silenciarlos nunca afecta a tus alarmas.
+421|Quitar
+422|Quitar límites de batería
+423|Quitar misión
+424|Repetir
+425|Repite el patrón de fichas que brillan.
+426|Restaurar compra
+427|Restringido
+428|Reanudar
+429|Repetir foto
+430|Sonar una prueba en 1 minuto
+431|Sonar en 1 minuto
+432|Suena en el altavoz y en lo que esté conectado.
+433|Alarmas sonando
+434|Suena en 1 minuto. Bloquea el teléfono
+435|Suena en un minuto con una misión fácil. Bloquea el teléfono y espera: si suena sobre la pantalla de bloqueo, todo listo.
+436|Suena en {0}
+437|Rotar
+438|Mal comienzo. Agua, luz y tómatelo con calma hoy.
+439|Ronda {0} de {1}
+440|Rondas
+441|Rutina pro
+442|Rutina completa. ¡Gran comienzo!
+443|El mismo ángulo que al configurarlo
+444|Mismo sonido
+445|Samsung
+446|Guardar
+447|Guardar alarma
+448|Guardar estos cambios
+449|Guarda tu lugar de la foto
+450|Guardada
+451|Guardando…
+452|Escanea un código que dejes en otra habitación.
+453|Escanear otro código
+454|Escanea el código de {0}
+455|Escanea tu código
+456|Escanea tu código registrado
+457|Escena
+458|Buscar, p. ej. Lahore o Lisboa
+459|Buscando…
+460|Ve todos los meses desde tu primera alarma con Pro
+461|Ve todo tu historial con Pro
+462|Programar una alarma
+463|Fijar fecha
+464|Programa una y Wakeroo calcula tu hora de dormir.
+465|Prográmala en unos segundos.
+466|Configúrala primero
+467|Configurar esta noche · matemáticas mientras tanto
+468|Poner {0} {1}
+469|Ajustando tu hora…
+470|Ajustes
+471|Ajustes › Aplicaciones › Administrar aplicaciones › Wakeroo › Inicio automático: activado
+472|Ajustes › Aplicaciones › Wakeroo › Uso de batería › Permitir actividad en segundo plano
+473|Ajustes › Aplicaciones › Wakeroo › Batería › Sin restricciones
+474|Ajustes › Batería › Inicio de aplicaciones › Wakeroo › Gestionar manualmente
+475|Ajustes › Batería › Consumo en segundo plano › Wakeroo › Permitir
+476|Ajustes › Batería › Límites de uso en segundo plano › Aplicaciones que nunca se suspenden › añadir Wakeroo
+477|Siete mañanas seguidas sin posponer ni una vez.
+478|Agitar
+479|Agita el teléfono hasta que se llene el sol.
+480|Agita para llenar
+481|Agita tu teléfono
+482|Sacudidas
+483|Compartir
+484|Compartir frase
+485|Comparte tu racha
+486|¡Muy bien! Ya estás despierto
+487|Muéstrame {0}
+488|Se muestra sin sonido mientras estás en la pantalla de alarma
+489|Muestra la pantalla de alarma cuando suena una alarma
+490|Sirena
+491|Omitir por ahora
+492|Omitir la próxima
+493|Omitir la próxima
+494|Se omite la próxima
+495|Dormir
+496|Meta de sueño
+497|Sonidos para dormir
+498|Posponer
+499|Posponer {0} minutos
+500|Posponer {0} min  ·  quedan {1}
+501|Pospuesta
+502|Posposiciones permitidas
+503|Nieve
+504|Para que un altavoz Bluetooth sin batería o unos auriculares olvidados nunca silencien tu alarma.
+505|Para que aparezca la pantalla de alarma
+506|Marimba suave
+507|Suave y cálido, para el sueño ligero
+508|Resuelve sumas rápidas. Despierta tu mente.
+509|Algo podría impedir que suene tu alarma
+510|Sonido
+511|Sonidos
+512|Espacio
+513|Lugar sin configurar
+514|Lugar guardado. A la hora de la alarma, apunta la cámara a la misma vista.
+515|Combina matemáticas, un QR en la cocina y una foto del lavabo.
+516|Si te quedas quieto 10 segundos, el contador baja, así que tienes que seguir moviéndote.
+517|Ponte donde estarás a la hora de la alarma y encuadra algo que no se mueva: el lavabo, la tetera, un póster.
+518|Estrellas y un amanecer lento
+519|Empezar misión
+520|Empieza la misión para parar la alarma
+521|Empezar mi día
+522|Iniciar sonidos para dormir
+523|Empieza bajito y sube al volumen máximo, para despertar con calma.
+524|Empieza con este sonido. Si no respondes en un minuto, cambia a un tono extremo a todo volumen.
+525|Ritmo de tambor metálico
+526|Paso {0} de {1}
+527|Pasos
+528|Pega una etiqueta NFC (sirven las pegatinas NTAG baratas) junto al espejo del baño o la tetera y regístrala aquí.
+529|Pegatina en {0}
+530|Pegatina registrada
+531|Pegatina sin registrar
+532|¿Sigues despierto?
+533|Parar
+534|Parar sonidos para dormir
+535|Racha
+536|Estírate 2 minutos
+537|Estricto
+538|Amanecer sobre un planeta que gira
+539|ESTA SEMANA
+540|HOY
+541|PLAN DE HOY
+542|Haz una foto de un lugar lejos de la cama, como el lavabo o la tetera.
+543|Hacer la foto
+544|Tarda un minuto. Demuestra que funciona en tu teléfono.
+545|Ocupa la pantalla de bloqueo en lugar de un pequeño aviso
+546|Toca antes de que se acabe el anillo o tu alarma volverá.
+547|Toca para confirmar que estás despierto
+548|Toca para volver
+549|Toca para escucharlo al volumen de alarma.
+550|Toca para escucharlo al volumen de tu alarma.
+551|Toca para ver por qué y arreglarlo en un minuto.
+552|Toca para ver tu mejor marca
+553|Toca para programar una
+554|Toca con el teléfono una pegatina junto al espejo.
+555|Toca con el teléfono la pegatina en {0}
+556|Toca tu pegatina con el teléfono
+557|Te avisa si se perdió una alarma y cómo arreglarlo
+558|Temperatura
+559|Alarma de prueba
+560|Alarma de prueba en 1 minuto. Bloquea el teléfono y espera
+561|Alarma de prueba: termina la misión para superarla
+562|Prueba superada
+563|Gracias por apoyar una alarma independiente.
+564|Eso no parecen palabras. Escribe un plan de verdad
+565|Ese es otro código. Busca el que registraste.
+566|Esa es otra pegatina. Busca la que registraste.
+567|Así es como funciona
+568|Eso es, quédate quieto
+569|La razón n.º 1 por la que las apps de alarma fallan
+570|La alarma sigue sonando hasta que termines. Las misiones en otra habitación funcionan mejor.
+571|La alarma sigue sonando. Esto rompe tu racha y queda registrado.
+572|La pantalla de alarma para todas las alarmas, salvo las que elijan la suya.
+573|La alarma ocupa la pantalla de bloqueo.
+574|La última prueba no terminó. Inténtalo de nuevo.
+575|El mismo sonido siempre.
+576|Tema
+577|Cosas que hay en casi cualquier casa: una taza, una silla, una planta, el lavabo.
+578|Esta fecha ya pasó
+579|Así se ve tu pantalla de alarma. Toca una para verla a pantalla completa.
+580|Tres seguidas
+581|Tres palabras sobre tu día
+582|Tormentas
+583|Completa toda tu rutina de la mañana siete días.
+584|Ficha
+585|Hora de levantarse
+586|Tiempo en levantarte, últimos 7 días
+587|Hora de relajarse
+588|Temporizador
+589|Consejo: funciona mejor un código que no alcances desde la cama.
+590|Cansado
+591|Hoy
+592|Mañana
+593|Esta noche
+594|¡Demasiado quieto! Vuelve el volumen máximo. Sigue
+595|¡Demasiado quieto! Vuelve el volumen máximo. Empieza otra vez
+596|Linterna
+597|Afinando tu sonido…
+598|Desactivar
+599|Desactiva "Optimizar uso de batería" para Wakeroo
+600|Desactiva "Suspender apps no usadas"
+601|Activa Inicio automático, Inicio secundario y Ejecutar en segundo plano
+602|Activar pantalla completa
+603|Desactivar esta alarma
+604|Desactivar esta alarma, eliminarla, omitirla o posponerla requiere antes una misión. Parte de Pro.
+605|Escribe una frase
+606|Escribe una frase corta, letra a letra.
+607|Escribe lo primero que harás hoy.
+608|Escribe tu plan
+609|Escribe: {0}
+610|Escritura
+611|Deshacer
+612|Desbloquear Pro · {0} una vez
+613|Sin restricciones
+614|Sin restricciones. {0} no dormirá Wakeroo.
+615|Hasta que lo configures, esta alarma usa matemáticas.
+616|Hasta mi alarma
+617|Despierto a las {0}
+618|Despierto a las {0} {1}  ·  despierto en {2}
+619|En pie en
+620|Despierto desde las {0} {1}
+621|Hasta 5 misiones por alarma
+622|Hasta 5 misiones por alarma, historial completo, sin anuncios. Pagas una vez.
+623|Hasta 5 misiones con Pro
+624|En pie con una misión, cada mañana.
+625|Usarlo
+626|Usar esta misión
+627|Usar esta vista
+628|Hora habitual
+629|Normalmente en pie a las {0}
+630|Variado
+631|Vibrar
+632|Vivo
+633|Volumen
+634|DESPIERTA
+635|Despierta, son las {0}
+636|Calendario de despertares
+637|Comprobación de despertar
+638|Comprobación superada
+639|Escena para despertar
+640|Despertares
+641|Wakeroo
+642|Wakeroo Pro
+643|Wakeroo Pro es tuyo
+644|Wakeroo Rise
+645|Wakeroo necesita acceso al movimiento para contar tus pasos. Solo se usa mientras dura esta misión.
+646|Wakeroo lo sube al nivel de tu alarma cuando suena.
+647|Wakeroo {0}
+648|Muévete y apunta la cámara hacia él
+649|Ve a otra habitación y escanea cualquier código de barras o QR. Tendrás que escanear el mismo para parar la alarma.
+650|Ve a otra habitación. Tus pasos cuentan mientras caminas.
+651|Camina hasta que se llene la pista.
+652|¿Quieres probarla ahora?
+653|¿Quieres tu alarma de siempre de las {0} {1}?
+654|Pads cálidos
+655|Mira las fichas que se iluminan
+656|Olas bajo un cielo melocotón
+657|Restauramos tu alarma.
+658|Restauramos tus {0} alarmas.
+659|El tiempo de {0} no está disponible sin conexión.
+660|Aviso del tiempo
+661|El tiempo en {0}
+662|Entre semana
+663|Guerrero del fin de semana
+664|Fines de semana
+665|Bienvenido de nuevo
+666|¿Para qué te levantas?
+667|Cómo se ve la pantalla de alarma. Toca una para verla a pantalla completa.
+668|¿Qué haría de hoy un buen día?
+669|¿Qué es lo primero que harás hoy?
+670|¿A qué hora quieres despertarte?
+671|¿Dónde está?
+672|¿Dónde está este código?
+673|Ruido blanco
+674|¿Para qué te levantas?
+675|Gana un sábado y un domingo
+676|Gana cien mañanas seguidas.
+677|Gana las dos mañanas de un fin de semana.
+678|Gana catorce mañanas seguidas.
+679|Gana siete mañanas seguidas.
+680|Gana treinta mañanas seguidas.
+681|Gana tres mañanas seguidas.
+682|Recordatorio para relajarse
+683|Escribe tu plan de hoy
+684|Xiaomi
+685|TUS ALARMAS
+686|TU PRIMERA ALARMA ESTÁ LISTA
+687|Tú
+688|Te sentiste: {0}
+689|Tu alarma suena en {0}
+690|Tus alarmas sonarán así, incluso con el teléfono bloqueado.
+691|Tu ciudad
+692|Tu primera mañana aparecerá aquí.
+693|Tus primeras mañanas aparecerán aquí
+694|Tu misión
+695|Tus mañanas
+696|Tus mañanas empiezan aquí
+697|Tu música
+698|Tu teléfono
+699|Tu foto
+700|Tu lugar de la foto · coincidencia {0}
+701|Tus ajustes se pasaron desde tu teléfono anterior.
+702|Tu canción
+703|Tu sonido
+704|Todo tu historial
+705|Tu alarma de las {0} no sonó
+706|una tele
+707|un bolso
+708|una silla
+709|un reloj
+710|una taza
+711|un escritorio
+712|un cajón o armario
+713|un tenedor o una cuchara
+714|un sombrero o una gorra
+715|una chaqueta o un abrigo
+716|una lámpara
+717|un portátil o un ordenador
+718|un periódico o una hoja de papel
+719|una fruta
+720|una planta
+721|un plato o un cuenco
+722|un póster o un cuadro
+723|una olla o una sartén
+724|una bufanda
+725|una estantería
+726|un zapato
+727|un lavabo
+728|un sofá
+729|un mantel o un salvamanteles
+730|un juguete o un peluche
+731|en total
+732|un paraguas
+733|y {0} más
+734|despierto en {0}
+735|espejo del baño
+736|bote de café
+737|cafetera
+738|días de racha
+739|escritorio
+740|para dormir {0} antes de tu alarma de las {1} {2}
+741|nevera
+742|puerta de entrada
+743|unas gafas o gafas de sol
+744|i Manager › Administrador de apps › Inicio automático › Wakeroo: activado
+745|unos vaqueros
+746|tetera
+747|últimas 2 semanas
+748|últimos 30 días
+749|menos de un minuto
+750|medicinas
+751|medianoche
+752|mañana seguida
+753|mañanas seguidas
+754|mediodía
+755|de {0} pasos
+756|de media
+757|arriba y a brillar
+758|un poco de pan
+759|espacio
+760|las cortinas
+761|la encimera de la cocina
+762|las escaleras
+763|hoy
+764|mañana
+765|cepillo de dientes
+766|pasta de dientes
+767|{0} (sin configurar)
+768|{0} viene con Pro. Toca para ver Pro
+769|{0} h
+770|{0} h {1} min
+771|{0} es una de las escenas Pro.
+772|{0} puede pausar Wakeroo para ahorrar batería. Ponla en Sin restricciones.
+773|{0} min
+774|quedan {0} min
+775|quedan {0} min, luego se apaga suavemente
+776|{0} min {1} s
+777|{0} min, {1} veces
+778|{0} mañanas seguidas
+779|{0} mañanas seguidas con Wakeroo
+780|{0} objetos
+781|{0} de 3 palabras
+782|{0} de 7 mañanas ganadas
+783|{0} de sueño antes de tu alarma
+784|{0} de {1} hechos
+785|{0} de {1} min antes
+786|{0} de {1} mañanas ganadas
+787|{0} combina bien con {1}
+788|{0} frases
+789|{0} problemas · {1}
+790|{0} rondas · {1}×{2}
+791|{0} sacudidas
+792|{0} posposiciones
+793|{0} pasos
+794|Consejos para {0}
+795|{0} {1}. Cierra los ojos y descansa lo que puedas.
+796|{0} · sin configurar
+797|{0}% de probabilidad de lluvia
+798|{0} s
+799|{0}×{1} cuadrícula. Cada ronda ilumina una ficha más.
+800|AM o PM
+801|Hora
+802|Minuto
+803|+1 h
+804|en {0}
+805|Elegir fecha

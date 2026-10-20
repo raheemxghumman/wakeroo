@@ -128,6 +128,7 @@ import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
+import com.wakeroo.app.ui.util.formatHours
 
 @Composable
 fun HomeScreen(
@@ -364,10 +365,9 @@ private fun bedtimeFor(state: HomeState): Triple<String, String, Float>? {
     val bed = BedtimeCalculator.next(state.rows.map { it.alarm }, state.settings.sleepGoalMinutes, 0, state.now) ?: return null
     val bedTime = Instant.ofEpochMilli(bed.bedAt).atZone(zone).toLocalTime()
     val use24 = state.settings.use24Hour ?: false
-    val hours = state.settings.sleepGoalMinutes / 60f
-    val left = bed.bedAt - state.now
+        val left = bed.bedAt - state.now
     val closeness = (1f - left / (4 * 3_600_000f)).coerceIn(0f, 1f)
-    val sleep = if (left > 0) tr("{0} of sleep before your alarm", if (hours % 1f == 0f) "${hours.toInt()} h" else "%.1f h".format(hours))
+    val sleep = if (left > 0) tr("{0} of sleep before your alarm", formatHours(state.settings.sleepGoalMinutes))
         else tr("Past bedtime. Every minute of sleep still counts")
     return Triple("${bedTime.formatClock(use24)} ${bedTime.formatMeridiem(use24)}", sleep, closeness)
 }
@@ -411,7 +411,7 @@ private fun QuickAlarms(modifier: Modifier = Modifier, onQuick: (Int) -> Unit) {
         modifier.fillMaxWidth().padding(top = Space.lg).horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(Space.sm),
     ) {
-        val presets = listOf(10 to tr("+10 min"), 20 to tr("+20 min"), 30 to tr("+30 min"), 60 to "+1 h", 480 to tr("In 8 h"))
+        val presets = listOf(10 to tr("+10 min"), 20 to tr("+20 min"), 30 to tr("+30 min"), 60 to tr("+1 h"), 480 to tr("In 8 h"))
         // Debug builds get a one-minute alarm for testing the full ring flow.
         (if (BuildConfig.DEBUG) listOf(1 to tr("+1 min")) + presets else presets).forEach { (m, label) ->
             Row(

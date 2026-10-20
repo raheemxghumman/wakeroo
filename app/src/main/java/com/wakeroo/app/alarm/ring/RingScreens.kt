@@ -78,6 +78,7 @@ import kotlinx.coroutines.delay
 import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.Locale
 
 /** Ringing: one giant action, a breathing sunrise, and nothing else to tap by mistake. */
 @Composable
@@ -172,7 +173,7 @@ private fun EscalationHint(state: RingState, now: Long) {
         state.escalated -> tr("Full volume. Start your mission to quiet it")
         state.escalateAt > 0 -> {
             val left = ((state.escalateAt - now) / 1000).coerceAtLeast(0)
-            tr("Getting louder in %d:%02d").format(left / 60, left % 60)
+            String.format(Locale.ROOT, tr("Getting louder in %d:%02d"), left / 60, left % 60)
         }
         else -> return
     }

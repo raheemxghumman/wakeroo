@@ -81,6 +81,7 @@ import com.wakeroo.app.ui.theme.WakerooMotion
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
+import androidx.compose.ui.text.style.TextOverflow
 
 /** Position on the tilted 24-hour orbit for a time of day: midnight at the front, noon at the back. */
 private fun orbitPoint(minutes: Float, c: Offset, rx: Float, ry: Float, spin: Float): Offset {
@@ -215,7 +216,7 @@ fun OrbitHero(
                         contentAlignment = Alignment.Center,
                     ) { Text(tr("Set an alarm"), style = MaterialTheme.typography.labelLarge, color = Night) }
                 } else {
-                    Text("in ${untilText.orEmpty()}", style = MaterialTheme.typography.headlineMedium, color = Paper)
+                    Text(tr("in {0}", untilText.orEmpty()), style = MaterialTheme.typography.headlineMedium, color = Paper)
                     Spacer(Modifier.weight(1f))
                     Row(verticalAlignment = Alignment.Bottom) {
                         Text(timeText, style = ClockType.card, color = Paper)
@@ -267,7 +268,7 @@ fun FixBanner(item: HealthItem, onFix: () -> Unit, onHide: (() -> Unit)?, modifi
         Spacer(Modifier.width(Space.md))
         Column(Modifier.weight(1f)) {
             Text(item.title, style = MaterialTheme.typography.titleSmall, color = Paper)
-            Text(item.detail, style = MaterialTheme.typography.bodySmall, color = PaperMuted, maxLines = 2)
+            Text(item.detail, style = MaterialTheme.typography.bodySmall, color = PaperMuted, maxLines = 3, overflow = TextOverflow.Ellipsis)
         }
         Text(
             tr("Fix"), style = MaterialTheme.typography.labelLarge, color = Night,

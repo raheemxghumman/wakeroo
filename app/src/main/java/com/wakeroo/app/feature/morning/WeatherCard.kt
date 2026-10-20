@@ -210,7 +210,7 @@ fun WeatherCard(
                         )
                         Text(forecast.currentTemp.deg(), style = MaterialTheme.typography.displayMedium, color = Paper)
                         Text(
-                            "${forecast.condition.label} · H ${forecast.high.deg()} L ${forecast.low.deg()}",
+                            "${forecast.condition.label} · " + tr("High {0}°, low {1}°", Math.round(forecast.high), Math.round(forecast.low)),
                             style = MaterialTheme.typography.bodyMedium, color = PaperMuted,
                         )
                         if (forecast.rainChance > 0) {

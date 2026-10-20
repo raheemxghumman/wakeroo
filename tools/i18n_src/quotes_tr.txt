@@ -1,0 +1,150 @@
+p01|Erteleme tuşunu yendin. Günün geri kalanı bundan kolay.
+p02|Güzel sabahlar bulunmaz, yaratılır.
+p03|Güneş yine senin için doğdu. Şimdi sıra sende.
+p04|Bugün boş bir sayfa. Akşam okumaktan keyif alacağın bir şey yaz.
+p05|Küçük zaferler de sayılır. İlki yataktan kalkmaktı.
+p06|Öğleden önce birine gülümse. Sana da iyi gelir.
+p07|En güzel günlerin genelde böyle başlar: bilerek, isteyerek.
+p08|Her gün harika olmayabilir ama her günün içinde güzel bir şey vardır.
+p09|Görmek istediğin enerjiyi sen getir.
+p10|Bugünü sonra hava atacağın bir güne dönüştür.
+p11|Sabahın dünden haberi yok. Senin de olmak zorunda değil.
+p12|Birinin sabahını güzelleştiren sen ol.
+p13|Mutluluk çoğu zaman, bile isteye fark etmektir.
+p14|Sıradan şeylerle gurur duymak senin de hakkın.
+p15|Umut, ruha tünemiş tüylü bir şeydir.
+p16|Her günün yılın en güzel günü olduğunu kalbine yaz.
+p17|Sabah, uyanık olduğum ve içimde bir şafağın söktüğü andır.
+p18|Her sabah, hayatımı doğanın kendisi kadar sade, hatta diyebilirim ki masum kılmam için neşeli bir davetti.
+p19|Güzel şeyler erken saatlerde filizlenir.
+p20|Bugün en az bir kez başını kaldırıp bak. Gökyüzü bedava.
+p21|Boşa giden gün doğumu diye bir şey yoktur.
+p22|Bugünkü modum: sebepsiz yere umutlu.
+p23|İyilik de bir sabah alışkanlığıdır.
+p24|Buradasın. İşin çoğu zaten bu.
+p25|Bırak bugün seni güzel bir şekilde şaşırtsın.
+w01|Önce zor olanı yap. Gün sonra hafifler.
+w02|Öğleden önce yapılan tek önemli iş, öğleden sonraki on telaşlı işe bedeldir.
+w03|En zor kısım başlamaktır ve sen çoktan başladın.
+w04|Temiz masa, berrak zihin, net plan.
+w05|İvme sabahları kazanılır. Biraz topla.
+w06|Bugün neyin önemli olduğuna karar ver. Gerisini kibarca boş ver.
+w07|Odaklı yirmi dakika, dağınık iki saatin yapamadığını yapar.
+w08|Bitti ne güzel bir kelime. Bugün birkaç tane biriktir.
+w09|Telefonun bekleyebilir. Hedeflerin çok daha uzun süredir bekliyor.
+w10|Planlar kafanda değil, kâğıtta daha iyi durur.
+w11|Mükemmellik değil, ilerleme. Taslağı gönder gitsin.
+w12|Başlamak için en iyi zaman dündü. İkinci en iyi zaman şimdi.
+w13|Yatağını topla. Günün ilk görevi tamam.
+w14|Amaç meşgul olmak değil, bitirmek.
+w15|Her gün atılan küçük adımlar, kocaman mesafeler kat eder.
+w16|İyi başlanan iş yarı yarıya bitmiştir.
+w17|Kaybedilen zaman asla geri gelmez.
+w18|Erken yatıp erken kalkmak insanı sağlıklı, zengin ve bilge yapar.
+w19|Biz erteledikçe hayat hızla akıp gider.
+w20|Önce kendine ne olmak istediğini söyle, sonra yapman gerekeni yap.
+w21|Sabah isteksizce uyandığında şu düşünce aklında olsun: Bir insanın yapması gereken işi yapmak için kalkıyorum.
+w22|Sabahı kazan, öğleden sonrası genelde arkasından gelir.
+w23|Üç şey yaz. İlkini hemen şimdi yap.
+w24|Yetenek uyuyakaldığında çalışkanlık öne geçer.
+w25|Dünya uyanmadan önceki sessiz bir saat, süper güç gibidir.
+c01|Dört sayarak nefes al, altı sayarak ver. Bir daha. İşte böyle. Daha iyi.
+c02|Kahvaltıdan önce her şeye cevap bulman gerekmiyor.
+c03|Yavaş sabahlar da sabahtır.
+c04|Kahveni sıcakken iç. Bütün plan bu.
+c05|Bir dakikalığına bırak, gün sana gelsin.
+c06|Işığa bir bak. Şu an çok güzel bir şey yapıyor.
+c07|Zamanında yetişmek için koşturman gerekmiyor.
+c08|Huzur gidilecek bir yer değil, tutturulacak bir tempo.
+c09|Şimdi geçen beş sessiz dakika, sonraki bir saatlik gürültüden kurtarır.
+c10|Pencereyi aç. Sabahın biraz içeri girsin.
+c11|Sen gerinip esnedikten sonra da yapılacaklar listen yerinde olacak.
+c12|Sakinlik bir beceridir. Sabahlar da iyi bir antrenman.
+c13|Her seferinde tek bir iş yap ve onu sonuna kadar yap.
+c14|Bin millik bir yolculuk tek bir adımla başlar.
+c15|Ağaçlar acele etmeden büyür. Sen de öyle yapabilirsin.
+c16|Hemen yaşamaya başla ve her günü ayrı bir hayat say.
+c17|Bazı sabahlar bir şeyler yapmak, bazıları sadece var olmak içindir. İkisi de olur.
+c18|Ayaklar yere. Omuzlar aşağı. Sen bu işi halledersin.
+c19|Gün uzun. Hepsini bir anda harcamak zorunda değilsin.
+c20|Telefonuna bakmadan önce sessiz bir sese kulak ver.
+c21|Çeneni gevşet. Cidden, bir kontrol et.
+c22|Yumuşak bir başlangıç da başlangıçtır.
+c23|Biraz dinginliğe yer aç. Karşılığını fazlasıyla verir.
+c24|Dinlenmek işten kaçmak değil, işin bir parçası.
+c25|Derin ve güzel bir nefes almaya her zaman vakit vardır.
+h01|Zor sabahlar da biter. Bu da bitmeye başladı bile.
+h02|Kötü bir günde yataktan kalkmak, çoğu kişinin görmediği bir zaferdir. Biz görüyoruz.
+h03|Başlamak için hazır hissetmen gerekmiyor.
+h04|Bugün sadece bugünü yaşaman yeter.
+h05|En karanlık gece bile gün doğumuyla biter. Sen de ayaktasın, hazırsın.
+h06|Güçlü olmak hiç düşmemek değil, az önce yaptığın gibi kalkmaktır.
+h07|Kendine nazik davran. Sandığından çok daha iyi gidiyorsun.
+h08|Bazı günler en cesur şey, sadece orada olmaktır.
+h09|Fırtınalar sonsuza dek sürmez. Bu da geçecek.
+h10|Yardım istemek sorun değil. Bugün bunun için iyi bir gün.
+h11|İlerleme sessiz olabilir. Yine de sayılır.
+h12|Bir adım. Sonra bir adım daha. Dağlara böyle tırmanılır.
+h13|Şüphelerimiz hainlerdir; denemekten korkarak, sıkça kazanabileceğimiz iyiliği kaybettirirler.
+h14|Bugüne kadar her zor günü atlattın. Rekorun kusursuz.
+h15|Zor bir gece mi? Sabah sana yine de taze bir başlangıç borçlu.
+h16|Duygular misafirdir. Bırak gelsinler, gitsinler.
+h17|Biraz yağmur olmadan hiçbir şey büyümez.
+h18|Sıradaki doğru şeyi yap. Sadece sıradakini.
+h19|Bu bölüm kitabın tamamı değil.
+h20|Cesaret çoğu zaman, yarın yine dene diyen sessiz bir sestir. Eh, yarın geldi.
+h21|Roma bir günde kurulmadı. Sen de öyle.
+h22|Kendine iyi davranmak pes etmek değildir.
+h23|Gerekirse mola ver. Sonra kaldığın yerden devam et.
+h24|Zor, imkânsız demek değildir.
+h25|Bugünün hedefi: idare eder. İdare eder de gayet yeterli.
+f01|Kahveden önce bir bardak su. Vücudun fark edecek.
+f02|Şimdi biraz hareket et. Öğleden sonraki halin teşekkür eder.
+f03|Sabah ışığı bedava ilaçtır. Beş dakikalığına dışarı çık.
+f04|Kimse bakmıyormuş gibi gerin. Zaten kimse bakmıyor.
+f05|Her kahvaltı, olmak istediğin kişiye verdiğin bir oydur.
+f06|Uyku, antrenman sonrası en iyi toparlanmadır. Bu gece ona sahip çık.
+f07|Çaydanlık kaynarken on squat. Kolay bir zafer.
+f08|Vücudun seni buraya kadar taşıdı. Bugün ona iyi bak.
+f09|Ekranı kaydıracağına biraz yürü.
+f10|Her gece aynı saatte yatmak, böyle sabahları kolaylaştırır.
+f11|Yürüyüş de sayılır. Her zaman sayılır.
+f12|Gün gürültüye boğulmadan yeşil bir şeyler ye.
+f13|Güçlü sabahlar bir önceki gece hazırlanır.
+f14|Kalk, su iç, hareket et. Yarın tekrarla.
+f15|Temiz hava en ucuz enerji içeceğidir.
+f16|Dik otur. Sırtın bunu bekliyordu.
+f17|İki dakikalık esneme, sıfır dakikalık kusursuz yogadan iyidir.
+f18|Her sağlıklı seçim, gelecekteki haline küçük bir iyiliktir.
+f19|Yatmadan bir saat önce ekranları kapat. Yarınki alarm sana daha nazik gelecek.
+f20|Bugün merdivenleri kullan. Bir kerecik.
+f21|Hareket ettiğinde kalbin mutlu olur. Ona sevinecek bir şey ver.
+f22|Kafan mı bulanık? Yüzüne soğuk su çarp. Anında yeniden başlatma.
+f23|İstikrar, yoğunluğu her seferinde yener.
+f24|Sağlıklı alışkanlık, yeterince tekrarladığın bir seçimden ibarettir.
+f25|Yüzüne biraz güneş değsin. Sonra işine bak.
+l01|Bugün yeni bir şey öğren. Ne olursa.
+l02|Merak en iyi çalar saattir.
+l03|Günde on sayfa, ayda bir kitap.
+l04|Normalde içinde tutacağın bir soruyu sor.
+l05|Hatalar, bedelini peşin ödediğin derslerdir.
+l06|Beyin en keskin halini sabah yaşar. Ona güzel bir şeyler ver.
+l07|İşleyen demir ışıldar.
+l08|Her uzman, bir zamanlar erken kalkmaya devam eden bir acemiydi.
+l09|Sadece kaydırıp geçmek yerine seni düşündüren bir şey oku.
+l10|Bugün birine bir şey anlat. İki kez öğrenmiş olursun.
+l11|Bildirimler başlamadan çalış.
+l12|Motivasyonu bekleme. Başla, motivasyon arkadan gelir.
+l13|Her gün biraz, haftada bir çok çalışmaktan iyidir.
+l14|Yanılmak, doğruyu bulmanın yoludur.
+l15|Sınavlar, sınavdan önceki sabahlarda kazanılır.
+l16|Erken kalkan yol alır.
+l17|Meraklı kal. Zihni uyanık tutar.
+l18|Öğrendiklerini not al. Hafıza delik bir kovadır.
+l19|Zor problemler, henüz seninle tanışmamış bulmacalardır.
+l20|Öğrendikçe dünya daha ilginç bir yer olur.
+l21|Kaldığın yerden devam et. Beceriler böyle kazanılır.
+l22|Bu hafta işine yarayacak bir şeyi kendi kendine öğren.
+l23|Odaklı bir saatlik çalışma, dağınık üç saatten iyidir.
+l24|Gelecekteki halin şu an sessizce seni alkışlıyor.
+l25|Bilgi faiziyle büyür. Faizi bugün işletmeye başla.

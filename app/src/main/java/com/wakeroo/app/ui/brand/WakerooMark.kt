@@ -32,6 +32,7 @@ import com.wakeroo.app.ui.theme.WakerooMotion
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.pow
+import com.wakeroo.app.ui.util.Ltr
 
 // Geometry on a 100 x 100 grid; must match docs/brand/build_brand.py.
 private const val HORIZON_Y = 74f
@@ -143,8 +144,10 @@ fun Wordmark(
     accent: Color = SunriseCoral,
 ) {
     val style = TextStyle(fontFamily = Outfit, fontWeight = FontWeight.SemiBold, fontSize = fontSize, letterSpacing = (-0.015).em)
-    Row(modifier, verticalAlignment = Alignment.Bottom) {
-        Text("wakero", style = style, color = color)
-        Text("o", style = style, color = accent)
+    Ltr {
+        Row(modifier, verticalAlignment = Alignment.Bottom) {
+            Text("wakero", style = style, color = color)
+            Text("o", style = style, color = accent)
+        }
     }
 }

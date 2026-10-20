@@ -1,0 +1,150 @@
+p01|Kamu berhasil mengalahkan tombol snooze. Sisa hari ini jauh lebih mudah dari itu.
+p02|Pagi yang indah itu diciptakan, bukan ditemukan.
+p03|Matahari terbit lagi untukmu. Saatnya membalas kebaikannya.
+p04|Hari ini adalah halaman kosong. Tulislah sesuatu yang ingin kamu baca nanti malam.
+p05|Kemenangan kecil itu berarti. Bangun tidur adalah yang pertama.
+p06|Tersenyumlah pada seseorang sebelum tengah hari. Efeknya terasa juga untukmu.
+p07|Hari-hari terbaikmu biasanya dimulai seperti hari ini: dengan niat.
+p08|Tidak setiap hari terasa luar biasa, tapi setiap hari selalu punya sisi baik.
+p09|Bawalah energi yang ingin kamu terima.
+p10|Jadikan hari ini hari yang kelak ingin kamu ceritakan dengan bangga.
+p11|Pagi tak peduli soal kemarin. Kamu pun tak perlu.
+p12|Jadilah alasan pagi seseorang terasa lebih baik.
+p13|Kebahagiaan sering kali hanyalah perhatian yang diberikan dengan sengaja.
+p14|Kamu boleh bangga pada hal-hal sederhana.
+p15|Harapan adalah sesuatu yang bersayap, yang hinggap di dalam jiwa.
+p16|Tuliskan di hatimu bahwa setiap hari adalah hari terbaik dalam setahun.
+p17|Pagi adalah saat aku terjaga dan ada fajar di dalam diriku.
+p18|Setiap pagi adalah undangan riang untuk menjalani hidup sesederhana, dan bisa kukatakan sepolos, Alam itu sendiri.
+p19|Hal-hal baik tumbuh dari jam-jam pagi.
+p20|Tengoklah ke atas setidaknya sekali hari ini. Langit itu gratis.
+p21|Tidak ada matahari terbit yang sia-sia.
+p22|Mood hari ini: optimis tanpa alasan.
+p23|Kebaikan juga bisa jadi kebiasaan pagi.
+p24|Kamu sudah hadir. Itu sudah separuh lebih dari perjuangan.
+p25|Biarkan hari ini mengejutkanmu dengan cara yang menyenangkan.
+w01|Kerjakan yang sulit dulu. Setelah itu, harimu terasa lebih ringan.
+w02|Satu tugas penting sebelum makan siang lebih berharga daripada sepuluh kesibukan sesudahnya.
+w03|Memulai adalah bagian tersulit, dan kamu sudah memulainya.
+w04|Meja rapi, pikiran jernih, rencana jelas.
+w05|Momentum itu milik pagi. Bangun, lalu bangunlah momentummu.
+w06|Tentukan apa yang penting hari ini. Abaikan sisanya dengan sopan.
+w07|Dua puluh menit penuh fokus bisa menghasilkan apa yang tak sanggup dicapai dua jam penuh distraksi.
+w08|"Selesai" itu kata yang indah. Kumpulkan beberapa hari ini.
+w09|Ponselmu bisa menunggu. Tujuanmu sudah menunggu lebih lama.
+w10|Rencana lebih baik ditulis di kertas daripada disimpan di kepala.
+w11|Kemajuan, bukan kesempurnaan. Kirim saja drafnya.
+w12|Waktu terbaik untuk memulai adalah kemarin. Waktu terbaik kedua adalah sekarang.
+w13|Rapikan tempat tidurmu. Tugas pertama hari ini, beres.
+w14|Sibuk bukanlah tujuannya. Selesai, itu tujuannya.
+w15|Langkah kecil yang diambil setiap hari bisa menempuh jarak yang sangat jauh.
+w16|Awal yang baik adalah separuh dari keberhasilan.
+w17|Waktu yang hilang tidak akan pernah kembali.
+w18|Tidur cepat dan bangun pagi membuat orang sehat, kaya, dan bijaksana.
+w19|Selagi kita menunda-nunda, hidup terus melaju.
+w20|Pertama, katakan pada dirimu sendiri ingin menjadi apa; lalu lakukan apa yang perlu dilakukan.
+w21|Di pagi hari, saat kamu enggan bangun, ingatlah ini: aku bangun untuk melakukan pekerjaan seorang manusia.
+w22|Menangkan pagimu, dan siangmu biasanya akan mengikuti.
+w23|Tulis tiga hal. Kerjakan yang pertama sekarang.
+w24|Kerja keras mengalahkan bakat, saat bakat bangun kesiangan.
+w25|Satu jam hening sebelum dunia bangun adalah kekuatan super.
+c01|Tarik napas empat hitungan, embuskan enam. Lagi. Nah. Lebih baik.
+c02|Tidak semua hal harus terjawab sebelum sarapan.
+c03|Pagi yang santai tetap terhitung pagi.
+c04|Minum kopimu selagi hangat. Itu saja rencananya.
+c05|Biarkan hari datang menghampirimu sejenak.
+c06|Perhatikan cahaya pagi. Saat ini, ia sedang indah-indahnya.
+c07|Kamu tidak perlu terburu-buru untuk tepat waktu.
+c08|Damai itu soal tempo, bukan tempat.
+c09|Lima menit tenang sekarang menyelamatkanmu dari sejam kebisingan nanti.
+c10|Buka jendelanya. Biarkan sedikit pagi masuk.
+c11|Daftar tugasmu akan tetap ada setelah kamu selesai peregangan.
+c12|Tenang itu keterampilan. Pagi adalah waktu yang pas untuk berlatih.
+c13|Kerjakan satu hal dalam satu waktu, dan tuntaskan sepenuhnya.
+c14|Perjalanan seribu mil dimulai dengan satu langkah.
+c15|Pohon tumbuh tanpa terburu-buru. Kamu juga bisa.
+c16|Mulailah hidup sekarang juga, dan anggap setiap hari sebagai satu kehidupan tersendiri.
+c17|Ada pagi untuk berbuat. Ada pagi untuk sekadar ada. Keduanya baik-baik saja.
+c18|Kaki menapak lantai. Bahu rileks. Kamu pasti bisa.
+c19|Hari ini masih panjang. Kamu tidak harus menghabiskannya sekaligus.
+c20|Dengarkan satu suara tenang sebelum kamu mengecek ponsel.
+c21|Lemaskan rahangmu. Serius, coba cek.
+c22|Awal yang pelan tetaplah sebuah awal.
+c23|Sisihkan ruang untuk sedikit keheningan. Ia akan membalas kebaikanmu.
+c24|Istirahat adalah bagian dari kerja, bukan jeda darinya.
+c25|Selalu ada waktu untuk satu tarikan napas yang dalam.
+h01|Pagi yang berat juga akan berakhir. Yang ini bahkan sudah mulai.
+h02|Bangun di hari yang buruk adalah kemenangan yang jarang dilihat orang. Kami melihatnya.
+h03|Kamu tidak harus merasa siap untuk memulai.
+h04|Hari ini, kamu cukup menjalani hari ini.
+h05|Malam tergelap pun berakhir dengan matahari terbit. Dan kamu sudah bangun untuk menyambutnya.
+h06|Kuat bukan berarti tak pernah jatuh. Kuat itu bangun lagi, seperti yang baru saja kamu lakukan.
+h07|Lembutlah pada dirimu sendiri. Kamu sudah melangkah lebih baik dari yang kamu kira.
+h08|Ada hari ketika hal paling berani adalah sekadar hadir.
+h09|Badai tak bertahan selamanya. Begitu juga yang ini.
+h10|Tidak apa-apa meminta bantuan. Hari ini waktu yang tepat untuk itu.
+h11|Kemajuan bisa terjadi diam-diam. Tetap saja itu berarti.
+h12|Satu langkah. Lalu satu lagi. Begitulah gunung didaki.
+h13|Keraguan kita adalah pengkhianat, yang membuat kita kehilangan kebaikan yang mungkin kita raih, karena takut untuk mencoba.
+h14|Kamu sudah melewati setiap hari berat sejauh ini. Rekormu sempurna.
+h15|Malam yang berat? Pagi tetap berutang awal yang baru untukmu.
+h16|Perasaan itu seperti tamu. Biarkan mereka datang dan pergi.
+h17|Tak ada yang tumbuh tanpa sedikit hujan.
+h18|Lakukan hal benar berikutnya. Satu saja dulu.
+h19|Bab ini bukan seluruh isi bukunya.
+h20|Keberanian sering kali hanyalah suara pelan yang berkata: coba lagi besok. Nah, sekarang sudah besok.
+h21|Roma tidak dibangun dalam sehari. Begitu juga kamu.
+h22|Berbaik hati pada diri sendiri bukan berarti menyerah.
+h23|Berhentilah sejenak kalau perlu. Lalu lanjutkan lagi.
+h24|Sulit tidak sama dengan mustahil.
+h25|Hari ini, cukup jadi baik-baik saja. Itu sudah lebih dari cukup.
+f01|Segelas air sebelum kopi. Tubuhmu akan merasakannya.
+f02|Bergeraklah sedikit sekarang. Dirimu di sore hari akan berterima kasih.
+f03|Cahaya pagi adalah obat gratis. Keluarlah selama lima menit.
+f04|Lakukan peregangan seolah tak ada yang melihat. Memang tak ada.
+f05|Sarapan adalah dukunganmu untuk dirimu yang sedang bertumbuh.
+f06|Tidur adalah pemulihan terbaik setelah olahraga. Jaga baik-baik malam ini.
+f07|Sepuluh squat sambil menunggu air mendidih. Kemenangan mudah.
+f08|Tubuhmu sudah membawamu sampai sini. Perlakukan ia dengan baik hari ini.
+f09|Berjalanlah di waktu yang biasanya kamu pakai untuk scroll.
+f10|Jam tidur yang sama setiap malam membuat pagi seperti ini lebih mudah.
+f11|Jalan kaki itu berarti. Selalu berarti.
+f12|Makan sesuatu yang hijau sebelum hari jadi riuh.
+f13|Pagi yang kuat dibangun sejak malam sebelumnya.
+f14|Bangun, minum air, bergerak. Ulangi besok.
+f15|Udara segar adalah minuman energi termurah.
+f16|Duduk tegak. Punggungmu sudah lama menunggu ini.
+f17|Dua menit peregangan lebih baik daripada nol menit yoga sempurna.
+f18|Setiap pilihan sehat adalah hadiah kecil untuk dirimu di masa depan.
+f19|Matikan layar satu jam sebelum tidur. Alarm besok akan terasa lebih ramah.
+f20|Naik tangga hari ini. Sekali saja.
+f21|Jantungmu senang saat kamu bergerak. Beri ia alasan untuk senang.
+f22|Masih linglung? Basuh wajah dengan air dingin. Langsung segar lagi.
+f23|Konsistensi selalu mengalahkan intensitas, setiap saat.
+f24|Kebiasaan sehat hanyalah pilihan yang sudah cukup sering kamu ambil.
+f25|Biarkan sinar matahari menyentuh wajahmu. Lalu lanjutkan harimu.
+l01|Pelajari satu hal baru hari ini. Apa saja.
+l02|Rasa ingin tahu adalah jam alarm terbaik.
+l03|Sepuluh halaman sehari sama dengan satu buku sebulan.
+l04|Ajukan pertanyaan yang biasanya hanya kamu simpan sendiri.
+l05|Kesalahan hanyalah pelajaran yang sudah kamu bayar di muka.
+l06|Otak paling tajam di pagi hari. Beri ia asupan yang baik.
+l07|Latihan membuatmu makin maju.
+l08|Setiap ahli dulunya pemula yang terus bangun pagi.
+l09|Bacalah sesuatu yang membuatmu berpikir, bukan sekadar scroll.
+l10|Jelaskan sesuatu kepada seseorang hari ini. Kamu akan mempelajarinya dua kali.
+l11|Belajarlah sebelum notifikasi mulai berdatangan.
+l12|Jangan tunggu termotivasi. Mulailah, dan motivasi akan menyusul.
+l13|Sedikit setiap hari lebih baik daripada banyak tapi seminggu sekali.
+l14|Salah adalah jalan menuju benar.
+l15|Ujian dimenangkan di pagi-pagi sebelum harinya tiba.
+l16|Bangun pagi, rezeki tak dipatok ayam.
+l17|Tetaplah penasaran. Itu menjaga pikiranmu tetap terjaga.
+l18|Catat apa yang kamu pelajari. Ingatan itu seperti ember bocor.
+l19|Masalah sulit hanyalah teka-teki yang belum bertemu denganmu.
+l20|Semakin banyak kamu belajar, semakin menarik dunia ini.
+l21|Lanjutkan dari bagian terakhirmu. Begitulah keterampilan terbentuk.
+l22|Pelajari sendiri sesuatu yang akan kamu pakai minggu ini.
+l23|Satu jam belajar dengan fokus lebih baik daripada tiga jam yang penuh distraksi.
+l24|Dirimu di masa depan diam-diam sedang menyemangatimu sekarang.
+l25|Ilmu itu berbunga seperti tabungan. Mulai menabung hari ini.

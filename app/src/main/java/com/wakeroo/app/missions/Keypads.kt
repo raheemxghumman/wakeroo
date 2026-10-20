@@ -40,6 +40,7 @@ import com.wakeroo.app.ui.theme.Outfit
 import com.wakeroo.app.ui.theme.Paper
 import com.wakeroo.app.ui.theme.Space
 import com.wakeroo.app.ui.theme.SunriseCoral
+import com.wakeroo.app.ui.util.Ltr
 
 sealed interface Key {
     data class Char(val c: kotlin.Char) : Key
@@ -98,38 +99,42 @@ fun RowScope.KeyCap(
 
 @Composable
 fun NumberPad(onKey: (Key) -> Unit, modifier: Modifier = Modifier) {
-    val rows = listOf("123", "456", "789")
-    Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.md)) {
-        rows.forEach { row ->
-            Row(horizontalArrangement = Arrangement.spacedBy(Space.md)) {
-                row.forEach { KeyCap(Key.Char(it), onKey, 72.dp) }
+    Ltr {
+        val rows = listOf("123", "456", "789")
+        Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.md)) {
+            rows.forEach { row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(Space.md)) {
+                    row.forEach { KeyCap(Key.Char(it), onKey, 72.dp) }
+                }
             }
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(Space.md)) {
-            KeyCap(Key.Delete, onKey, 72.dp)
-            KeyCap(Key.Char('0'), onKey, 72.dp)
-            KeyCap(Key.Enter, onKey, 72.dp, accent = true)
+            Row(horizontalArrangement = Arrangement.spacedBy(Space.md)) {
+                KeyCap(Key.Delete, onKey, 72.dp)
+                KeyCap(Key.Char('0'), onKey, 72.dp)
+                KeyCap(Key.Enter, onKey, 72.dp, accent = true)
+            }
         }
     }
 }
 
 @Composable
 fun LetterPad(onKey: (Key) -> Unit, modifier: Modifier = Modifier) {
-    val rows = listOf("qwertyuiop", "asdfghjkl", "zxcvbnm")
-    Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.sm)) {
-        rows.forEachIndexed { i, row ->
-            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                if (i == 1) Box(Modifier.weight(0.5f))
-                if (i == 2) KeyCap(Key.Delete, onKey, 54.dp, weight = 1.5f)
-                row.forEach { KeyCap(Key.Char(it), onKey, 54.dp) }
-                if (i == 1) Box(Modifier.weight(0.5f))
-                if (i == 2) KeyCap(Key.Enter, onKey, 54.dp, weight = 1.5f, accent = true)
+    Ltr {
+        val rows = listOf("qwertyuiop", "asdfghjkl", "zxcvbnm")
+        Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.sm)) {
+            rows.forEachIndexed { i, row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                    if (i == 1) Box(Modifier.weight(0.5f))
+                    if (i == 2) KeyCap(Key.Delete, onKey, 54.dp, weight = 1.5f)
+                    row.forEach { KeyCap(Key.Char(it), onKey, 54.dp) }
+                    if (i == 1) Box(Modifier.weight(0.5f))
+                    if (i == 2) KeyCap(Key.Enter, onKey, 54.dp, weight = 1.5f, accent = true)
+                }
             }
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-            Box(Modifier.weight(1.5f))
-            KeyCap(Key.Space, onKey, 54.dp, weight = 7f)
-            Box(Modifier.weight(1.5f))
+            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                Box(Modifier.weight(1.5f))
+                KeyCap(Key.Space, onKey, 54.dp, weight = 7f)
+                Box(Modifier.weight(1.5f))
+            }
         }
     }
 }

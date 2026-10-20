@@ -163,7 +163,7 @@ fun Alarm.soundTitle(): String = when {
 }
 
 fun Alarm.soundCategoryTitle(): String = when {
-    soundUri?.startsWith("content://media") == true -> "Phone tone"
+    soundUri?.startsWith("content://media") == true -> tr("Phone tone")
     soundUri != null -> tr("Your music")
     else -> Tones.byId(tone).category.title
 }

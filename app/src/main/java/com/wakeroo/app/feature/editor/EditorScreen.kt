@@ -124,6 +124,7 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import com.wakeroo.app.ui.util.Ltr
 
 @Composable
 fun EditorScreen(
@@ -239,19 +240,21 @@ private fun TimeCard(draft: Alarm, use24h: Boolean, state: EditorState, onTime: 
         Box(contentAlignment = Alignment.Center) {
             // The highlight band the centre values sit in.
             Box(Modifier.fillMaxWidth(0.86f).height(64.dp).clip(RoundedCornerShape(20.dp)).background(Glass))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                DrumWheel(
-                    values = hours, selected = if (use24h) draft.hour else draft.hour % 12, style = wheelStyle, label = "Hour",
-                    onSelected = { i -> onTime(if (use24h) i else i + if (pm) 12 else 0, draft.minute) },
-                )
-                Text(":", style = wheelStyle, color = Paper)
-                DrumWheel(values = minutes, selected = draft.minute, style = wheelStyle, label = "Minute", onSelected = { m -> onTime(draft.hour, m) })
-                if (!use24h) {
+            Ltr {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     DrumWheel(
-                        values = listOf(formatMeridiem(0), formatMeridiem(12)), selected = if (pm) 1 else 0, cyclic = false, width = 80.dp,
-                        style = MaterialTheme.typography.headlineSmall, label = "AM or PM",
-                        onSelected = { i -> onTime(draft.hour % 12 + if (i == 1) 12 else 0, draft.minute) },
+                        values = hours, selected = if (use24h) draft.hour else draft.hour % 12, style = wheelStyle, label = tr("Hour"),
+                        onSelected = { i -> onTime(if (use24h) i else i + if (pm) 12 else 0, draft.minute) },
                     )
+                    Text(":", style = wheelStyle, color = Paper)
+                    DrumWheel(values = minutes, selected = draft.minute, style = wheelStyle, label = tr("Minute"), onSelected = { m -> onTime(draft.hour, m) })
+                    if (!use24h) {
+                        DrumWheel(
+                            values = listOf(formatMeridiem(0), formatMeridiem(12)), selected = if (pm) 1 else 0, cyclic = false, width = 80.dp,
+                            style = MaterialTheme.typography.headlineSmall, label = tr("AM or PM"),
+                            onSelected = { i -> onTime(draft.hour % 12 + if (i == 1) 12 else 0, draft.minute) },
+                        )
+                    }
                 }
             }
         }
@@ -307,7 +310,7 @@ private fun RepeatSection(draft: Alarm, update: ((Alarm) -> Alarm) -> Unit) {
             Chip(tr("Weekdays"), draft.days == weekdays && draft.date == null, { update { it.copy(days = weekdays, date = null) } })
             Chip(tr("Every day"), draft.days.size == 7 && draft.date == null, { update { it.copy(days = DayOfWeek.entries.toSet(), date = null) } })
             Chip(
-                draft.date?.let { DateTimeFormatter.ofPattern("EEE d MMM").format(it) } ?: "Pick a date",
+                draft.date?.let { DateTimeFormatter.ofPattern("EEE d MMM").format(it) } ?: tr("Pick a date"),
                 draft.date != null, { picking = true },
             )
         }

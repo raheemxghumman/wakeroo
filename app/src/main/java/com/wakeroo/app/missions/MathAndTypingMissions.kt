@@ -144,12 +144,13 @@ fun TypingMission(config: MissionConfig, onActivity: () -> Unit, onProgress: (Fl
             label = "phrase",
         ) { phrase ->
             // Letters turn gold as they are typed correctly; a wrong letter shows in red.
-            val norm = TypingPhrases.normalize(typed)
+            val norm = TypingPhrases.fold(TypingPhrases.normalize(typed))
+            val folded = TypingPhrases.fold(phrase)
             val text = buildAnnotatedString {
                 phrase.forEachIndexed { i, c ->
                     val color = when {
                         i >= norm.length -> Paper.copy(alpha = 0.55f)
-                        norm[i] == c -> MorningGold
+                        norm[i] == folded[i] -> MorningGold
                         else -> Alert
                     }
                     withStyle(SpanStyle(color = color)) { append(c) }

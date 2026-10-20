@@ -1,0 +1,806 @@
+0|\n\nWakeroo ile uyandım
+1|Yeni telefon alarm izinlerini sıfırlar, o yüzden burada da çaldıklarından emin olalım.
+2|· giderek yükselir
+3|· sırayla değişir
+4|"{0}". Nedenini görmek ve düzeltmek için dokun.
+5|+1 dk
+6|+10 dk
+7|+20 dk
+8|+30 dk
+9|+5 dk
+10|1 sa önce
+11|1 dk
+12|Üst üste 1 sabah
+13|1 nesne
+14|1 cümle
+15|1 erteleme
+16|10 dk
+17|15 dk
+18|15 dk önce
+19|2 dk
+20|24 saat biçimi
+21|30 dk önce
+22|5 dk
+23|7,5 sa uyku
+24|8 sa uyku
+25|Biraz yavaş. Önümüzdeki bir saat içinde biraz gün ışığı çok iyi gelir.
+26|Her sabah farklı bir {0} ton, böylece asla alışmazsın.
+27|Birkaç dakika sonra Wakeroo "Hâlâ uyanık mısın?" diye sorar. Cevap yoksa alarm geri gelir.
+28|Biraz daha: yaklaşık üç kelime
+29|Yatmadan önce bir hatırlatma, uyku sesleri tek dokunuş uzağında.
+30|Bir dakika içinde kolay bir görevle test alarmı çalar. Telefonu kilitle ve bekle: kilit ekranının üstünde çalarsa her şey hazır.
+31|BU ALARM HAKKINDA
+32|Hakkında
+33|'Yatağı topla' gibi bir alışkanlık ekle
+34|Görev ekle
+35|Görevi ekle
+36|En fazla beş küçük alışkanlık ekle.
+37|Hava durumunu ekle
+38|Alarmdan sonra: planın, hava durumu, serin ve bir söz. Kendiliğinden kapanır.
+39|Bu süre boyunca dokunulmazsa tam ses geri gelir ve görev baştan başlar.
+40|Uyandıktan sonra {0} için yağmur, don ya da sıcak varsa bir not.
+41|{0} dk sonra
+42|Alarm
+43|Alarm uyarıları
+44|Alarm ve görev ekranları her zaman koyu kalır, sabah 6'da gözü yormaz.
+45|Alarm davranışı
+46|Alarm silindi
+47|Alarm sağlığı
+48|Alarm çalıyor
+49|Alarm kaydedildi
+50|Alarm {0} sonrasına kuruldu
+51|Alarm sesi
+52|Alarm kapatıldı
+53|Alarm ses düzeyi
+54|Alarmlar
+55|Alarmlar yalnızca kulaklığında çalabilir. Ayarlar'da "Her zaman telefon hoparlöründen çal"ı aç.
+56|Alarmlar telefon hoparlöründen çalmaya devam eder.
+57|Alarmlar, görevler ve fotoğraflar telefonunda kalır. Hesap yok, alarmda takip yok.
+58|Her şey hazır!
+59|Her şey hazır. Alarmların çalacak.
+60|İzin ver
+61|Wakeroo'nun sana bildirim göndermesine izin verilsin mi?
+62|Alarm uyarılarına izin ver
+63|Otomatik başlatmaya izin ver
+64|Tam ekran bildirimlere izin ver
+65|Hareket erişimine izin ver
+66|İzin verildi. Alarmlar tam dakikasında çalar.
+67|Neredeyse, sabit tut
+68|Kulaklıkta da çal
+69|Her zaman telefon hoparlöründen çal
+70|Sabah için kurulu bir şey yoksa akşam bir hatırlatma.
+71|Android, Wakeroo'yu az kullanılan olarak işaretledi. Her gün aç ya da widget ekle.
+72|Animasyonlar
+73|Başka
+74|Herhangi bir kod
+75|Herhangi bir nesne, ve kamera gerçekten emin olmalı.
+76|Ceketten tavaya 30 nesneden herhangi biri.
+77|Yavaşça kayan herhangi bir fotoğraf
+78|Herhangi bir şarkı ya da ses dosyası
+79|Uygulama pil kullanımı
+80|Uygulama varsayılanı
+81|Uygulama uykuda
+82|Görünüm
+83|Alarm saatinde, işin bitince ses durur.
+84|Yatma saatinde
+85|En az 3 gerçek kelime
+86|Sıfırda. Wakeroo çalarken sesi açar, ama telefon ayarlarını kontrol et.
+87|Saat {0} {1}'de, sabah için kurulu bir şey yoksa bir hatırlatma.
+88|Kutup Işığı
+89|Kutup Işığı, Okyanus Şafağı, UYAN ve kendi fotoğrafın, artı dört ton daha.
+90|YATMA SAATİ
+91|Geri
+92|Görevlere dön
+93|Görevime dön
+94|Pil tasarrufu
+95|Pil tasarrufu › Kısıtlama yok
+96|Yatma saati: {0}
+97|Saat {3} {4} alarmından önce {2} uyumak için {0} {1}'de yat.
+98|Yatma saati
+99|Yatma saati ve "yarın alarm yok" hatırlatmaları. Bunları sessize almak alarmları asla susturmaz.
+100|Yatmadan önce, bir sonraki alarmına göre hesaplanır.
+101|Zil Fırtınası
+102|En iyi seri
+103|Zil ve Kuş
+104|Engellendi. Alarmlar geç çalabilir.
+105|Parlak Nabız
+106|Neşeli ve enerjik
+107|Kahverengi gürültü
+108|Buzzer
+109|Sakin
+110|10 dakikadan kısa sürede çalacak bir alarmda açılamaz, kimse yanlışlıkla kilitlenmesin diye.
+111|Bunu yapamıyor musun? Yedek göreve geç
+112|İptal
+113|Yüzlük
+114|Değiştir
+115|Fikrini mi değiştirdin? Kapat, hiçbir şey değişmez.
+116|Kontrol et
+117|Cevabı kontrol et
+118|Sağlığı kontrol et
+119|{0} üzerindeki gökyüzüne bakılıyor…
+120|Önce Sabah sekmesinde şehrini seç.
+121|Uyanma görevini seç
+122|Seçilen: {0}
+123|Açık
+124|Kapat
+125|Önizlemeyi kapat
+126|Bulutlu
+127|Kod konumu: {0}
+128|Soğuk bir gün, en fazla {0}°. Sıkı giyin.
+129|Beş farklı türde görev tamamla.
+130|Devam
+131|{0} ile devam et
+132|Uyku sesleri çalarken kontroller
+133|Google Play'e ulaşılamadı. Birazdan tekrar dene.
+134|Cırcır böcekleri
+135|Koyu
+136|Şafak Çanları
+137|Sil
+138|Alarmı sil
+139|Bu alarmı sil
+140|Ayrıntılar
+141|Çalmadı (telefon kapalı ya da uygulama duraklatılmış)
+142|Çalmadı: telefon kapalı ya da uygulama duraklatılmış
+143|Kapat
+144|Rahatsız Etmeyin
+145|İzin verme
+146|Yok mu? Başka bir nesne dene
+147|Alarmlardan sonra bunu gösterme
+148|Tamam
+149|Bir bardak su iç
+150|Çisenti
+151|Her sabah
+152|Erkenci Kuş
+153|Kazanıldı
+154|{0} tarihinde kazanıldı
+155|Düzenle
+156|Alarmı düzenle
+157|Acil durum
+158|Acil çıkış
+159|Enerjik
+160|Yükselt
+161|Her gün
+162|Tüm görevler ve güvenilirlik özellikleri ücretsiz kalır. Her zaman.
+163|Takvimde her ay ve kayıtta her alarm.
+164|Tüm uyanma sahneleri
+165|Gündelik
+166|Her şey hazır. Alarmların çalacak.
+167|Bitkin
+168|Aşırı
+169|Alarmından önce kısılır · {0} sa {1} dk
+170|Alarmından önce kısılır · {0} dk
+171|Vantilatör
+172|Fanfar
+173|En hızlı: {0}
+174|Tekrar uyudun, alarm yeniden çaldı
+175|Tekrar uyudun, alarm geri geldi
+176|Fincan gibi gündelik bir nesne bul.
+177|Bunu bul
+178|Başka bir odada on görev tamamla (QR, fotoğraf, NFC, nesne avı ya da adım).
+179|Önce görevi bitir. Uykulu halinin, uyanıkken yaptığın planı iptal etmesini bu engeller.
+180|İlk uyanma görevini tamamla.
+181|Görevini beş kez bir dakikadan kısa sürede bitir.
+182|Alarmı durdurmak için görevini bitir
+183|İlk Kalkış
+184|Düzelt
+185|Döndürmek için kaydır
+186|Sis
+187|Telefonunu izler
+188|Derin uyuyanlar için. Çok yüksek
+189|İki Hafta
+190|Tam
+191|Tam Hafta
+192|Tam ses. Susturmak için görevine başla
+193|Tam ekran alarm
+194|KALK
+195|HADİ
+196|Nazik
+197|Yumuşak başlangıç
+198|İlk haftana göre ortalama 30 dakika erken kalk.
+199|Kalk ve yürü
+200|Beş kez sabah 6'dan önce kalk.
+201|Seni yataktan çıkarır
+202|%d:%02d içinde daha yüksek
+203|Yaklaşıyorsun
+204|İyice salla
+205|Koşuya çık
+206|İyi günler
+207|İyi akşamlar
+208|Günaydın
+209|İyi geceler
+210|İyi, geliştirilecek bir iki şeyle
+211|Tamamdır!
+212|Dersten önce spor, sınav saat 9'da…
+213|ZOR MOD
+214|Alışkanlık Oturdu
+215|Zor
+216|Zor zamanlar
+217|Zor Mod
+218|Kulaklık bağlı
+219|Sağlık
+220|Gizle
+221|Bir hafta gizle
+222|En yüksek {0}°, en düşük {1}°
+223|Basılı tut
+224|Çerçevenin içinde sabit tut
+225|Telefonun üst kısmını çıkartmaya dokundur. Yataktan uzanamayacağın bir yere yapıştır.
+226|Telefonun üst kısmını bir saniye dokundur
+227|Sıcak bir gün, en fazla {0}°. Bol su iç.
+228|Görüntünün ne kadar eşleşmesi gerektiği
+229|Nasıl hissediyorsun?
+230|Uyandım
+231|Zaten Kısıtlama yok yaptım
+232|Görev sırasında durursam
+233|Dosyan taşınır ya da silinirse Wakeroo Rise çalar. Alarm asla sessiz kalmaz.
+234|15 dk sonra
+235|8 sa sonra
+236|Son kullanılanlarda Wakeroo'yu aşağı çekip kilitle
+237|Uzaya Doğru
+238|Alarm ekranında büyük görünür. Bir sebep ertelemeyi yener.
+239|Nesne avı
+240|Nesne avı kamerayı yalnızca alarm ekranı açıkken kullanır.
+241|Sadece bir kez
+242|Devam et. Durursan boşalır
+243|Alarmı olduğu gibi bırak
+244|Yürümeye devam et. Durursan iz boşalır
+245|Korna
+246|GEÇEN HAFTA
+247|Dil
+248|Sonra, beni alarmıma götür
+249|Yağmuru vantilatörle karıştır, pembe gürültü ile cırcır böceklerinin kilidini aç.
+250|Öğrenme
+251|Daha az
+252|İlk alarmını kuralım. Yaklaşık bir dakika sürer.
+253|Açık
+254|17 × 6 + 38 gibi
+255|24 + 7 gibi
+256|34 × 11 + 245 gibi
+257|Telefonumla aynı
+258|Görevin yükleniyor…
+259|Kilitli
+260|Yerini ara
+261|Harika görünüyor. Güne başlamak için ✓'e dokun
+262|Uyuklamana izin vermeyen dev harfler
+263|Harika. Uykun karşılığını veriyor.
+264|Kahve yap, sonra yürüyüşe çık
+265|Uyanık kaldığımdan emin ol
+266|Çaldığından emin ol
+267|Çaldıklarından emin ol
+268|Matematik
+269|Madalyalar · {0} / {1}
+270|Orta
+271|Hafıza kareleri
+272|Minimal Siyah
+273|Görev Kâşifi
+274|Görev tamam
+275|Görev {0} içinde tamam
+276|Görev {0} / {1}
+277|Görevler
+278|Başka odadaki görevler en iyisidir: yataktan çıkman gerekir.
+279|Uyku seslerini karıştır
+280|Daha fazla
+281|Sabah
+282|Sabah ve bildirimler
+283|Sabah özeti
+284|Sabah rutini
+285|Motorola
+286|YENİ MADALYA
+287|SONRAKİ ALARM
+288|NFC kapalı
+289|NFC etiketi
+290|ALARM YOK
+291|ÖĞLE
+292|Düzeltilmeli
+293|Üç haftalık sabah gerekir
+294|Asla
+295|Yeni alarm
+296|Sonraki alarm
+297|Sonraki alarm {0} {1} {2}
+298|Sonraki ay
+299|Sonraki atlandı
+300|Güzel tempo. Devam
+301|Güzel. O sakinliği koru.
+302|Güzel. Sonraki turda bir kare daha
+303|Islah Olmuş Baykuş
+304|Gece Göğü
+305|Burada NFC yok. Simüle etmek için çıkartmaya dokun (hata ayıklama sürümü).
+306|Bu telefonda NFC yok
+307|Bu Google hesabında Pro satın alımı bulunamadı.
+308|Ertelemesiz Hafta
+309|Yarın için alarm yok
+310|O gün hiç alarm çalmadı.
+311|Alarm yok
+312|Sabah için alarm yok
+313|Banner yok, üstelik bağımsız bir alarmı desteklersin
+314|Pil sınırı yok
+315|Henüz sonuç yok. Yazımı ya da bağlantını kontrol et.
+316|Hareket sensörü yok
+317|Kayıtlı referans fotoğraf yok, yedek görevi kullan
+318|Kurulacak bir şey yok. Alarm saatinde günün hakkında en az üç kelime yazarsın. Planın sonra Sabah sekmesinde görünür.
+319|Bunda erteleme yok. Yapabilirsin.
+320|Normal
+321|Tepende kuzey ışıkları
+322|Şimdi değil
+323|O değil. Tekrar izle
+324|Yarın değil
+325|Henüz denenmedi. Bir dakika, alarmlarının çalıştığını kanıtlar.
+326|Şimdi
+327|Şimdi aynı {0} kareye dokun · {1} bulundu
+328|Nesne {0} / {1}
+329|Bulunacak nesneler
+330|Okyanus Şafağı
+331|Okyanus dalgaları
+332|Kapalı
+333|Kapatmak, silmek, atlamak ve ertelemek için önce görev gerekir. Yarı uykulu hile yok.
+334|Kapatmak, silmek, atlamak, ertelemek ya da 2 sa veya daha fazla ileri almak için önce görev gerekir. Acil çıkış her zaman çalışır.
+335|Kapalı. Alarm ekranı açılamaz.
+336|Kapalı. Yalnızca küçük bir banner görürsün.
+337|İdare eder
+338|İdare eder de iyi bir başlangıç.
+339|Açık
+340|Zamanında
+341|{0} cihazlarda
+342|Açık, ama alarmlar geçebilir.
+343|Açık ve alarmları engelliyor. Rahatsız Etmeyin'de alarmlara izin ver.
+344|Zamanında alarmlar
+345|Açık.
+346|Bir kez
+347|Telefonunun alarm seslerinden biri
+348|Yalnızca gerçek acil durumlar için
+349|Tahmin için Open-Meteo'ya yalnızca şehrin koordinatları gönderilir. Seninle ilgili hiçbir şey değil.
+350|Görevi aç
+351|Perdeleri aç
+352|Optimize edilmiş
+353|Yataktan Çıktı
+354|Parçalı bulutlu
+355|Geçti
+356|Geçti. Telefonun Wakeroo alarmlarını düzgün çalıyor.
+357|Yatma saati geçti. Her uyku dakikası yine de önemli
+358|Duraklat
+359|Duraklatıldı · {0}
+360|Bir kez öde. Abonelik yok, yenileme yok, sürpriz yok.
+361|Telefon zil sesi
+362|Telefonlar alarmları sinsice engeller. Bir kez aç, iş bitsin.
+363|Fotoğraf yeri
+364|Lavabon gibi bir yerin fotoğrafını çek.
+365|Cümle {0} / {1}
+366|Cümleler
+367|Bir görev seç
+368|Fotoğraf seç
+369|Birini seç. Pro ile iki sesi karıştır.
+370|Başka bir odada barkodu ya da QR kodu olan bir şey seç (diş macunu, kahve, bir kitap) ve şimdi tara.
+371|Karıştırmak için en fazla iki tane seç.
+372|Şehrini bir kez seç. Konum izni gerekmez.
+373|Sesini seç
+374|Uyanma sahneni seç
+375|Pembe gürültü
+376|Uyku seslerini çal
+377|Medya sesinden çalar ve alarmından her zaman bir dakika önce kısılır, böylece onu asla bastırmaz.
+378|Fotoğraf yerine doğrult
+379|Pozitiflik
+380|Şekerleme
+381|Şekerleme, {0}
+382|Deneme
+383|Pro gibi davran (hata ayıklama)
+384|Önizleme · {0}
+385|Önceki ay
+386|Gizlilik seçenekleri
+387|Pro
+388|Pro etkin. Teşekkürler!
+389|Pro zaten etkin.
+390|Pro geri yüklendi. Tekrar hoş geldin!
+391|Pro sahnelerinin kilidini istediğin zaman açabilirsin. Acele yok.
+392|Soru {0} / {1}
+393|Sorular
+394|Verimlilik
+395|Her alarmın kanıtı. Bir alarm çalmadıysa burada kırmızı görünür.
+396|Bu alarmı koru
+397|Satın alımlar şu an kullanılamıyor. Bağlantını kontrol edip tekrar dene.
+398|Saf siyah. OLED ekrana ve gözlere nazik
+399|QR / Barkod
+400|Hızlı Uyanış
+401|Hızlı toplamalar
+402|Günün sözü
+403|ALARM KAYDI
+404|KALK
+405|Yağmur
+406|Saat {0} civarında yağmur bekleniyor. Şemsiye al.
+407|Hazır
+408|Çalmaya hazır
+409|Azaltılmış
+410|Dinç
+411|Başka çıkartma kaydet
+412|Kodunu kaydet
+413|Çıkartmanı kaydet
+414|Kod kaydedildi
+415|Kaydedildi: {0} üzerindeki kod
+416|Kaydedildi: {0} yanındaki çıkartma
+417|Esnek
+418|Kareleri hatırla
+419|Hatırlatmalar
+420|Hatırlatmaların kendi bildirim kanalı vardır. Onları sessize almak alarmlarını asla etkilemez.
+421|Kaldır
+422|Pil sınırlarını kaldır
+423|Görevi kaldır
+424|Tekrarla
+425|Parlayan karelerin desenini tekrarla.
+426|Satın alımı geri yükle
+427|Kısıtlı
+428|Devam ettir
+429|Yeniden çek
+430|1 dakika içinde test çal
+431|1 dakika içinde çal
+432|Hoparlörde ve bağlı olan her şeyde çalar.
+433|Çalan alarmlar
+434|1 dakika içinde çalar. Telefonunu kilitle
+435|Bir dakika içinde kolay bir görevle çalar. Telefonu kilitle ve bekle: kilit ekranının üstünde çalarsa her şey hazır.
+436|{0} sonra çalar
+437|Sırayla
+438|Zor bir başlangıç. Su, ışık ve bugün kendine nazik ol.
+439|Tur {0} / {1}
+440|Turlar
+441|Rutin Ustası
+442|Rutin tamam. Harika bir başlangıç!
+443|Kurduğundaki açının aynısı
+444|Aynı ses
+445|Samsung
+446|Kaydet
+447|Alarmı kaydet
+448|Bu değişiklikleri kaydet
+449|Fotoğraf yerini kaydet
+450|Kaydedildi
+451|Kaydediliyor…
+452|Başka bir odada bıraktığın bir kodu tara.
+453|Başka kod tara
+454|{0} üzerindeki kodu tara
+455|Kodunu tara
+456|Kayıtlı kodunu tara
+457|Sahne
+458|Ara, ör. Lahor veya Lizbon
+459|Aranıyor…
+460|Pro ile ilk alarmından bu yana her ayı gör
+461|Pro ile tüm geçmişini gör
+462|Alarm kur
+463|Tarih seç
+464|Bir tane kur, Wakeroo yatma saatini hesaplasın.
+465|Saniyeler içinde kur.
+466|Önce kur
+467|Bu gece kur · o zamana kadar matematik
+468|{0} {1} kur
+469|Saatin ayarlanıyor…
+470|Ayarlar
+471|Ayarlar › Uygulamalar › Uygulamaları yönet › Wakeroo › Otomatik başlatma: açık
+472|Ayarlar › Uygulamalar › Wakeroo › Pil kullanımı › Arka plan etkinliğine izin ver
+473|Ayarlar › Uygulamalar › Wakeroo › Pil › Kısıtlama yok
+474|Ayarlar › Pil › Uygulama başlatma › Wakeroo › Manuel yönet
+475|Ayarlar › Pil › Arka plan güç tüketimi › Wakeroo › İzin ver
+476|Ayarlar › Pil › Arka plan kullanım sınırları › Asla uyumayan uygulamalar › Wakeroo'yu ekle
+477|Hiç ertelemeden üst üste yedi sabah.
+478|Salla
+479|Güneş dolana kadar telefonu salla.
+480|Doldurmak için salla
+481|Telefonunu salla
+482|Sallama
+483|Paylaş
+484|Sözü paylaş
+485|Serini paylaş
+486|Harikasın! Uyandın
+487|Bana {0} göster
+488|Alarm ekranındayken sessizce gösterilir
+489|Alarm çaldığında alarm ekranını gösterir
+490|Siren
+491|Şimdilik atla
+492|Sonrakini atla
+493|Bir sonrakini atla
+494|Bir sonraki atlanıyor
+495|Uyku
+496|Uyku hedefi
+497|Uyku sesleri
+498|Ertele
+499|{0} dakika ertele
+500|{0} dk ertele  ·  {1} kaldı
+501|Ertelendi
+502|İzin verilen erteleme
+503|Kar
+504|Şarjı biten bir Bluetooth hoparlör ya da unutulan kulaklık alarmını asla susturmasın diye.
+505|Alarm ekranının açılabilmesi için
+506|Yumuşak Marimba
+507|Yumuşak ve sıcak, hafif uyuyanlar için
+508|Hızlı toplamalar çöz. Beynini uyandırır.
+509|Bir şey alarmının çalmasını engelleyebilir
+510|Ses
+511|Sesler
+512|Boşluk
+513|Yer ayarlanmadı
+514|Yer kaydedildi. Alarm saatinde kamerayı aynı görüntüye doğrult.
+515|Matematiği, mutfakta bir QR'ı ve lavabo fotoğrafını üst üste koy.
+516|10 saniye kıpırdamazsan sayaç azalır, yani hareket etmeye devam etmelisin.
+517|Alarm saatinde duracağın yerde dur ve hareket etmeyen bir şeyi kadraja al: lavabo, su ısıtıcısı, bir poster.
+518|Yıldızlar ve yavaş bir şafak
+519|Görevi başlat
+520|Alarmı durdurmak için görevi başlat
+521|Günüme başla
+522|Uyku seslerini başlat
+523|Yumuşak başlar ve tam sese çıkar, sakin uyanırsın.
+524|Bu sesle başlar. Bir dakikada yanıt yoksa tam seste aşırı bir tona geçer.
+525|Çelik Davul
+526|Adım {0} / {1}
+527|Adımlar
+528|Banyo aynasının ya da su ısıtıcısının yanına bir NFC etiketi (ucuz NTAG çıkartmalar olur) yapıştır ve burada kaydet.
+529|Çıkartma: {0}
+530|Çıkartma kilitlendi
+531|Çıkartma kaydedilmedi
+532|Hâlâ uyanık mısın?
+533|Durdur
+534|Uyku seslerini durdur
+535|Seri
+536|2 dakika esne
+537|Katı
+538|Dönen bir gezegen üzerinde gün doğumu
+539|BU HAFTA
+540|BUGÜN
+541|BUGÜNÜN PLANI
+542|Yataktan uzak bir yerin fotoğrafını çek, örneğin banyo lavabosu ya da su ısıtıcısı.
+543|Fotoğrafı çek
+544|Bir dakika sürer. Telefonunda çalıştığını kanıtlar.
+545|Küçük bir banner yerine kilit ekranını kaplar
+546|Halka bitmeden dokun, yoksa alarm geri gelir.
+547|Uyanık olduğunu onaylamak için dokun
+548|Çevirmek için dokun
+549|Alarm ses düzeyinde dinlemek için dokun.
+550|Alarmının ses düzeyinde dinlemek için dokun.
+551|Nedenini görmek ve bir dakikada düzeltmek için dokun.
+552|En iyini görmek için dokun
+553|Kurmak için dokun
+554|Telefonunu aynanın yanındaki çıkartmaya dokundur.
+555|Telefonunu şu çıkartmaya dokundur: {0}
+556|Telefonunu çıkartmana dokundur
+557|Bir alarm kaçarsa ve nasıl düzeltileceğini sana söyler
+558|Sıcaklık
+559|Test alarmı
+560|1 dakika içinde test alarmı. Telefonunu kilitle ve bekle
+561|Test alarmı: geçmek için görevi bitir
+562|Test geçti
+563|Bağımsız bir alarmı desteklediğin için teşekkürler.
+564|Bu kelimeye benzemiyor. Gerçek bir plan yaz
+565|Bu farklı bir kod. Kaydettiğin kodu bul.
+566|Bu farklı bir çıkartma. Kaydettiğini bul.
+567|Nasıl çalıştığı bu
+568|İşte bu, sabit tut
+569|Alarm uygulamalarının çalmamasının 1 numaralı sebebi
+570|Bitirene kadar alarm çalmaya devam eder. Başka odadaki görevler en iyisidir.
+571|Alarm çalmaya devam eder. Bu serini bozar ve kayda geçer.
+572|Kendi ekranını seçenler dışında tüm alarmlar için alarm ekranı.
+573|Alarm kilit ekranını kaplar.
+574|Son test tamamlanmadı. Tekrar dene.
+575|Her seferinde aynı ses.
+576|Tema
+577|Hemen her evde olan şeyler: fincan, sandalye, bitki, lavabo.
+578|Bu tarih geçti
+579|Alarm ekranın böyle görünür. Tam ekran görmek için birine dokun.
+580|Üst Üste Üç
+581|Günün hakkında üç kelime
+582|Fırtına
+583|Tüm sabah rutinini yedi gün tamamla.
+584|Kare
+585|Kalkma vakti
+586|Kalkma süresi, son 7 gün
+587|Rahatlama vakti
+588|Zamanlayıcı
+589|İpucu: yataktan uzanamayacağın bir kod en iyisidir.
+590|Yorgun
+591|Bugün
+592|Yarın
+593|Bu gece
+594|Çok hareketsiz! Tam ses geri geldi. Devam et
+595|Çok hareketsiz! Tam ses geri geldi. Baştan başla
+596|El feneri
+597|Sesin ayarlanıyor…
+598|Kapat
+599|Wakeroo için "Pil kullanımını optimize et"i kapat
+600|"Kullanılmayan uygulamaları uyut"u kapat
+601|Otomatik başlatma, İkincil başlatma ve Arka planda çalışmayı aç
+602|Tam ekranı aç
+603|Bu alarmı kapat
+604|Bu alarmı kapatmak, silmek, atlamak ya da ertelemek için önce görev gerekir. Pro'nun bir parçası.
+605|Bir cümle yaz
+606|Kısa bir cümleyi harf harf yaz.
+607|Bugün yapacağın ilk şeyi yaz.
+608|Planını yaz
+609|Yaz: {0}
+610|Yazma
+611|Geri al
+612|Pro'yu aç · tek seferlik {0}
+613|Kısıtlama yok
+614|Kısıtlama yok. {0} Wakeroo'yu uyutmayacak.
+615|Kurulana kadar bu alarm matematik kullanır.
+616|Alarmıma kadar
+617|Kalkış: {0}
+618|Kalkış: {0} {1}  ·  {2} içinde uyandı
+619|Kalkış süresi
+620|{0} {1}'den beri ayakta
+621|Alarm başına en fazla 5 görev
+622|Alarm başına en fazla 5 görev, tüm geçmiş, banner yok. Bir kez öde.
+623|Pro ile en fazla 5 görev
+624|Her sabah bir görevle ayakta.
+625|Kullan
+626|Bu görevi kullan
+627|Bu görüntüyü kullan
+628|Her zamanki kalkış saati
+629|Genelde saat {0}'de ayakta
+630|Çeşitli
+631|Titret
+632|Vivo
+633|Ses düzeyi
+634|UYAN
+635|Uyan, saat {0}
+636|Uyanış takvimi
+637|Uyanıklık kontrolü
+638|Uyanıklık kontrolü geçti
+639|Uyanma sahnesi
+640|Uyanışlar
+641|Wakeroo
+642|Wakeroo Pro
+643|Wakeroo Pro artık senin
+644|Wakeroo Rise
+645|Wakeroo adımlarını saymak için hareket erişimine ihtiyaç duyar. Yalnızca bu görev sürerken kullanılır.
+646|Wakeroo çaldığında sesi alarm düzeyine çıkarır.
+647|Wakeroo {0}
+648|Etrafta dolaş ve kamerayı ona doğrult
+649|Başka bir odaya git ve herhangi bir barkodu ya da QR kodu tara. Alarmı durdurmak için aynısını taraman gerekecek.
+650|Başka bir odaya git. Yürüdükçe adımların sayılır.
+651|İz dolana kadar yürü.
+652|Şimdi denemek ister misin?
+653|Her zamanki {0} {1} alarmın kurulsun mu?
+654|Sıcak Pedler
+655|Yanan kareleri izle
+656|Şeftali rengi gökyüzü altında dalgalar
+657|Alarmını geri yükledik.
+658|{0} alarmını geri yükledik.
+659|{0} için hava durumu çevrimdışıyken kullanılamaz.
+660|Hava durumu notu
+661|{0} hava durumu
+662|Hafta içi
+663|Hafta Sonu Savaşçısı
+664|Hafta sonu
+665|Tekrar hoş geldin
+666|Ne için kalkıyorsun?
+667|Alarm ekranının görünümü. Tam ekran görmek için birine dokun.
+668|Bugünü güzel bir gün ne yapar?
+669|Bugün yapacağın ilk şey ne?
+670|Kaçta uyanmak istersin?
+671|Nerede?
+672|Bu kod nerede?
+673|Beyaz gürültü
+674|Neden kalkıyorsun?
+675|Bir cumartesi ve pazarı kazan
+676|Üst üste yüz sabah kazan.
+677|Bir hafta sonunun iki sabahını da kazan.
+678|Üst üste on dört sabah kazan.
+679|Üst üste yedi sabah kazan.
+680|Üst üste otuz sabah kazan.
+681|Üst üste üç sabah kazan.
+682|Rahatlama hatırlatması
+683|Bugünün planını yaz
+684|Xiaomi
+685|ALARMLARIN
+686|İLK ALARMIN HAZIR
+687|Sen
+688|Hissin: {0}
+689|Alarmın {0} sonra çalacak
+690|Alarmların böyle çalacak, telefon kilitliyken bile.
+691|Şehrin
+692|İlk sabahın burada görünecek.
+693|İlk sabahların burada görünecek
+694|Görevin
+695|Sabahların
+696|Sabahların burada başlar
+697|Müziğin
+698|Telefonun
+699|Fotoğrafın
+700|Fotoğraf yerin · {0} eşleşme
+701|Ayarların eski telefonundan aktarıldı.
+702|Şarkın
+703|Sesin
+704|Tüm geçmişin
+705|Saat {0} alarmın çalmadı
+706|bir televizyon
+707|bir çanta
+708|bir sandalye
+709|bir saat
+710|bir fincan ya da kupa
+711|bir masa
+712|bir çekmece ya da dolap
+713|bir çatal ya da kaşık
+714|bir şapka ya da kep
+715|bir ceket ya da mont
+716|bir lamba
+717|bir dizüstü ya da bilgisayar
+718|bir gazete ya da kâğıt
+719|bir meyve
+720|bir bitki
+721|bir tabak ya da kâse
+722|bir poster ya da tablo
+723|bir tencere ya da tava
+724|bir atkı
+725|bir raf
+726|bir ayakkabı
+727|bir lavabo
+728|bir kanepe
+729|bir amerikan servis ya da masa örtüsü
+730|bir oyuncak ya da pelüş
+731|tüm zamanlar
+732|bir şemsiye
+733|ve {0} tane daha
+734|{0} içinde uyandı
+735|banyo aynası
+736|kahve kavanozu
+737|kahve makinesi
+738|günlük seri
+739|masa
+740|saat {1} {2} alarmından önce {0} uyumak için
+741|buzdolabı
+742|ön kapı
+743|gözlük ya da güneş gözlüğü
+744|i Manager › Uygulama yöneticisi › Otomatik başlatma › Wakeroo: açık
+745|bir kot pantolon
+746|su ısıtıcısı
+747|son 2 hafta
+748|son 30 gün
+749|bir dakikadan az
+750|ilaçlar
+751|gece yarısı
+752|üst üste sabah
+753|üst üste sabah
+754|öğle
+755|/ {0} adım
+756|ortalama
+757|güne merhaba
+758|biraz ekmek
+759|boşluk
+760|perdeler
+761|mutfak tezgâhı
+762|merdiven
+763|bugün
+764|yarın
+765|diş fırçası
+766|diş macunu
+767|{0} (kurulmalı)
+768|{0} Pro ile gelir. Pro'yu görmek için dokun
+769|{0} sa
+770|{0} sa {1} dk
+771|{0} Pro sahnelerinden biri.
+772|{0}, pil tasarrufu için Wakeroo'yu duraklatabilir. Kısıtlama yok olarak ayarla.
+773|{0} dk
+774|{0} dk kaldı
+775|{0} dk kaldı, sonra yavaşça kısılır
+776|{0} dk {1} sn
+777|{0} dk, {1} kez
+778|Üst üste {0} sabah
+779|Wakeroo ile üst üste {0} sabah
+780|{0} nesne
+781|{0} / 3 kelime
+782|7 sabahtan {0} tanesi kazanıldı
+783|Alarmından önce {0} uyku
+784|{1} içinden {0} tamam
+785|{1} dk içinden {0} dk erken
+786|{1} sabahtan {0} tanesi kazanıldı
+787|{0}, {1} ile iyi gider
+788|{0} cümle
+789|{0} soru · {1}
+790|{0} tur · {1}×{2}
+791|{0} sallama
+792|{0} erteleme
+793|{0} adım
+794|{0} ipuçları
+795|{0} {1}. Gözlerini kapat ve dinlenebildiğin kadar dinlen.
+796|{0} · kurulmalı
+797|%{0} yağmur ihtimali
+798|{0} sn
+799|{0}×{1} ızgara. Her tur bir kare daha yakar.
+800|ÖÖ veya ÖS
+801|Saat
+802|Dakika
+803|+1 sa
+804|{0} sonra
+805|Tarih seç

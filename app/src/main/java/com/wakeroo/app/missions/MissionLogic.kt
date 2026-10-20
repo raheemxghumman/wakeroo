@@ -26,30 +26,90 @@ object MathProblems {
     }
 }
 
-/** Short, upbeat phrases: easy to type with one thumb, impossible to type asleep. */
+/**
+ * Short, upbeat phrases in the app's language: easy to type with one thumb, impossible to type
+ * asleep. The keypad is Latin a-z, so accents are optional ("dia" types "día") and Hindi and
+ * Urdu use the romanised spelling most people already text in. Arabic falls back to English.
+ */
 object TypingPhrases {
-    /** Typed to leave through the emergency exit. Latin letters, so the keypad can type it. */
-    const val ESCAPE = "i am awake"
-
-    private val phrases = listOf(
-        "today is going to be good",
-        "my feet are on the floor",
-        "the early bird gets the worm",
-        "i am up and i am ready",
-        "coffee first then the world",
-        "small steps every morning",
-        "rise and shine sleepy head",
-        "i choose to start strong",
-        "open the curtains and breathe",
-        "one more day of progress",
+    private val escapes = mapOf(
+        "en" to "i am awake", "es" to "estoy despierto", "pt" to "estou acordado", "fr" to "je suis debout",
+        "id" to "aku sudah bangun", "tr" to "uyandım ben", "hi" to "main jaag gaya", "ur" to "main jaag gaya",
     )
 
-    fun pick(count: Int, random: Random = Random.Default): List<String> = phrases.shuffled(random).take(count.coerceIn(1, phrases.size))
+    private val phrases = mapOf(
+        "en" to listOf(
+            "today is going to be good", "my feet are on the floor", "the early bird gets the worm",
+            "i am up and i am ready", "coffee first then the world", "small steps every morning",
+            "rise and shine sleepy head", "i choose to start strong", "open the curtains and breathe",
+            "one more day of progress",
+        ),
+        "es" to listOf(
+            "hoy va a ser un gran día", "mis pies ya están en el suelo", "a quien madruga dios le ayuda",
+            "estoy listo para empezar", "primero el café y luego el mundo", "pasos pequeños cada mañana",
+            "arriba que el día espera", "hoy elijo empezar con fuerza", "abre las cortinas y respira",
+            "un día más de progreso",
+        ),
+        "pt" to listOf(
+            "hoje vai ser um bom dia", "meus pés estão no chão", "deus ajuda quem cedo madruga",
+            "estou de pé e estou pronto", "primeiro o café depois o mundo", "pequenos passos toda manhã",
+            "bom dia flor do dia", "hoje escolho começar forte", "abra as cortinas e respire",
+            "mais um dia de progresso",
+        ),
+        "fr" to listOf(
+            "aujourd hui sera une belle journée", "mes pieds sont sur le sol", "le monde appartient à ceux qui se lèvent tôt",
+            "je suis debout et je suis prêt", "un café puis le monde", "des petits pas chaque matin",
+            "debout la journée commence", "je choisis de bien commencer", "ouvre les rideaux et respire",
+            "encore un jour de progrès",
+        ),
+        "id" to listOf(
+            "hari ini akan jadi hari yang baik", "kakiku sudah menyentuh lantai", "bangun pagi rezeki tidak dipatok ayam",
+            "aku sudah bangun dan siap", "kopi dulu baru dunia", "langkah kecil setiap pagi",
+            "ayo bangun dan bersinar", "aku memilih mulai dengan kuat", "buka gorden dan tarik napas",
+            "satu hari lagi untuk maju",
+        ),
+        "tr" to listOf(
+            "bugün güzel bir gün olacak", "ayaklarım yere bastı", "erken kalkan yol alır",
+            "kalktım ve hazırım", "önce kahve sonra dünya", "her sabah küçük adımlar",
+            "günaydın uykucu", "güçlü başlamayı seçiyorum", "perdeleri aç ve nefes al",
+            "ilerlemek için bir gün daha",
+        ),
+        "hi" to listOf(
+            "aaj ka din accha hoga", "mere pair zameen par hain", "jaldi uthne wale aage badhte hain",
+            "main uth gaya aur taiyaar hoon", "pehle chai phir duniya", "har subah chhote kadam",
+            "utho aur chamko", "aaj main zor se shuru karunga", "parde kholo aur saans lo",
+            "aage badhne ka ek aur din",
+        ),
+        "ur" to listOf(
+            "aaj ka din acha hoga", "mere paon zameen par hain", "jaldi uthne wale aage barhte hain",
+            "main uth gaya aur tayyar hoon", "pehle chai phir dunya", "har subah chhote qadam",
+            "utho aur chamko", "aaj main zor se shuru karunga", "parde kholo aur saans lo",
+            "aage barhne ka aik aur din",
+        ),
+    )
 
-    /** Case and repeated spaces don't matter. */
-    fun matches(target: String, typed: String) = normalize(target) == normalize(typed)
+    private fun language() = java.util.Locale.getDefault().language.let { if (it == "in") "id" else it }
 
-    fun normalize(s: String) = s.trim().lowercase().replace(Regex("\\s+"), " ")
+    /** Typed to leave through the emergency exit, in the app's language. */
+    val ESCAPE: String get() = escapes[language()] ?: escapes.getValue("en")
+
+    fun pick(count: Int, random: Random = Random.Default, language: String = language()): List<String> {
+        val pool = phrases[language] ?: phrases.getValue("en")
+        return pool.shuffled(random).take(count.coerceIn(1, pool.size))
+    }
+
+    /** Case, repeated spaces and accents don't matter. */
+    fun matches(target: String, typed: String) = fold(normalize(target)) == fold(normalize(typed))
+
+    fun normalize(s: String) = s.trim().lowercase().replace(Regex("""\s+"""), " ")
+
+    /** "día" → "dia", "günaydın" → "gunaydin": one letter in, one letter out, so positions line up. */
+    fun fold(s: String): String = buildString(s.length) {
+        for (c in s) {
+            val base = java.text.Normalizer.normalize(c.toString(), java.text.Normalizer.Form.NFD).first()
+            append(if (c == 'ı') 'i' else base)
+        }
+    }
 }
 
 /** 64-bit difference hash: robust to lighting and small framing changes, cheap to compute. */

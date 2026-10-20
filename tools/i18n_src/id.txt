@@ -1,0 +1,806 @@
+0|\n\nBangun bersama Wakeroo
+1|Ponsel baru mengatur ulang izin alarm, jadi mari pastikan alarmnya juga berbunyi di sini.
+2|· makin keras
+3|· berganti-ganti
+4|"{0}". Ketuk untuk melihat penyebabnya dan memperbaikinya.
+5|+1 mnt
+6|+10 mnt
+7|+20 mnt
+8|+30 mnt
+9|+5 mnt
+10|1 jam sebelumnya
+11|1 mnt
+12|1 pagi berturut-turut
+13|1 benda
+14|1 kalimat
+15|1 tunda
+16|10 mnt
+17|15 mnt
+18|15 mnt sebelumnya
+19|2 mnt
+20|Jam 24 jam
+21|30 mnt sebelumnya
+22|5 mnt
+23|Tidur 7,5 jam
+24|Tidur 8 jam
+25|Agak lambat. Sedikit cahaya matahari dalam satu jam ke depan sangat membantu.
+26|Nada {0} yang berbeda setiap pagi, supaya kamu tidak pernah terbiasa.
+27|Beberapa menit kemudian Wakeroo bertanya "Masih bangun?". Kalau tidak dijawab, alarm kembali.
+28|Sedikit lagi: kira-kira tiga kata
+29|Pengingat sebelum tidur, dengan suara tidur tinggal sekali ketuk.
+30|Alarm uji berbunyi dalam satu menit dengan misi mudah. Kunci ponsel dan tunggu: kalau berbunyi di atas layar kunci, semuanya siap.
+31|TENTANG ALARM INI
+32|Tentang
+33|Tambah kebiasaan, seperti 'Merapikan tempat tidur'
+34|Tambah misi
+35|Tambah misi
+36|Tambahkan hingga lima kebiasaan kecil.
+37|Tambahkan cuaca
+38|Setelah alarm: rencanamu, cuaca, rentetanmu, dan sebuah kutipan. Tertutup sendiri.
+39|Setelah selama ini tanpa ketukan, volume penuh kembali dan misi diulang.
+40|Setelah bangun, catatan jika ada hujan, beku, atau panas di {0}.
+41|Setelah {0} mnt
+42|Alarm
+43|Peringatan alarm
+44|Layar alarm dan misi selalu gelap, nyaman untuk mata pukul 6 pagi.
+45|Perilaku alarm
+46|Alarm dihapus
+47|Kesehatan alarm
+48|Alarm sedang berjalan
+49|Alarm disimpan
+50|Alarm diatur untuk {0} lagi
+51|Suara alarm
+52|Alarm dimatikan
+53|Volume alarm
+54|Alarm
+55|Alarm mungkin hanya berbunyi di headphone. Aktifkan "Selalu bunyikan di speaker ponsel" di Setelan.
+56|Alarm tetap berbunyi di speaker ponsel.
+57|Alarm, misi, dan foto tetap di ponselmu. Tanpa akun, tanpa pelacakan saat alarm.
+58|Semua siap!
+59|Semua siap. Alarmmu akan berbunyi.
+60|Izinkan
+61|Izinkan Wakeroo mengirimkan notifikasi?
+62|Izinkan peringatan alarm
+63|Izinkan mulai otomatis
+64|Izinkan notifikasi layar penuh
+65|Izinkan akses gerakan
+66|Diizinkan. Alarm berbunyi tepat waktu.
+67|Hampir, tahan diam
+68|Bunyikan juga di headphone
+69|Selalu bunyikan di speaker ponsel
+70|Pengingat di malam hari jika belum ada alarm untuk pagi.
+71|Android menandai Wakeroo jarang dipakai. Buka setiap hari atau tambahkan widgetnya.
+72|Animasi
+73|Lainnya
+74|Kode apa pun
+75|Benda apa pun, dan kamera harus benar-benar yakin.
+76|Salah satu dari 30 benda, dari jaket sampai wajan.
+77|Foto apa pun, bergerak pelan
+78|Lagu atau file audio apa pun
+79|Penggunaan baterai aplikasi
+80|Bawaan aplikasi
+81|Aplikasi tertidur
+82|Tampilan
+83|Saat alarm, suara berhenti setelah kamu selesai.
+84|Saat waktu tidur
+85|Minimal 3 kata sungguhan
+86|Di nol. Wakeroo menaikkannya saat berbunyi, tapi periksa setelan ponselmu.
+87|Pukul {0} {1}, pengingat jika belum ada alarm untuk pagi.
+88|Aurora
+89|Aurora, Fajar Samudra, BANGUN, dan fotomu sendiri, plus empat nada lagi.
+90|TIDUR PUKUL
+91|Kembali
+92|Kembali ke misi
+93|Kembali ke misiku
+94|Penghemat baterai
+95|Penghemat baterai › Tanpa batasan
+96|Tidur pukul {0}
+97|Tidur pukul {0} {1} untuk tidur {2} sebelum alarm pukul {3} {4}.
+98|Waktu tidur
+99|Pengingat waktu tidur dan "tidak ada alarm untuk besok". Membisukannya tidak pernah membisukan alarm.
+100|Sebelum tidur, dihitung dari alarm berikutnya.
+101|Badai Lonceng
+102|Rentetan terbaik
+103|Lonceng Kicau
+104|Diblokir. Alarm bisa berbunyi terlambat.
+105|Denyut Cerah
+106|Ceria dan bersemangat
+107|Derau cokelat
+108|Bel
+109|Tenang
+110|Tidak bisa diaktifkan untuk alarm yang kurang dari 10 menit lagi, supaya tidak ada yang terkunci tanpa sengaja.
+111|Tidak bisa yang ini? Ganti ke misi cadangan
+112|Batal
+113|Seratus
+114|Ubah
+115|Berubah pikiran? Tutup saja dan tidak ada yang berubah.
+116|Periksa
+117|Periksa jawaban
+118|Cek kesehatan
+119|Melihat langit di atas {0}…
+120|Pilih kotamu di tab Pagi terlebih dahulu.
+121|Pilih misi bangunmu
+122|Dipilih: {0}
+123|Cerah
+124|Tutup
+125|Tutup pratinjau
+126|Berawan
+127|Kode di {0}
+128|Hari dingin, sampai {0}°. Pakai baju hangat.
+129|Selesaikan lima jenis misi yang berbeda.
+130|Lanjutkan
+131|Lanjutkan dengan {0}
+132|Kontrol suara tidur saat diputar
+133|Tidak bisa menghubungi Google Play. Coba lagi sebentar lagi.
+134|Jangkrik
+135|Gelap
+136|Lonceng Fajar
+137|Hapus
+138|Hapus alarm
+139|Hapus alarm ini
+140|Detail
+141|Tidak berbunyi (ponsel mati atau aplikasi dijeda)
+142|Tidak berbunyi: ponsel mati atau aplikasi dijeda
+143|Tutup
+144|Jangan Ganggu
+145|Jangan izinkan
+146|Tidak punya? Coba benda lain
+147|Jangan tampilkan ini setelah alarm
+148|Selesai
+149|Minum segelas air
+150|Gerimis
+151|Setiap pagi
+152|Bangun Pagi
+153|Diraih
+154|Diraih pada {0}
+155|Edit
+156|Edit alarm
+157|Darurat
+158|Jalan keluar darurat
+159|Bersemangat
+160|Makin keras
+161|Setiap hari
+162|Semua misi dan fitur keandalan tetap gratis. Selamanya.
+163|Setiap bulan di kalender dan setiap alarm di catatan.
+164|Semua adegan bangun
+165|Sehari-hari
+166|Semua siap. Alarmmu akan berbunyi.
+167|Kelelahan
+168|Ekstrem
+169|Memudar sebelum alarmmu · {0} jam {1} mnt
+170|Memudar sebelum alarmmu · {0} mnt
+171|Kipas angin
+172|Fanfare
+173|Tercepat: {0}
+174|Tertidur lagi, alarm berbunyi lagi
+175|Tertidur lagi, alarm kembali
+176|Temukan benda sehari-hari, seperti cangkir.
+177|Temukan ini
+178|Selesaikan sepuluh misi di ruangan lain (QR, foto, NFC, berburu benda, atau langkah).
+179|Selesaikan misinya dulu. Inilah yang mencegah dirimu yang mengantuk membatalkan rencana yang dibuat saat segar.
+180|Selesaikan misi bangun pertamamu.
+181|Selesaikan misimu dalam kurang dari satu menit, lima kali.
+182|Selesaikan misimu untuk menghentikan alarm
+183|Bangun Pertama
+184|Perbaiki
+185|Usap untuk memutarnya
+186|Berkabut
+187|Mengikuti ponselmu
+188|Untuk yang tidurnya pulas. Sangat keras
+189|Dua Minggu
+190|Penuh
+191|Seminggu Penuh
+192|Volume penuh. Mulai misimu untuk mendiamkannya
+193|Alarm layar penuh
+194|BANGKIT
+195|AYO
+196|Lembut
+197|Mulai lembut
+198|Bangun rata-rata 30 menit lebih awal dibanding minggu pertamamu.
+199|Bangun dan berjalan
+200|Bangun sebelum pukul 6 pagi lima kali.
+201|Membuatmu keluar dari kasur
+202|Makin keras dalam %d:%02d
+203|Makin dekat
+204|Kocok dengan kencang
+205|Lari pagi
+206|Selamat siang
+207|Selamat malam
+208|Selamat pagi
+209|Selamat tidur
+210|Baik, dengan satu atau dua hal yang bisa ditingkatkan
+211|Dapat!
+212|Gym sebelum kuliah, ujian pukul 9…
+213|MODE LEBIH SULIT
+214|Kebiasaan Terbentuk
+215|Sulit
+216|Masa sulit
+217|Mode Lebih Sulit
+218|Headphone terhubung
+219|Kesehatan
+220|Sembunyikan
+221|Sembunyikan seminggu
+222|Tertinggi {0}°, terendah {1}°
+223|Tahan
+224|Tahan tetap di dalam bingkai
+225|Tempelkan bagian atas ponsel ke stiker. Letakkan di tempat yang tidak terjangkau dari kasur.
+226|Tempelkan bagian atas ponsel sebentar
+227|Hari panas, sampai {0}°. Minum banyak air.
+228|Seberapa mirip pemandangannya harus cocok
+229|Bagaimana perasaanmu?
+230|Aku sudah bangun
+231|Sudah kusetel ke Tidak dibatasi
+232|Jika aku berhenti di tengah misi
+233|Jika file-mu dipindah atau dihapus, Wakeroo Rise yang diputar. Alarm tidak pernah diam.
+234|Dalam 15 mnt
+235|Dalam 8 jam
+236|Di Terbaru, tarik Wakeroo ke bawah untuk menguncinya
+237|Ke Luar Angkasa
+238|Tampil besar di layar alarm. Alasan mengalahkan tunda.
+239|Berburu benda
+240|Berburu benda memakai kamera hanya selama layar alarm terbuka.
+241|Sekali saja
+242|Terus. Berhenti dan isinya berkurang
+243|Biarkan alarm seperti semula
+244|Terus berjalan. Diam dan lintasannya berkurang
+245|Klakson
+246|MINGGU LALU
+247|Bahasa
+248|Nanti saja, bawa aku ke alarmku
+249|Gabungkan hujan dengan kipas, dan buka derau merah muda serta jangkrik.
+250|Belajar
+251|Kurangi
+252|Ayo atur alarm pertamamu. Hanya butuh sekitar satu menit.
+253|Terang
+254|Seperti 17 × 6 + 38
+255|Seperti 24 + 7
+256|Seperti 34 × 11 + 245
+257|Ikuti ponselku
+258|Memuat misimu…
+259|Terkunci
+260|Cari tempatmu
+261|Bagus. Ketuk ✓ untuk memulai harimu
+262|Huruf besar yang tidak membiarkanmu terlelap
+263|Mantap. Tidurmu membuahkan hasil.
+264|Bikin kopi lalu jalan pagi
+265|Pastikan aku tetap bangun
+266|Pastikan berbunyi
+267|Pastikan semuanya berbunyi
+268|Matematika
+269|Medali · {0} dari {1}
+270|Sedang
+271|Kartu memori
+272|Hitam Minimal
+273|Penjelajah Misi
+274|Misi selesai
+275|Misi selesai dalam {0}
+276|Misi {0} dari {1}
+277|Misi
+278|Misi di ruangan lain paling efektif: kamu harus keluar dari kasur.
+279|Campur suara tidur
+280|Tambah
+281|Pagi
+282|Pagi & notifikasi
+283|Ringkasan pagi
+284|Rutinitas pagi
+285|Motorola
+286|MEDALI BARU
+287|ALARM BERIKUTNYA
+288|NFC dimatikan
+289|Tag NFC
+290|TIDAK ADA ALARM
+291|SIANG
+292|Perlu diperbaiki
+293|Butuh tiga minggu pagi
+294|Tidak pernah
+295|Alarm baru
+296|Alarm berikutnya
+297|Alarm berikutnya {0} {1} {2}
+298|Bulan berikutnya
+299|Berikutnya dilewati
+300|Langkah yang bagus. Terus
+301|Bagus. Pertahankan ketenangan itu.
+302|Bagus. Satu kartu lagi di ronde berikutnya
+303|Burung Hantu Insaf
+304|Langit Malam
+305|Tidak ada NFC di sini. Ketuk stiker untuk menyimulasikannya (versi debug).
+306|Ponsel ini tidak punya NFC
+307|Tidak ada pembelian Pro untuk akun Google ini.
+308|Minggu Tanpa Tunda
+309|Tidak ada alarm untuk besok
+310|Tidak ada alarm yang berbunyi hari itu.
+311|Tidak ada alarm
+312|Belum ada alarm untuk pagi
+313|Tanpa banner, dan kamu mendukung alarm indie
+314|Tanpa batasan baterai
+315|Belum ada hasil. Periksa ejaan atau koneksimu.
+316|Tidak ada sensor gerak
+317|Belum ada foto referensi, pakai misi cadangan
+318|Tidak perlu diatur. Saat alarm, ketik minimal tiga kata tentang harimu. Rencanamu lalu tampil di tab Pagi.
+319|Alarm ini tidak bisa ditunda. Kamu pasti bisa.
+320|Normal
+321|Cahaya utara melayang di atas
+322|Jangan sekarang
+323|Bukan yang itu. Lihat lagi
+324|Jangan besok
+325|Belum dicoba. Satu menit membuktikan alarmmu berfungsi.
+326|Sekarang
+327|Sekarang ketuk {0} kartu yang sama · {1} ditemukan
+328|Benda {0} dari {1}
+329|Benda yang dicari
+330|Fajar Samudra
+331|Ombak laut
+332|Mati
+333|Mematikan, menghapus, melewati, dan menunda butuh misi dulu. Tidak ada curang setengah sadar.
+334|Mematikan, menghapus, melewati, menunda, atau memundurkan 2 jam lebih butuh misi dulu. Jalan keluar darurat tetap berfungsi.
+335|Mati. Layar alarm tidak bisa muncul.
+336|Mati. Kamu hanya akan melihat banner kecil.
+337|Biasa saja
+338|Biasa saja itu awal yang baik.
+339|Nyala
+340|Tepat waktu
+341|Di {0}
+342|Nyala, dan alarm tetap bisa lewat.
+343|Nyala, dan memblokir alarm. Izinkan alarm di Jangan Ganggu.
+344|Alarm tepat waktu
+345|Nyala.
+346|Sekali
+347|Salah satu nada alarm ponselmu
+348|Hanya untuk keadaan darurat sungguhan
+349|Hanya koordinat kota yang dikirim ke Open-Meteo untuk prakiraan. Tidak ada data tentang kamu.
+350|Buka misi
+351|Buka gorden
+352|Dioptimalkan
+353|Keluar dari Kasur
+354|Berawan sebagian
+355|Terlewat
+356|Lulus. Ponselmu membunyikan alarm Wakeroo dengan benar.
+357|Sudah lewat waktu tidur. Setiap menit tidur tetap berarti
+358|Jeda
+359|Dijeda · {0}
+360|Bayar sekali. Tanpa langganan, tanpa perpanjangan, tanpa kejutan.
+361|Nada ponsel
+362|Ponsel memblokir alarm dengan cara diam-diam. Aktifkan sekali dan beres.
+363|Tempat foto
+364|Foto sebuah tempat, misalnya wastafel.
+365|Kalimat {0} dari {1}
+366|Kalimat
+367|Pilih misi
+368|Pilih foto
+369|Pilih satu. Campur dua suara dengan Pro.
+370|Pilih sesuatu di ruangan lain yang punya barcode atau kode QR (pasta gigi, kopi, buku) lalu pindai sekarang.
+371|Pilih hingga dua untuk dicampur.
+372|Pilih kotamu sekali. Tanpa izin lokasi.
+373|Pilih suaramu
+374|Pilih adegan bangunmu
+375|Derau merah muda
+376|Putar suara tidur
+377|Diputar dengan volume media dan selalu memudar semenit sebelum alarm, jadi tidak pernah menutupinya.
+378|Arahkan ke tempat fotomu
+379|Positif
+380|Tidur siang
+381|Tidur siang, {0}
+382|Latihan
+383|Pura-pura Pro (debug)
+384|Pratinjau · {0}
+385|Bulan sebelumnya
+386|Opsi privasi
+387|Pro
+388|Pro aktif. Terima kasih!
+389|Pro sudah aktif.
+390|Pro dipulihkan. Selamat datang kembali!
+391|Adegan Pro bisa dibuka kapan saja nanti. Tidak perlu buru-buru.
+392|Soal {0} dari {1}
+393|Soal
+394|Produktivitas
+395|Bukti setiap alarm. Kalau ada alarm yang tidak berbunyi, akan muncul di sini dengan warna merah.
+396|Lindungi alarm ini
+397|Pembelian tidak tersedia saat ini. Periksa koneksimu dan coba lagi.
+398|Hitam pekat. Nyaman untuk OLED dan mata
+399|QR / Barcode
+400|Bangun Kilat
+401|Hitungan cepat
+402|Kutipan hari ini
+403|CATATAN ALARM
+404|BANGUN
+405|Hujan
+406|Kemungkinan hujan sekitar {0}. Bawa payung.
+407|Siap
+408|Siap berbunyi
+409|Dikurangi
+410|Segar
+411|Daftarkan stiker lain
+412|Daftarkan kodemu
+413|Daftarkan stikermu
+414|Kode terdaftar
+415|Terdaftar: kode di {0}
+416|Terdaftar: stiker di {0}
+417|Longgar
+418|Ingat kartunya
+419|Pengingat
+420|Pengingat memakai saluran notifikasi sendiri. Membisukannya tidak pernah mengubah alarmmu.
+421|Hapus
+422|Hapus batasan baterai
+423|Hapus misi
+424|Ulangi
+425|Ulangi pola kartu yang menyala.
+426|Pulihkan pembelian
+427|Dibatasi
+428|Lanjutkan
+429|Ambil ulang foto
+430|Bunyikan uji dalam 1 menit
+431|Bunyikan dalam 1 menit
+432|Berbunyi di speaker dan di perangkat apa pun yang terhubung.
+433|Alarm yang berbunyi
+434|Berbunyi dalam 1 menit. Kunci ponselmu
+435|Berbunyi dalam satu menit dengan misi mudah. Kunci ponsel dan tunggu: kalau berbunyi di atas layar kunci, semuanya siap.
+436|Berbunyi dalam {0}
+437|Bergantian
+438|Awal yang berat. Air, cahaya, dan santai saja hari ini.
+439|Ronde {0} dari {1}
+440|Ronde
+441|Rutinitas Pro
+442|Rutinitas selesai. Awal yang hebat!
+443|Sudut yang sama seperti saat diatur
+444|Suara yang sama
+445|Samsung
+446|Simpan
+447|Simpan alarm
+448|Simpan perubahan ini
+449|Simpan tempat fotomu
+450|Disimpan
+451|Menyimpan…
+452|Pindai kode yang kamu taruh di ruangan lain.
+453|Pindai kode lain
+454|Pindai kode di {0}
+455|Pindai kodemu
+456|Pindai kode terdaftarmu
+457|Adegan
+458|Cari, misalnya Lahore atau Lisbon
+459|Mencari…
+460|Lihat setiap bulan sejak alarm pertamamu dengan Pro
+461|Lihat seluruh riwayatmu dengan Pro
+462|Atur alarm
+463|Atur tanggal
+464|Atur satu dan Wakeroo menghitung waktu tidurmu.
+465|Atur dalam beberapa detik.
+466|Atur dulu
+467|Atur malam ini · matematika sampai saat itu
+468|Atur {0} {1}
+469|Mengatur waktumu…
+470|Setelan
+471|Setelan › Aplikasi › Kelola aplikasi › Wakeroo › Mulai otomatis: aktif
+472|Setelan › Aplikasi › Wakeroo › Penggunaan baterai › Izinkan aktivitas latar belakang
+473|Setelan › Aplikasi › Wakeroo › Baterai › Tidak dibatasi
+474|Setelan › Baterai › Peluncuran aplikasi › Wakeroo › Kelola secara manual
+475|Setelan › Baterai › Konsumsi daya latar belakang › Wakeroo › Izinkan
+476|Setelan › Baterai › Batas penggunaan latar belakang › Aplikasi yang tidak pernah tidur › tambahkan Wakeroo
+477|Tujuh pagi berturut-turut tanpa sekali pun menunda.
+478|Kocok
+479|Kocok ponsel sampai mataharinya penuh.
+480|Kocok untuk mengisi
+481|Kocok ponselmu
+482|Kocokan
+483|Bagikan
+484|Bagikan kutipan
+485|Bagikan rentetanmu
+486|Mantap! Kamu sudah bangun
+487|Tunjukkan {0}
+488|Ditampilkan diam-diam saat kamu di layar alarm
+489|Menampilkan layar alarm saat alarm berbunyi
+490|Sirene Melengking
+491|Lewati dulu
+492|Lewati berikutnya
+493|Lewati yang berikutnya
+494|Melewati yang berikutnya
+495|Tidur
+496|Target tidur
+497|Suara tidur
+498|Tunda
+499|Tunda {0} menit
+500|Tunda {0} mnt  ·  sisa {1}
+501|Ditunda
+502|Tunda yang diizinkan
+503|Salju
+504|Supaya speaker Bluetooth yang mati atau earbud yang terlupa tidak pernah membungkam alarmmu.
+505|Supaya layar alarm bisa muncul
+506|Marimba Lembut
+507|Lembut dan hangat, untuk yang mudah terbangun
+508|Selesaikan hitungan cepat. Membangunkan otakmu.
+509|Ada yang bisa menghalangi alarmmu berbunyi
+510|Suara
+511|Suara
+512|Spasi
+513|Tempat belum diatur
+514|Tempat disimpan. Saat alarm, arahkan kamera ke pemandangan yang sama.
+515|Tumpuk matematika, kode QR di dapur, dan foto wastafel.
+516|Diam selama 10 detik dan hitungannya berkurang, jadi kamu harus terus bergerak.
+517|Berdirilah di tempatmu saat alarm dan bingkai sesuatu yang tidak bergerak: wastafel, ketel, poster.
+518|Bintang dan cahaya fajar yang pelan
+519|Mulai misi
+520|Mulai misi untuk menghentikan alarm
+521|Mulai hariku
+522|Mulai suara tidur
+523|Mulai pelan lalu naik ke volume penuh, supaya kamu bangun dengan tenang.
+524|Mulai dengan suara ini. Tanpa respons dalam satu menit, berganti ke nada ekstrem dengan volume penuh.
+525|Steel Drum
+526|Langkah {0} dari {1}
+527|Langkah
+528|Tempel tag NFC (stiker NTAG murah pun bisa) di dekat cermin kamar mandi atau ketel, lalu daftarkan di sini.
+529|Stiker di {0}
+530|Stiker terkunci
+531|Stiker belum terdaftar
+532|Masih bangun?
+533|Berhenti
+534|Hentikan suara tidur
+535|Rentetan
+536|Peregangan 2 menit
+537|Ketat
+538|Matahari terbit di atas planet yang berputar
+539|MINGGU INI
+540|HARI INI
+541|RENCANA HARI INI
+542|Foto tempat yang jauh dari kasur, seperti wastafel kamar mandi atau ketel.
+543|Ambil foto
+544|Hanya satu menit. Membuktikan semuanya berfungsi di ponselmu.
+545|Mengambil alih layar kunci, bukan banner kecil
+546|Ketuk sebelum lingkarannya habis, atau alarm kembali.
+547|Ketuk untuk memastikan kamu sudah bangun
+548|Ketuk untuk membalik
+549|Ketuk untuk mendengarnya di volume alarm.
+550|Ketuk untuk mendengarnya di volume alarmmu.
+551|Ketuk untuk melihat penyebabnya dan memperbaikinya dalam satu menit.
+552|Ketuk untuk melihat rekor terbaikmu
+553|Ketuk untuk mengatur
+554|Tempelkan ponselmu ke stiker di dekat cermin.
+555|Tempelkan ponselmu ke stiker di {0}
+556|Tempelkan ponselmu ke stikermu
+557|Memberitahumu jika alarm terlewat dan cara memperbaikinya
+558|Suhu
+559|Alarm uji
+560|Alarm uji dalam 1 menit. Kunci ponselmu dan tunggu
+561|Alarm uji: selesaikan misi untuk lulus
+562|Uji lulus
+563|Terima kasih telah mendukung alarm indie.
+564|Itu tidak terlihat seperti kata. Tulis rencana sungguhan
+565|Itu kode yang berbeda. Cari yang sudah kamu daftarkan.
+566|Itu stiker yang berbeda. Cari yang sudah kamu daftarkan.
+567|Begitulah cara kerjanya
+568|Itu dia, tahan
+569|Alasan nomor 1 aplikasi alarm gagal berbunyi
+570|Alarm terus berbunyi sampai selesai. Misi di ruangan lain paling efektif.
+571|Alarm terus berbunyi. Ini memutus rentetanmu dan dicatat.
+572|Layar alarm untuk semua alarm, kecuali alarm yang memilih sendiri.
+573|Alarm mengambil alih layar kunci.
+574|Uji terakhir tidak selesai. Coba lagi.
+575|Suara yang sama setiap kali.
+576|Tema
+577|Benda yang ada di hampir semua rumah: cangkir, kursi, tanaman, wastafel.
+578|Tanggal ini sudah lewat
+579|Seperti inilah layar alarmmu. Ketuk salah satu untuk melihatnya layar penuh.
+580|Tiga Berturut-turut
+581|Tiga kata tentang harimu
+582|Badai petir
+583|Selesaikan seluruh rutinitas pagimu selama tujuh hari.
+584|Kartu
+585|Waktunya bangun
+586|Waktu untuk bangun, 7 hari terakhir
+587|Waktunya bersantai
+588|Pengatur waktu
+589|Tips: kode yang tidak terjangkau dari kasur paling efektif.
+590|Lelah
+591|Hari ini
+592|Besok
+593|Malam ini
+594|Terlalu diam! Volume penuh kembali. Lanjutkan
+595|Terlalu diam! Volume penuh kembali. Mulai lagi
+596|Senter
+597|Menyetel suaramu…
+598|Matikan
+599|Matikan "Optimalkan penggunaan baterai" untuk Wakeroo
+600|Matikan "Tidurkan aplikasi yang tidak digunakan"
+601|Aktifkan Mulai otomatis, Peluncuran sekunder, dan Berjalan di latar belakang
+602|Aktifkan layar penuh
+603|Matikan alarm ini
+604|Mematikan, menghapus, melewati, atau menunda alarm ini butuh misi dulu. Bagian dari Pro.
+605|Ketik kalimat
+606|Ketik kalimat pendek, huruf demi huruf.
+607|Ketik hal pertama yang akan kamu lakukan hari ini.
+608|Ketik rencanamu
+609|Ketik: {0}
+610|Mengetik
+611|Urungkan
+612|Buka Pro · {0} sekali bayar
+613|Tidak dibatasi
+614|Tidak dibatasi. {0} tidak akan menidurkan Wakeroo.
+615|Sampai diatur, alarm ini memakai matematika.
+616|Sampai alarmku
+617|Bangun pukul {0}
+618|Bangun pukul {0} {1}  ·  bangun dalam {2}
+619|Bangun dalam
+620|Bangun sejak {0} {1}
+621|Hingga 5 misi per alarm
+622|Hingga 5 misi per alarm, riwayat lengkap, tanpa banner. Bayar sekali.
+623|Hingga 5 misi dengan Pro
+624|Bangun dengan misi, setiap pagi.
+625|Pakai
+626|Pakai misi ini
+627|Pakai tampilan ini
+628|Waktu bangun biasa
+629|Biasanya bangun pukul {0}
+630|Beragam
+631|Getar
+632|Vivo
+633|Volume
+634|BANGUN
+635|Bangun, sudah pukul {0}
+636|Kalender bangun
+637|Cek bangun
+638|Cek bangun lulus
+639|Adegan bangun
+640|Bangun
+641|Wakeroo
+642|Wakeroo Pro
+643|Wakeroo Pro milikmu
+644|Wakeroo Rise
+645|Wakeroo butuh akses gerakan untuk menghitung langkahmu. Hanya dipakai selama misi ini berjalan.
+646|Wakeroo menaikkannya ke level alarmmu saat berbunyi.
+647|Wakeroo {0}
+648|Berkeliling dan arahkan kamera ke benda itu
+649|Pergi ke ruangan lain dan pindai barcode atau kode QR apa saja. Kamu harus memindai yang sama untuk menghentikan alarm.
+650|Pergi ke ruangan lain. Langkahmu dihitung selama berjalan.
+651|Berjalan sampai lintasannya penuh.
+652|Mau mencobanya sekarang?
+653|Mau alarm biasamu pukul {0} {1}?
+654|Pad Hangat
+655|Perhatikan kartu yang menyala
+656|Ombak di bawah langit persik
+657|Kami memulihkan alarmmu.
+658|Kami memulihkan {0} alarmmu.
+659|Cuaca untuk {0} tidak tersedia saat offline.
+660|Info cuaca
+661|Cuaca di {0}
+662|Hari kerja
+663|Pejuang Akhir Pekan
+664|Akhir pekan
+665|Selamat datang kembali
+666|Untuk apa kamu bangun?
+667|Tampilan layar alarm. Ketuk salah satu untuk melihatnya layar penuh.
+668|Apa yang akan membuat hari ini menyenangkan?
+669|Apa hal pertama yang akan kamu lakukan hari ini?
+670|Kamu mau bangun jam berapa?
+671|Di mana letaknya?
+672|Di mana kode ini?
+673|Derau putih
+674|Kenapa kamu bangun?
+675|Menangkan hari Sabtu dan Minggu
+676|Menangkan seratus pagi berturut-turut.
+677|Menangkan kedua pagi di akhir pekan.
+678|Menangkan empat belas pagi berturut-turut.
+679|Menangkan tujuh pagi berturut-turut.
+680|Menangkan tiga puluh pagi berturut-turut.
+681|Menangkan tiga pagi berturut-turut.
+682|Pengingat bersantai
+683|Tulis rencana hari ini
+684|Xiaomi
+685|ALARMMU
+686|ALARM PERTAMAMU SUDAH SIAP
+687|Kamu
+688|Kamu merasa {0}
+689|Alarmmu berbunyi dalam {0}
+690|Alarmmu akan berbunyi seperti ini, bahkan saat ponsel terkunci.
+691|Kotamu
+692|Pagi pertamamu akan muncul di sini.
+693|Pagi-pagi pertamamu akan muncul di sini
+694|Misimu
+695|Pagimu
+696|Pagimu dimulai di sini
+697|Musikmu
+698|Ponselmu
+699|Fotomu
+700|Tempat fotomu · kecocokan {0}
+701|Setelanmu dipindahkan dari ponsel lamamu.
+702|Lagumu
+703|Suaramu
+704|Seluruh riwayatmu
+705|Alarm pukul {0} tidak berbunyi
+706|TV
+707|tas
+708|kursi
+709|jam
+710|cangkir atau mug
+711|meja kerja
+712|laci atau lemari
+713|garpu atau sendok
+714|topi
+715|jaket atau mantel
+716|lampu
+717|laptop atau komputer
+718|koran atau selembar kertas
+719|buah
+720|tanaman
+721|piring atau mangkuk
+722|poster atau gambar
+723|panci atau wajan
+724|syal
+725|rak
+726|sepatu
+727|wastafel
+728|sofa
+729|alas piring atau taplak meja
+730|mainan atau boneka
+731|sepanjang waktu
+732|payung
+733|dan {0} lagi
+734|bangun dalam {0}
+735|cermin kamar mandi
+736|toples kopi
+737|mesin kopi
+738|hari beruntun
+739|meja kerja
+740|untuk tidur {0} sebelum alarm pukul {1} {2}
+741|kulkas
+742|pintu depan
+743|kacamata atau kacamata hitam
+744|i Manager › Manajer aplikasi › Mulai otomatis › Wakeroo: aktif
+745|celana jin
+746|ketel
+747|2 minggu terakhir
+748|30 hari terakhir
+749|kurang dari semenit
+750|obat-obatan
+751|tengah malam
+752|pagi berturut-turut
+753|pagi berturut-turut
+754|siang
+755|dari {0} langkah
+756|rata-rata
+757|bangun dan bersinar
+758|roti
+759|spasi
+760|gorden
+761|meja dapur
+762|tangga
+763|hari ini
+764|besok
+765|sikat gigi
+766|pasta gigi
+767|{0} (belum diatur)
+768|{0} termasuk Pro. Ketuk untuk melihat Pro
+769|{0} jam
+770|{0} jam {1} mnt
+771|{0} adalah salah satu adegan Pro.
+772|{0} bisa menjeda Wakeroo untuk menghemat baterai. Setel ke Tidak dibatasi.
+773|{0} mnt
+774|sisa {0} mnt
+775|sisa {0} mnt, lalu memudar pelan
+776|{0} mnt {1} dtk
+777|{0} mnt, {1} kali
+778|{0} pagi berturut-turut
+779|{0} pagi berturut-turut bersama Wakeroo
+780|{0} benda
+781|{0} dari 3 kata
+782|{0} dari 7 pagi dimenangkan
+783|tidur {0} sebelum alarmmu
+784|{0} dari {1} selesai
+785|{0} dari {1} mnt lebih awal
+786|{0} dari {1} pagi dimenangkan
+787|{0} cocok dengan {1}
+788|{0} kalimat
+789|{0} soal · {1}
+790|{0} ronde · {1}×{2}
+791|{0} kocokan
+792|{0} tunda
+793|{0} langkah
+794|Tips {0}
+795|{0} {1}. Pejamkan mata dan istirahatlah sebisanya.
+796|{0} · belum diatur
+797|Peluang hujan {0}%
+798|{0} dtk
+799|Kisi {0}×{1}. Setiap ronde menyalakan satu kartu lagi.
+800|AM atau PM
+801|Jam
+802|Menit
+803|+1 jam
+804|{0} lagi
+805|Pilih tanggal

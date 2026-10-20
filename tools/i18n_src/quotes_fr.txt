@@ -1,0 +1,150 @@
+p01|Vous avez battu le bouton snooze. Le reste de la journée sera plus facile.
+p02|Les bons matins ne se trouvent pas, ils se construisent.
+p03|Le soleil s'est encore levé pour vous. À votre tour de briller.
+p04|Aujourd'hui est une page blanche. Écrivez-y quelque chose que vous aimerez relire ce soir.
+p05|Les petites victoires comptent. Vous lever était la première.
+p06|Souriez à quelqu'un avant midi. Ça marche aussi sur vous.
+p07|Vos meilleures journées commencent souvent comme celle-ci : avec intention.
+p08|Chaque jour n'est pas parfait, mais chaque jour a du bon.
+p09|Donnez l'énergie que vous aimeriez recevoir.
+p10|Faites de cette journée celle dont vous vous vanterez plus tard.
+p11|Le matin ne sait rien d'hier. Vous n'êtes pas obligé non plus.
+p12|Soyez la raison pour laquelle quelqu'un passe une meilleure matinée.
+p13|La joie, c'est souvent de l'attention, offerte exprès.
+p14|Vous avez le droit d'être fier des choses ordinaires.
+p15|L'espoir est cette chose à plumes qui se perche dans l'âme.
+p16|Écrivez sur votre cœur que chaque jour est le meilleur jour de l'année.
+p17|Le matin, c'est quand je suis éveillé et qu'il y a en moi une aurore.
+p18|Chaque matin était une joyeuse invitation à rendre ma vie aussi simple, et je puis dire aussi innocente, que la Nature elle-même.
+p19|Les belles choses poussent aux premières heures.
+p20|Levez les yeux au moins une fois aujourd'hui. Le ciel est gratuit.
+p21|Un lever de soleil n'est jamais perdu.
+p22|Humeur du jour : déraisonnablement optimiste.
+p23|La gentillesse aussi, ça se prend le matin.
+p24|Vous êtes là. C'est déjà l'essentiel.
+p25|Laissez cette journée vous surprendre, en bien.
+w01|Commencez par le plus difficile. La journée s'allège ensuite.
+w02|Une tâche importante avant midi vaut mieux que dix tâches futiles après.
+w03|Le plus dur, c'est de commencer. Et vous avez déjà commencé.
+w04|Bureau rangé, esprit clair, plan net.
+w05|L'élan, ça se prend le matin. Prenez-en un peu.
+w06|Décidez de ce qui compte aujourd'hui. Ignorez le reste, poliment.
+w07|Vingt minutes concentrées valent mieux que deux heures dispersées.
+w08|« Fini » est un joli mot. Collectionnez-en quelques-uns aujourd'hui.
+w09|Votre téléphone peut attendre. Vos objectifs attendent depuis plus longtemps.
+w10|Un plan est plus clair sur papier que dans la tête.
+w11|Le progrès, pas la perfection. Lancez le brouillon.
+w12|Le meilleur moment pour commencer, c'était hier. Le deuxième meilleur, c'est maintenant.
+w13|Faites votre lit. Première tâche de la journée : accomplie.
+w14|Être occupé n'est pas le but. Avoir fini, si.
+w15|De petits pas, chaque jour, mènent très loin.
+w16|Bien commencé est à moitié fait.
+w17|Le temps perdu ne se rattrape jamais.
+w18|Se coucher tôt et se lever tôt rend un homme sain, riche et sage.
+w19|Pendant qu'on la remet à plus tard, la vie passe.
+w20|Dis-toi d'abord ce que tu veux être, puis fais ce que tu dois faire.
+w21|Le matin, quand tu as peine à te lever, aie cette pensée présente à l'esprit : c'est pour faire œuvre d'homme que je m'éveille.
+w22|Gagnez la matinée, et l'après-midi suit souvent.
+w23|Notez trois choses. Faites la première maintenant.
+w24|Le travail bat le talent quand le talent fait la grasse matinée.
+w25|Une heure de calme avant que le monde se réveille, c'est un super-pouvoir.
+c01|Inspirez sur quatre temps, expirez sur six. Encore. Voilà. C'est mieux.
+c02|Tout n'a pas besoin d'une réponse avant le petit-déjeuner.
+c03|Les matins tranquilles sont des matins aussi.
+c04|Buvez votre café tant qu'il est chaud. C'est tout le programme.
+c05|Laissez la journée venir à vous, une minute.
+c06|Regardez la lumière. Elle fait quelque chose de beau en ce moment.
+c07|Pas besoin de courir pour être à l'heure.
+c08|La sérénité est une allure, pas une adresse.
+c09|Cinq minutes de calme maintenant vous épargnent une heure de bruit plus tard.
+c10|Ouvrez la fenêtre. Laissez entrer un peu de matin.
+c11|Votre liste de tâches sera toujours là après vos étirements.
+c12|Le calme s'apprend. Le matin est un bon entraînement.
+c13|Une chose à la fois, et jusqu'au bout.
+c14|Un voyage de mille lieues commence toujours par un premier pas.
+c15|Les arbres poussent sans se presser. Vous aussi, vous pouvez.
+c16|Hâte-toi de bien vivre et songe que chaque jour est à lui seul une vie.
+c17|Certains matins sont faits pour agir, d'autres pour simplement être. Les deux sont bien.
+c18|Les pieds au sol. Les épaules relâchées. Vous allez y arriver.
+c19|La journée est longue. Inutile de tout dépenser d'un coup.
+c20|Écoutez un son paisible avant de regarder votre téléphone.
+c21|Desserrez la mâchoire. Si, si, vérifiez.
+c22|Un départ en douceur reste un départ.
+c23|Faites une place à un peu de calme. Il vous le rendra.
+c24|Le repos fait partie du travail, ce n'est pas une pause.
+c25|On a toujours le temps de prendre une bonne inspiration.
+h01|Les matins difficiles finissent aussi. Celui-ci a déjà commencé.
+h02|Se lever un mauvais jour, c'est une victoire que peu de gens voient. Nous, on la voit.
+h03|Pas besoin de vous sentir prêt pour commencer.
+h04|Aujourd'hui, vous n'avez qu'à vivre aujourd'hui.
+h05|Même la nuit la plus sombre finit par un lever de soleil. Et vous êtes debout.
+h06|Être fort, ce n'est pas ne jamais tomber. C'est se relever, comme vous venez de le faire.
+h07|Soyez indulgent avec vous-même. Vous vous en sortez mieux que vous ne le pensez.
+h08|Certains jours, le plus courageux, c'est simplement d'être là.
+h09|Les tempêtes ne durent pas. Ceci non plus.
+h10|Demander de l'aide, c'est permis. Aujourd'hui est un bon jour pour le faire.
+h11|Le progrès peut être discret. Il compte quand même.
+h12|Un pas, puis un autre. C'est comme ça qu'on gravit les montagnes.
+h13|Nos doutes sont des traîtres et nous font perdre le bien que nous pourrions souvent gagner, par peur d'essayer.
+h14|Vous avez survécu à chaque jour difficile jusqu'ici. Votre bilan est parfait.
+h15|Nuit agitée ? Le matin vous doit quand même un nouveau départ.
+h16|Les émotions sont de passage. Laissez-les aller et venir.
+h17|Rien ne pousse sans un peu de pluie.
+h18|Faites la prochaine bonne chose. Juste la prochaine.
+h19|Ce chapitre n'est pas tout le livre.
+h20|Le courage, c'est souvent une petite voix qui dit : « On réessaiera demain. » Eh bien, on est demain.
+h21|Rome ne s'est pas faite en un jour. Vous non plus.
+h22|Être bienveillant envers soi-même, ce n'est pas abandonner.
+h23|Faites une pause s'il le faut. Puis reprenez.
+h24|Difficile ne veut pas dire impossible.
+h25|Aujourd'hui, visez « ça va ». « Ça va », c'est largement suffisant.
+f01|Un verre d'eau avant le café. Votre corps le remarquera.
+f02|Bougez un peu maintenant. Votre vous de l'après-midi vous dira merci.
+f03|La lumière du matin est un remède gratuit. Sortez cinq minutes.
+f04|Étirez-vous comme si personne ne regardait. Personne ne regarde.
+f05|Le petit-déjeuner est un vote pour la personne que vous devenez.
+f06|Le sommeil est la meilleure récupération qui soit. Protégez-le ce soir.
+f07|Dix squats pendant que la bouilloire chauffe. Victoire facile.
+f08|Votre corps vous a porté jusqu'ici. Prenez-en soin aujourd'hui.
+f09|Marchez au lieu de faire défiler.
+f10|Se coucher à la même heure chaque soir rend les matins comme celui-ci plus faciles.
+f11|Une marche, ça compte. Ça compte toujours.
+f12|Mangez quelque chose de vert avant que la journée ne s'emballe.
+f13|Les bons matins se préparent la veille.
+f14|Se lever, boire, bouger. On recommence demain.
+f15|L'air frais est la boisson énergisante la moins chère.
+f16|Tenez-vous droit. Votre dos n'attendait que ça.
+f17|Deux minutes d'étirements valent mieux que zéro minute de yoga parfait.
+f18|Chaque choix sain est un petit cadeau pour votre futur vous.
+f19|Écrans éteints une heure avant le coucher. Le réveil de demain vous semblera plus doux.
+f20|Prenez l'escalier aujourd'hui. Juste une fois.
+f21|Votre cœur aime quand vous bougez. Faites-lui plaisir.
+f22|Encore dans le brouillard ? Un peu d'eau froide sur le visage. Redémarrage instantané.
+f23|La régularité l'emporte sur l'intensité, à chaque fois.
+f24|Une bonne habitude, c'est juste un choix fait assez souvent.
+f25|Offrez un peu de soleil à votre visage. Puis lancez-vous.
+l01|Apprenez une chose nouvelle aujourd'hui. N'importe laquelle.
+l02|La curiosité est le meilleur des réveils.
+l03|Dix pages par jour, c'est un livre par mois.
+l04|Posez une question que vous auriez d'habitude gardée pour vous.
+l05|Les erreurs sont des leçons payées d'avance.
+l06|Le cerveau est plus vif le matin. Nourrissez-le de bonnes choses.
+l07|C'est en pratiquant qu'on progresse.
+l08|Chaque expert a d'abord été un débutant qui continuait à se lever tôt.
+l09|Lisez quelque chose qui fait réfléchir, pas juste défiler.
+l10|Expliquez quelque chose à quelqu'un aujourd'hui. Vous l'apprendrez deux fois.
+l11|Étudiez avant que les notifications commencent.
+l12|N'attendez pas d'être motivé. Commencez, la motivation suivra.
+l13|Un peu chaque jour vaut mieux que beaucoup une fois par semaine.
+l14|C'est en se trompant qu'on finit par avoir raison.
+l15|Les examens se réussissent les matins qui les précèdent.
+l16|L'avenir appartient à ceux qui se lèvent tôt.
+l17|Restez curieux. Ça garde l'esprit éveillé.
+l18|Notez ce que vous apprenez. La mémoire est une passoire.
+l19|Les problèmes difficiles sont juste des énigmes qui ne vous ont pas encore rencontré.
+l20|Plus on apprend, plus le monde devient passionnant.
+l21|Reprenez là où vous vous étiez arrêté. C'est ainsi qu'on acquiert un savoir-faire.
+l22|Apprenez par vous-même quelque chose qui vous servira cette semaine.
+l23|Une heure d'étude concentrée vaut mieux que trois heures distraites.
+l24|Votre futur vous vous encourage discrètement en ce moment même.
+l25|Le savoir se capitalise. Commencez à faire fructifier les intérêts dès aujourd'hui.

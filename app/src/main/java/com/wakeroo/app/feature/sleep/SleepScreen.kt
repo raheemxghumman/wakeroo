@@ -123,6 +123,7 @@ import java.time.Instant
 import java.time.ZoneId
 import kotlin.math.cos
 import kotlin.math.sin
+import com.wakeroo.app.ui.util.formatHours
 
 val SleepSound.icon: ImageVector
     get() = when (this) {
@@ -240,7 +241,7 @@ fun SleepScreen(onSettings: () -> Unit, onNewAlarm: () -> Unit, onPro: () -> Uni
                 SectionCard(tr("Bedtime"), icon = Icons.Rounded.Bedtime, modifier = Modifier.entrance(3)) {
                     val goal = settings.sleepGoalMinutes
                     Stepper(
-                        tr("Sleep goal"), "${goal / 60} h${if (goal % 60 != 0) " ${goal % 60}" else ""}",
+                        tr("Sleep goal"), formatHours(goal),
                         onMinus = { scope.launch { app.settings.update { it.copy(sleepGoalMinutes = (it.sleepGoalMinutes - 30).coerceAtLeast(360)) } } },
                         onPlus = { scope.launch { app.settings.update { it.copy(sleepGoalMinutes = (it.sleepGoalMinutes + 30).coerceAtMost(600)) } } },
                         minusEnabled = goal > 360, plusEnabled = goal < 600,
@@ -347,9 +348,8 @@ private fun MoonHero(
                 Text(bed.formatClock(use24h), style = MaterialTheme.typography.displayMedium, color = Paper)
                 Text(" ${bed.formatMeridiem(use24h)}", style = MaterialTheme.typography.titleMedium, color = PaperMuted, modifier = Modifier.padding(bottom = 8.dp))
             }
-            val hours = goalMinutes / 60f
             Text(
-                tr("for {0} of sleep before your {1} {2} alarm", if (hours % 1f == 0f) "${hours.toInt()} h" else "%.1f h".format(hours), alarm.formatClock(use24h), alarm.formatMeridiem(use24h)),
+                tr("for {0} of sleep before your {1} {2} alarm", formatHours(goalMinutes), alarm.formatClock(use24h), alarm.formatMeridiem(use24h)),
                 style = MaterialTheme.typography.bodyMedium, color = PaperMuted, textAlign = TextAlign.Center,
             )
         }

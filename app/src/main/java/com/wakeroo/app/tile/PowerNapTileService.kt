@@ -44,7 +44,7 @@ class PowerNapTileService : TileService() {
                 val id = app.repository.save(
                     base.copy(
                         id = 0, hour = at.hour, minute = at.minute, days = emptySet(), date = at.toLocalDate(),
-                        label = "Power nap", enabled = true, skipDate = null, hardMode = false,
+                        label = tr("Power nap"), enabled = true, skipDate = null, hardMode = false,
                         wakeCheckMinutes = 0, createdAt = System.currentTimeMillis(),
                     ),
                 )
@@ -61,7 +61,7 @@ class PowerNapTileService : TileService() {
         val nap = currentNap(this)
         tile.state = if (nap != null) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         tile.icon = Icon.createWithResource(this, R.drawable.ic_stat_wakeroo)
-        tile.label = "Power nap"
+        tile.label = tr("Power nap")
         val left = nap?.let { ((it.second - System.currentTimeMillis()) / 60_000).coerceAtLeast(0) + 1 }
         val subtitle = if (left != null) tr("{0} min left", left) else tr("{0} min", NAP_MINUTES)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) tile.subtitle = subtitle

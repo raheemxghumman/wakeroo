@@ -30,6 +30,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import com.wakeroo.app.ui.util.formatHours
 
 /** When to go to bed for the next alarm, or null if there's no alarm worth planning for. */
 data class Bedtime(val bedAt: Long, val alarmAt: Long, val remindAt: Long)
@@ -104,8 +105,7 @@ object Reminders {
         val zone = ZoneId.systemDefault()
         val bedTime = Instant.ofEpochMilli(bed.bedAt).atZone(zone).toLocalTime()
         val alarmTime = Instant.ofEpochMilli(bed.alarmAt).atZone(zone).toLocalTime()
-        val hours = settings.sleepGoalMinutes / 60f
-        val hoursText = if (hours % 1f == 0f) "${hours.toInt()} h" else "%.1f h".format(hours)
+        val hoursText = formatHours(settings.sleepGoalMinutes)
         val sounds = settings.sleepSounds.mapNotNull { SleepSound.byId(it) }.ifEmpty { listOf(SleepSound.Rain) }
         val startSounds = PendingIntent.getForegroundService(
             context, 52,

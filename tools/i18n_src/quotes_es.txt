@@ -1,0 +1,150 @@
+p01|Le ganaste al botón de posponer. Lo que queda del día es más fácil que eso.
+p02|Las buenas mañanas no se encuentran: se hacen.
+p03|El sol volvió a salir por ti. Devuélvele el favor.
+p04|Hoy es una página en blanco. Escribe algo que te guste leer esta noche.
+p05|Las pequeñas victorias cuentan. Levantarte fue la primera.
+p06|Sonríele a alguien antes del mediodía. También funciona contigo.
+p07|Tus mejores días suelen empezar como este: a propósito.
+p08|No todos los días son geniales, pero todos tienen algo bueno.
+p09|Da la energía que te gustaría recibir.
+p10|Haz de hoy un día del que luego puedas presumir.
+p11|La mañana no sabe nada de ayer. Tú tampoco tienes que saberlo.
+p12|Sé la razón por la que alguien tenga una mejor mañana.
+p13|La alegría muchas veces es solo atención, puesta a propósito.
+p14|Tienes permiso para sentirte orgulloso de las cosas simples.
+p15|La esperanza es esa cosa con plumas que se posa en el alma.
+p16|Escribe en tu corazón que cada día es el mejor día del año.
+p17|La mañana es cuando estoy despierto y hay un amanecer en mí.
+p18|Cada mañana era una alegre invitación a hacer mi vida tan sencilla, y diría que tan inocente, como la Naturaleza misma.
+p19|Las cosas buenas crecen desde temprano.
+p20|Mira al cielo al menos una vez hoy. Es gratis.
+p21|Ningún amanecer es un amanecer desperdiciado.
+p22|El ánimo de hoy: optimismo sin explicación.
+p23|La amabilidad también es un hábito de la mañana.
+p24|Llegaste. Eso ya es casi todo.
+p25|Deja que hoy te sorprenda para bien.
+w01|Haz primero lo difícil. Después, el día se aligera.
+w02|Una tarea importante antes del almuerzo vale más que diez urgentes después.
+w03|Empezar es lo más difícil, y tú ya empezaste.
+w04|Escritorio despejado, mente despejada, plan claro.
+w05|El impulso se construye por la mañana. Ve por él.
+w06|Decide qué importa hoy. Al resto, ignóralo con educación.
+w07|Veinte minutos de enfoque logran lo que dos horas distraído no.
+w08|Hecho es una palabra preciosa. Colecciona unas cuantas hoy.
+w09|Tu celular puede esperar. Tus metas llevan esperando más tiempo.
+w10|Los planes funcionan mejor en papel que en tu cabeza.
+w11|Progreso, no perfección. Entrega el borrador.
+w12|El mejor momento para empezar fue ayer. El segundo mejor es ahora.
+w13|Haz tu cama. Primera tarea del día: lista.
+w14|La meta no es estar ocupado. Es terminar.
+w15|Pasos pequeños, cada día, recorren distancias enormes.
+w16|Un buen comienzo es la mitad del trabajo.
+w17|El tiempo perdido nunca se vuelve a encontrar.
+w18|Acostarse temprano y levantarse temprano hace al hombre sano, rico y sabio.
+w19|Mientras aplazamos las cosas, la vida pasa volando.
+w20|Primero dite a ti mismo lo que quieres ser; luego haz lo que tengas que hacer.
+w21|Al amanecer, cuando te levantes con pereza, ten presente este pensamiento: me levanto para cumplir mi tarea de ser humano.
+w22|Gánale a la mañana y la tarde suele seguirte.
+w23|Anota tres cosas. Haz la primera ahora.
+w24|El esfuerzo le gana al talento cuando el talento se queda dormido.
+w25|Una hora de silencio antes de que el mundo despierte es un superpoder.
+c01|Inhala en cuatro, exhala en seis. Otra vez. Listo. Mejor.
+c02|No todo necesita respuesta antes del desayuno.
+c03|Las mañanas lentas también son mañanas.
+c04|Tómate el café mientras está caliente. Ese es todo el plan.
+c05|Deja que el día venga a ti por un minuto.
+c06|Fíjate en la luz. Está haciendo algo precioso ahora mismo.
+c07|No tienes que correr para llegar a tiempo.
+c08|La paz es un ritmo, no un lugar.
+c09|Cinco minutos de calma ahora te ahorran una hora de ruido después.
+c10|Abre la ventana. Deja entrar un poco de la mañana.
+c11|Tu lista de pendientes seguirá ahí después de que te estires.
+c12|La calma es una habilidad. Las mañanas son buena práctica.
+c13|Haz una cosa a la vez, y hazla completa.
+c14|Un viaje de mil millas comienza con un solo paso.
+c15|Los árboles crecen sin prisa. Tú también puedes.
+c16|Empieza ya a vivir, y cuenta cada día como una vida aparte.
+c17|Algunas mañanas son para hacer. Otras, solo para estar. Las dos están bien.
+c18|Pies en el suelo. Hombros abajo. Tú puedes.
+c19|El día es largo. No tienes que gastarlo todo de golpe.
+c20|Escucha un sonido tranquilo antes de mirar el celular.
+c21|Afloja la mandíbula. En serio, revisa.
+c22|Un comienzo suave sigue siendo un comienzo.
+c23|Haz espacio para un poco de quietud. Te lo devuelve con creces.
+c24|Descansar es parte del trabajo, no una pausa de él.
+c25|Siempre hay tiempo para respirar hondo una vez.
+h01|Las mañanas difíciles también terminan. Esta ya empezó a hacerlo.
+h02|Levantarte en un mal día es una victoria que casi nadie ve. Nosotros sí la vemos.
+h03|No necesitas sentirte listo para empezar.
+h04|Hoy solo tienes que vivir hoy.
+h05|Hasta la noche más oscura termina en un amanecer. Y tú ya estás despierto para verlo.
+h06|Ser fuerte no es no caer nunca. Es levantarse, como acabas de hacerlo.
+h07|Sé amable contigo. Lo estás haciendo mejor de lo que crees.
+h08|Hay días en que lo más valiente es simplemente aparecer.
+h09|Las tormentas no duran. Esto tampoco.
+h10|Está bien pedir ayuda. Hoy es un buen día para hacerlo.
+h11|El progreso puede ser silencioso. Igual cuenta.
+h12|Un paso. Luego otro. Así se escalan las montañas.
+h13|Nuestras dudas son traidoras y nos hacen perder el bien que a menudo podríamos ganar, por miedo a intentarlo.
+h14|Has sobrevivido a todos tus días difíciles. Tu récord es perfecto.
+h15|¿Mala noche? La mañana todavía te debe un nuevo comienzo.
+h16|Los sentimientos son visitas. Déjalos llegar y déjalos ir.
+h17|Nada crece sin un poco de lluvia.
+h18|Haz lo siguiente correcto. Solo lo siguiente.
+h19|Este capítulo no es todo el libro.
+h20|El valor a veces es solo una vocecita que dice: inténtalo de nuevo mañana. Pues bien, ya es mañana.
+h21|Roma no se construyó en un día. Tú tampoco.
+h22|Ser amable contigo no es rendirte.
+h23|Haz una pausa si la necesitas. Luego retoma.
+h24|Difícil no es lo mismo que imposible.
+h25|Hoy apunta a estar bien. Estar bien es más que suficiente.
+f01|Un vaso de agua antes del café. Tu cuerpo lo notará.
+f02|Muévete un poco ahora. Tu yo de la tarde te lo agradecerá.
+f03|La luz de la mañana es medicina gratis. Sal cinco minutos.
+f04|Estírate como si nadie te viera. Nadie te ve.
+f05|El desayuno es un voto por la persona en la que te estás convirtiendo.
+f06|Dormir es la mejor recuperación que existe. Cuídalo esta noche.
+f07|Diez sentadillas mientras hierve el agua. Victoria fácil.
+f08|Tu cuerpo te trajo hasta aquí. Trátalo bien hoy.
+f09|Sal a caminar en vez de deslizar la pantalla.
+f10|Acostarte a la misma hora cada noche hace que mañanas como esta sean más fáciles.
+f11|Caminar cuenta. Siempre cuenta.
+f12|Come algo verde antes de que el día se vuelva ruidoso.
+f13|Las mañanas fuertes se construyen la noche anterior.
+f14|Levántate, hidrátate, muévete. Repite mañana.
+f15|El aire fresco es la bebida energética más barata.
+f16|Siéntate derecho. Tu espalda llevaba tiempo esperando esto.
+f17|Dos minutos de estiramiento valen más que cero minutos de yoga perfecto.
+f18|Cada elección saludable es un pequeño favor para tu yo del futuro.
+f19|Apaga las pantallas una hora antes de dormir. La alarma de mañana se sentirá más amable.
+f20|Hoy usa las escaleras. Aunque sea una vez.
+f21|A tu corazón le gusta que te muevas. Dale el gusto.
+f22|¿Te sientes nublado? Échate agua fría en la cara. Reinicio instantáneo.
+f23|La constancia le gana a la intensidad, siempre.
+f24|Un hábito saludable es solo una decisión que tomaste suficientes veces.
+f25|Deja que el sol te dé en la cara. Y luego, a lo tuyo.
+l01|Aprende algo nuevo hoy. Lo que sea.
+l02|La curiosidad es el mejor despertador.
+l03|Diez páginas al día son un libro al mes.
+l04|Haz una pregunta que normalmente te guardarías.
+l05|Los errores son lecciones que pagaste por adelantado.
+l06|El cerebro está más despierto por la mañana. Dale algo bueno.
+l07|Practicar no te hace perfecto. Te hace avanzar.
+l08|Todo experto fue alguna vez un principiante que siguió madrugando.
+l09|Lee algo que te haga pensar, no solo deslizar.
+l10|Explícale algo a alguien hoy. Lo aprenderás dos veces.
+l11|Estudia antes de que empiecen las notificaciones.
+l12|No esperes a sentirte motivado. Empieza, y la motivación llegará.
+l13|Un poco cada día vale más que mucho una vez por semana.
+l14|Equivocarte es como llegas a acertar.
+l15|Los exámenes se aprueban en las mañanas previas.
+l16|Al que madruga, Dios lo ayuda.
+l17|Mantén la curiosidad. Mantiene la mente despierta.
+l18|Anota lo que aprendes. La memoria es un balde con agujeros.
+l19|Los problemas difíciles son solo acertijos que todavía no te conocen.
+l20|Cuanto más aprendes, más interesante se vuelve el mundo.
+l21|Retoma donde lo dejaste. Así se forman las habilidades.
+l22|Aprende por tu cuenta algo que vayas a usar esta semana.
+l23|Una hora de estudio enfocado vale más que tres distraídas.
+l24|Tu yo del futuro te está animando en silencio ahora mismo.
+l25|El conocimiento crece con interés compuesto. Empieza a invertir hoy.

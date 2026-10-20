@@ -296,7 +296,7 @@ class RingService : Service() {
         const val ESCALATE_AFTER_MS = 60_000L
 
         val TEST_ALARM = Alarm(
-            id = AlarmScheduler.TEST_ALARM_ID, hour = 0, minute = 0, label = "Test alarm",
+            id = AlarmScheduler.TEST_ALARM_ID, hour = 0, minute = 0, label = tr("Test alarm"),
             missions = listOf(MissionConfig(MissionType.Math, difficulty = 1, count = 1)),
             rampSeconds = 5, snoozeLimit = 0, wakeCheckMinutes = 0,
         )

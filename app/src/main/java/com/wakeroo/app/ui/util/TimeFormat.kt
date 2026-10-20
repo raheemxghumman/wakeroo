@@ -28,6 +28,10 @@ fun formatMeridiem(hour: Int, use24h: Boolean = false) = LocalTime.of(hour, 0).f
 /** Two-digit numbers for wheels and clocks, always with Western digits. */
 fun twoDigits(n: Int): String = String.format(Locale.ROOT, "%02d", n)
 
+/** A sleep length like "8 h" or "7 h 30 min". */
+fun formatHours(minutes: Int): String =
+    if (minutes % 60 == 0) tr("{0} h", minutes / 60) else tr("{0} h {1} min", minutes / 60, minutes % 60)
+
 /** "7 h 20 min", "45 min", "less than a minute". */
 fun Duration.formatUntil(): String {
     val total = toMinutes()

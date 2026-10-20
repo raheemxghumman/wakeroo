@@ -56,6 +56,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
+import com.wakeroo.app.ui.util.Ltr
 
 private class IntroStar(val x: Float, val y: Float, val z: Float, val r: Float)
 
@@ -321,27 +322,29 @@ private fun DrawScope.drawPlanetAndSun(
 @Composable
 private fun Wordmark3D(progress: Float, modifier: Modifier) {
     val word = "wakeroo"
-    Row(modifier) {
-        word.forEachIndexed { i, c ->
-            val local = ((progress - i * 0.07f) / 0.5f).coerceIn(0f, 1f)
-            val eased = EaseOutBack.transform(local)
-            Text(
-                c.toString(),
-                style = TextStyle(
-                    fontFamily = Outfit,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 48.sp,
-                    letterSpacing = (-0.015).em
-                ),
-                color = if (i == word.lastIndex) SunriseCoral else Paper,
-                modifier = Modifier.graphicsLayer {
-                    alpha = local
-                    rotationX = (1 - eased) * -90f
-                    translationY = (1 - eased) * 40f
-                    cameraDistance = 8f * density
-                    transformOrigin = TransformOrigin(0.5f, 1f)
-                },
-            )
+    Ltr {
+        Row(modifier) {
+            word.forEachIndexed { i, c ->
+                val local = ((progress - i * 0.07f) / 0.5f).coerceIn(0f, 1f)
+                val eased = EaseOutBack.transform(local)
+                Text(
+                    c.toString(),
+                    style = TextStyle(
+                        fontFamily = Outfit,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 48.sp,
+                        letterSpacing = (-0.015).em
+                    ),
+                    color = if (i == word.lastIndex) SunriseCoral else Paper,
+                    modifier = Modifier.graphicsLayer {
+                        alpha = local
+                        rotationX = (1 - eased) * -90f
+                        translationY = (1 - eased) * 40f
+                        cameraDistance = 8f * density
+                        transformOrigin = TransformOrigin(0.5f, 1f)
+                    },
+                )
+            }
         }
     }
 }
