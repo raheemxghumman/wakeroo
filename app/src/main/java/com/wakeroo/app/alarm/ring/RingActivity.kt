@@ -19,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wakeroo.app.container
 import com.wakeroo.app.data.RingKind
 import com.wakeroo.app.missions.MissionFlow
+import com.wakeroo.app.missions.runnableMission
 import com.wakeroo.app.ui.theme.WakerooTheme
 import com.wakeroo.app.ui.scenes.Scene
 import kotlinx.coroutines.launch
@@ -90,6 +91,7 @@ class RingActivity : ComponentActivity() {
                         onDone = {
                             val seconds = ((System.currentTimeMillis() - current.firedAt) / 1000).toInt()
                             RingService.send(this, RingService.ACTION_COMPLETE) { putExtra(RingService.EXTRA_SECONDS, seconds) }
+                            if (current.kind == RingKind.Alarm) recordMissions(current)
                             val result = FinishedRing(current, seconds, escaped = false)
                             val celebrate = (showGoodMorning && current.kind == RingKind.Alarm) || current.kind == RingKind.Test
                             if (celebrate) finished = result else closeScreen()
@@ -99,6 +101,18 @@ class RingActivity : ComponentActivity() {
                             closeScreen()
                         },
                     )
+                }
+            }
+        }
+    }
+
+    /** Counts the missions just completed, for the medals (credential storage permitting). */
+    private fun recordMissions(state: RingState) {
+        val types = state.alarm.missions.map { runnableMission(this, it).type.name }
+        container.appScope.launch {
+            runCatching {
+                container.settings.update { s ->
+                    s.copy(missionCounts = types.fold(s.missionCounts) { acc, t -> acc + (t to ((acc[t] ?: 0) + 1)) })
                 }
             }
         }

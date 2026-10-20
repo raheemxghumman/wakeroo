@@ -73,6 +73,8 @@ data class Settings(
     val quoteThemes: Set<String> = emptySet(),
     val sleepSounds: List<String> = listOf("rain"),
     val sleepTimerMinutes: Int = 30,
+    /** Completed missions by type, for the medals. */
+    val missionCounts: Map<String, Int> = emptyMap(),
 ) {
     val onboardingDone: Boolean get() = onboardingVersion > 0
 }
@@ -120,6 +122,7 @@ class SettingsStore(private val context: Context, private val directBoot: Direct
             prefs[QUOTE_THEMES] = next.quoteThemes
             prefs[SLEEP_SOUNDS] = next.sleepSounds.joinToString(",")
             prefs[SLEEP_TIMER] = next.sleepTimerMinutes
+            prefs[MISSION_COUNTS] = WakerooJson.encodeToString(next.missionCounts)
             directBoot?.ringPrefs = RingPrefs(next.alwaysSpeaker, next.alsoHeadphones, next.missionTimeLimit, next.ringScene)
         }
     }
@@ -160,6 +163,7 @@ class SettingsStore(private val context: Context, private val directBoot: Direct
         quoteThemes = this[QUOTE_THEMES] ?: emptySet(),
         sleepSounds = this[SLEEP_SOUNDS]?.split(',')?.filter { it.isNotBlank() } ?: listOf("rain"),
         sleepTimerMinutes = this[SLEEP_TIMER] ?: 30,
+        missionCounts = this[MISSION_COUNTS]?.let { runCatching { WakerooJson.decodeFromString<Map<String, Int>>(it) }.getOrNull() } ?: emptyMap(),
     )
 
     private inline fun <reified E : Enum<E>> enumOr(name: String?, fallback: E): E =
@@ -197,5 +201,6 @@ class SettingsStore(private val context: Context, private val directBoot: Direct
         val QUOTE_THEMES = stringSetPreferencesKey("quote_themes")
         val SLEEP_SOUNDS = stringPreferencesKey("sleep_sounds")
         val SLEEP_TIMER = intPreferencesKey("sleep_timer")
+        val MISSION_COUNTS = stringPreferencesKey("mission_counts")
     }
 }

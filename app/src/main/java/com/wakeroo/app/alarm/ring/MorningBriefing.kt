@@ -60,6 +60,12 @@ import com.wakeroo.app.feature.morning.MoodPicker
 import com.wakeroo.app.feature.morning.WeatherGlyph
 import com.wakeroo.app.feature.morning.greetingFor
 import com.wakeroo.app.feature.stats.WakeStatsCalculator
+import com.wakeroo.app.feature.you.AchievementDef
+import com.wakeroo.app.feature.you.AchievementEngine
+import com.wakeroo.app.feature.you.AchievementInput
+import com.wakeroo.app.feature.you.SpinnableMedal
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import com.wakeroo.app.ui.brand.WakerooMark
 import com.wakeroo.app.ui.theme.MorningGold
 import com.wakeroo.app.ui.theme.Night
@@ -83,6 +89,8 @@ private data class Briefing(
     val streak: Int = 0,
     val quote: Quote? = null,
     val mood: Mood? = null,
+    /** A medal this morning just earned, celebrated at the top. */
+    val medal: AchievementDef? = null,
 )
 
 private const val AUTO_CLOSE_MS = 12_000
@@ -95,6 +103,7 @@ private const val AUTO_CLOSE_MS = 12_000
 @Composable
 fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
     val context = LocalContext.current
+    val haptics = LocalHapticFeedback.current
     val app = context.container
     val scope = rememberCoroutineScope()
     val splash = remember { Animatable(0f) }
@@ -113,7 +122,17 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
             val settings = app.settings.current()
             val events = app.repository.ringEvents.first()
             val quotes = QuoteBook.all(context)
+            val routine = app.morning.routine.first()
+            val routineDays = if (routine.isEmpty()) 0 else app.morning.routineLog.first().groupBy { it.date }.count { it.value.size >= routine.size }
+            val fresh = AchievementEngine.newlyUnlocked(
+                AchievementEngine.evaluate(AchievementInput(events, settings.missionCounts, routineDays)), settings.achievements.keys,
+            )
+            if (fresh.isNotEmpty()) {
+                val at = System.currentTimeMillis()
+                app.settings.update { s -> s.copy(achievements = s.achievements + fresh.associate { it.id to at }) }
+            }
             briefing = Briefing(
+                medal = fresh.maxByOrNull { it.tier.ordinal },
                 plan = settings.plan?.takeIf { settings.planDate == today.toString() } ?: result.state.alarm.label.takeIf { it.isNotBlank() },
                 forecast = app.weather.cached()?.takeIf { System.currentTimeMillis() - it.fetchedAt < 12 * 3_600_000L },
                 streak = WakeStatsCalculator.compute(events).streak,
@@ -173,6 +192,16 @@ fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
             if (!test) {
                 Spacer(Modifier.height(Space.xl))
                 Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.md)) {
+                    BriefingLine(visible = briefing.medal != null, order = 0) {
+                        val medal = briefing.medal ?: return@BriefingLine
+                        LaunchedEffect(medal) { haptics.performHapticFeedback(HapticFeedbackType.Confirm) }
+                        SpinnableMedal(medal, unlocked = true, size = 56.dp)
+                        Spacer(Modifier.width(Space.md))
+                        Column {
+                            Text("NEW MEDAL", style = MaterialTheme.typography.labelSmall, color = ink.copy(alpha = 0.6f))
+                            Text(medal.title, style = MaterialTheme.typography.titleMedium, color = ink)
+                        }
+                    }
                     BriefingLine(visible = briefing.plan != null, order = 0) {
                         Icon(Icons.Rounded.EditNote, null, tint = ink)
                         Spacer(Modifier.width(Space.md))

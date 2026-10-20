@@ -25,6 +25,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CalendarMonth
+import androidx.compose.material.icons.rounded.IosShare
+import androidx.compose.material.icons.rounded.MilitaryTech
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.foundation.layout.navigationBarsPadding
+import com.wakeroo.app.ui.components.RoundIconButton
+import com.wakeroo.app.ui.components.SectionCard
+import com.wakeroo.app.ui.theme.PaperFixed
+import java.time.LocalDate
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -80,10 +93,35 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun YouScreen(onSettings: () -> Unit, onPro: () -> Unit) {
     val app = LocalContext.current.container
+    val scope = rememberCoroutineScope()
     val events by app.repository.ringEvents.collectAsStateWithLifecycle(emptyList())
     val settings by app.settings.settings.collectAsStateWithLifecycle(Settings())
+    val moods by app.morning.moods.collectAsStateWithLifecycle(emptyList())
+    val routine by app.morning.routine.collectAsStateWithLifecycle(emptyList())
+    val routineLog by app.morning.routineLog.collectAsStateWithLifecycle(emptyList())
     val stats = remember(events) { WakeStatsCalculator.compute(events) }
     val log = events.filter { !it.isTest }.let { if (settings.pro) it else it.take(14) }
+    val routineDays = remember(routine, routineLog) {
+        if (routine.isEmpty()) 0 else routineLog.groupBy { it.date }.count { (_, ticks) -> ticks.size >= routine.size }
+    }
+    val medals = remember(events, settings.missionCounts, routineDays, settings.achievements) {
+        AchievementEngine.evaluate(AchievementInput(events, settings.missionCounts, routineDays)).map {
+            // Once earned, a medal stays earned even if a streak later breaks.
+            if (it.def.id in settings.achievements) it.copy(unlocked = true, progress = 1f) else it
+        }
+    }
+    // Remember new unlocks with their date.
+    LaunchedEffect(medals) {
+        val fresh = AchievementEngine.newlyUnlocked(medals, settings.achievements.keys)
+        if (fresh.isNotEmpty()) {
+            val now = System.currentTimeMillis()
+            app.settings.update { s -> s.copy(achievements = s.achievements + fresh.associate { it.id to now }) }
+        }
+    }
+    val recap = remember(events, settings.achievements) { Recap.thisWeek(events, settings.achievements) }
+    var openDay by remember { mutableStateOf<LocalDate?>(null) }
+    var openMedal by remember { mutableStateOf<AchievementState?>(null) }
+    var sharing by remember { mutableStateOf(false) }
 
     SkyBackground(Sky.Dawn, intensity = 0.55f) {
         LazyColumn(
@@ -92,7 +130,9 @@ fun YouScreen(onSettings: () -> Unit, onPro: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(Space.md),
         ) {
             item(key = "header") {
-                TabHeader("Your mornings", onSettings = onSettings, eyebrow = "You", modifier = Modifier.entrance(0))
+                TabHeader("Your mornings", onSettings = onSettings, eyebrow = "You", modifier = Modifier.entrance(0)) {
+                    RoundIconButton(Icons.Rounded.IosShare, "Share your streak", { sharing = true })
+                }
             }
             item(key = "tiles") {
                 Row(Modifier.entrance(1), horizontalArrangement = Arrangement.spacedBy(Space.md)) {
@@ -106,15 +146,44 @@ fun YouScreen(onSettings: () -> Unit, onPro: () -> Unit) {
                     }
                 }
             }
-            item(key = "week") { Box(Modifier.entrance(2)) { WeekChart(stats) } }
+            item(key = "recap") { Box(Modifier.entrance(2)) { RecapCard(recap) } }
+            item(key = "calendar") {
+                SectionCard("Wake-up calendar", icon = Icons.Rounded.CalendarMonth, modifier = Modifier.entrance(3)) {
+                    WakeCalendar(events, settings.pro, onDay = { openDay = it }, onPro = onPro)
+                }
+            }
+            item(key = "medals") {
+                SectionCard("Medals · ${medals.count { it.unlocked }} of ${medals.size}", icon = Icons.Rounded.MilitaryTech, modifier = Modifier.entrance(4)) {
+                    medals.chunked(3).forEach { row ->
+                        Row(Modifier.fillMaxWidth().padding(bottom = Space.md), horizontalArrangement = Arrangement.spacedBy(Space.md)) {
+                            row.forEach { m ->
+                                Column(
+                                    Modifier.weight(1f).clip(RoundedCornerShape(20.dp)).clickable { openMedal = m }.padding(vertical = Space.sm),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                ) {
+                                    Medal(m.def, m.unlocked, 64.dp)
+                                    Text(m.def.title, style = MaterialTheme.typography.labelSmall, color = if (m.unlocked) Paper else PaperMuted, maxLines = 2, textAlign = TextAlign.Center, modifier = Modifier.padding(top = Space.sm))
+                                    if (!m.unlocked) {
+                                        Box(Modifier.padding(top = 4.dp).fillMaxWidth(0.6f).height(4.dp).clip(CircleShape).background(Paper.copy(alpha = 0.12f))) {
+                                            Box(Modifier.fillMaxWidth(m.progress).height(4.dp).clip(CircleShape).background(MorningGold))
+                                        }
+                                    }
+                                }
+                            }
+                            repeat(3 - row.size) { Spacer(Modifier.weight(1f)) }
+                        }
+                    }
+                }
+            }
+            item(key = "week") { Box(Modifier.entrance(5)) { WeekChart(stats) } }
             item(key = "numbers") {
-                Row(Modifier.entrance(3), horizontalArrangement = Arrangement.spacedBy(Space.md)) {
+                Row(Modifier.entrance(6), horizontalArrangement = Arrangement.spacedBy(Space.md)) {
                     NumberTile("Usual wake time", stats.averageWakeTime?.let { "${it.formatClock()} ${it.formatMeridiem()}" } ?: "–", "last 2 weeks", Modifier.weight(1f).height(94.dp))
                     NumberTile("Wake-ups", "${stats.totalWakeUps}", "all time", Modifier.weight(1f).height(94.dp))
                 }
             }
             item(key = "logTitle") {
-                Column(Modifier.entrance(4)) {
+                Column {
                     Text("RING LOG", style = MaterialTheme.typography.labelSmall, color = PaperMuted, modifier = Modifier.padding(top = Space.lg))
                     Text(
                         "Proof of every ring. If an alarm ever didn't fire, it shows here in red.",
@@ -140,6 +209,66 @@ fun YouScreen(onSettings: () -> Unit, onPro: () -> Unit) {
                 }
             }
             if (!settings.pro) item(key = "ad") { AdBanner(Modifier.fillMaxWidth().padding(top = Space.lg)) }
+        }
+    }
+    openDay?.let { day -> DaySheet(day, events, moods.firstOrNull { it.date == day.toString() }) { openDay = null } }
+    openMedal?.let { m -> MedalSheet(m, settings.achievements[m.def.id]) { openMedal = null } }
+    if (sharing) {
+        ShareStreakDialog(
+            stats.streak, stats.lastSevenDays.map { it.success },
+            medal = medals.filter { it.unlocked }.maxByOrNull { it.def.tier.ordinal }?.def,
+        ) { sharing = false }
+    }
+}
+
+/** This week at a glance: mornings won, usual wake time, fastest mission, the week's medal. */
+@Composable
+private fun RecapCard(recap: WeekRecap) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(26.dp))
+            .background(Brush.linearGradient(listOf(Color(0xFF3A2B4E), Color(0xFF6B4A78))))
+            .border(1.dp, MorningGold.copy(alpha = 0.25f), RoundedCornerShape(26.dp))
+            .padding(Space.lg),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text("THIS WEEK", style = MaterialTheme.typography.labelSmall, color = MorningGold)
+            Text("${recap.won} of ${recap.days} mornings won", style = MaterialTheme.typography.titleMedium, color = PaperFixed)
+            Text(
+                listOfNotNull(
+                    recap.averageWake?.let { "Usually up at $it" },
+                    recap.fastest?.let { "Fastest: ${if (it < 60) "${it}s" else "${it / 60} min ${it % 60}s"}" },
+                ).joinToString(" · ").ifEmpty { "Your first mornings will show here" },
+                style = MaterialTheme.typography.bodySmall, color = PaperFixed.copy(alpha = 0.75f),
+            )
+        }
+        recap.medal?.let { Medal(it, unlocked = true, size = 52.dp) }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MedalSheet(state: AchievementState, unlockedAt: Long?, onDismiss: () -> Unit) {
+    val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, containerColor = Night, dragHandle = null) {
+        Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(Space.xl), horizontalAlignment = Alignment.CenterHorizontally) {
+            SpinnableMedal(state.def, state.unlocked, 190.dp)
+            Text(if (state.unlocked) "Flick it to spin" else "Locked", style = MaterialTheme.typography.labelSmall, color = PaperMuted, modifier = Modifier.padding(top = Space.md))
+            Text(state.def.title, style = MaterialTheme.typography.headlineMedium, color = Paper, modifier = Modifier.padding(top = Space.md))
+            Text(state.def.description, style = MaterialTheme.typography.bodyLarge, color = PaperMuted, textAlign = TextAlign.Center, modifier = Modifier.padding(top = Space.xs))
+            Spacer(Modifier.height(Space.lg))
+            if (state.unlocked) {
+                val date = unlockedAt?.let { DateTimeFormatter.ofPattern("d MMMM yyyy").format(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())) }
+                Text(if (date != null) "Earned on $date" else "Earned", style = MaterialTheme.typography.labelLarge, color = MorningGold)
+            } else {
+                Box(Modifier.fillMaxWidth(0.7f).height(8.dp).clip(CircleShape).background(Paper.copy(alpha = 0.12f))) {
+                    Box(Modifier.fillMaxWidth(state.progress).height(8.dp).clip(CircleShape).background(MorningGold))
+                }
+                Text(state.progressLabel, style = MaterialTheme.typography.labelMedium, color = PaperMuted, modifier = Modifier.padding(top = Space.sm))
+            }
+            Spacer(Modifier.height(Space.lg))
         }
     }
 }
