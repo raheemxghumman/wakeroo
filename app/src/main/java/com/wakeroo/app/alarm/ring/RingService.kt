@@ -22,6 +22,8 @@ import com.wakeroo.app.data.model.MissionType
 import com.wakeroo.app.data.model.SoundMode
 import com.wakeroo.app.alarm.sound.Tone
 import com.wakeroo.app.sleep.SleepPlayer
+import com.wakeroo.app.weather.WeatherNotifier
+import androidx.core.os.UserManagerCompat
 import com.wakeroo.app.alarm.sound.Tones
 import android.net.Uri
 import kotlinx.coroutines.launch
@@ -210,7 +212,12 @@ class RingService : Service() {
             app.repository.log(event)
             when (state.kind) {
                 RingKind.Test -> app.settings.update { it.copy(lastTestAlarmAt = now, lastTestAlarmPassed = outcome == RingOutcome.Dismissed) }
-                RingKind.Alarm -> (listOf(state.alarm.id) + state.joined).forEach { app.repository.onRingFinished(it) }
+                RingKind.Alarm -> {
+                    (listOf(state.alarm.id) + state.joined).forEach { app.repository.onRingFinished(it) }
+                    if (outcome == RingOutcome.Dismissed && UserManagerCompat.isUserUnlocked(this@RingService)) {
+                        runCatching { WeatherNotifier.afterWakeUp(this@RingService) }
+                    }
+                }
                 RingKind.WakeCheck -> Unit
             }
         }

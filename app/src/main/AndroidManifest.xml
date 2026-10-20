@@ -5,6 +5,8 @@
     <!-- Alarm core: exact alarms (alarm-clock apps may use USE_EXACT_ALARM), reboot survival,
          ringing over the lock screen, and the foreground service that plays the sound. -->
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <!-- Weather (Open-Meteo) on the Morning tab and the optional ads banner. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.SCHEDULE_EXACT_ALARM"
         android:maxSdkVersion="32" />
@@ -88,6 +90,16 @@
             android:directBootAware="true"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <service
             android:name=".sleep.SleepSoundService"

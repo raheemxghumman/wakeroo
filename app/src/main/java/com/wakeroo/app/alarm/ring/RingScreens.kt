@@ -52,6 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wakeroo.app.data.RingKind
+import com.wakeroo.app.missions.runnableMission
 import com.wakeroo.app.ui.brand.WakerooMark
 import com.wakeroo.app.ui.scenes.Scene
 import com.wakeroo.app.ui.scenes.SceneBackground
@@ -181,7 +182,9 @@ private fun EscalationHint(state: RingState, now: Long) {
 
 @Composable
 private fun MissionSummary(state: RingState) {
-    val names = state.alarm.missions.joinToString("  ·  ") { it.type.title }
+    // Name the missions that will actually run (one not set up yet runs as math).
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val names = remember(state.alarm) { state.alarm.missions.joinToString("  ·  ") { runnableMission(context, it).type.title } }
     if (names.isNotEmpty()) {
         Text(
             names, style = MaterialTheme.typography.labelLarge, color = MorningGold,
@@ -235,54 +238,3 @@ fun WakeCheckScreen(state: RingState, onConfirm: () -> Unit) {
         }
     }
 }
-
-/** A coral splash grows from the button, the sun lands, and the streak counts up. */
-@Composable
-fun GoodMorningScreen(result: FinishedRing, onDone: () -> Unit) {
-    val splash = remember { Animatable(0f) }
-    val content = remember { Animatable(0f) }
-    LaunchedEffect(Unit) {
-        splash.animateTo(1f, tween(650, easing = FastOutSlowInEasing))
-        content.animateTo(1f, WakerooMotion.bouncy())
-        delay(4500)
-        onDone()
-    }
-    val time = LocalTime.now()
-    Box(Modifier.fillMaxSize().background(Night).clickable(onClick = onDone)) {
-        Canvas(Modifier.fillMaxSize()) {
-            val r = size.maxDimension * 1.2f * splash.value
-            drawCircle(
-                Brush.radialGradient(listOf(MorningGold, SunriseCoral), center = Offset(size.width / 2, size.height * 0.85f), radius = r.coerceAtLeast(1f)),
-                radius = r, center = Offset(size.width / 2, size.height * 0.85f),
-            )
-        }
-        Column(
-            Modifier.fillMaxSize().statusBarsPadding().padding(Space.xl).graphicsLayer {
-                alpha = content.value.coerceIn(0f, 1f)
-                translationY = (1 - content.value) * 80f
-            },
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            WakerooMark(Modifier.size(180.dp), horizonColor = Night, sunColor = Paper, leapColor = Night.copy(alpha = 0.7f), dotColor = Paper)
-            Text(
-                if (result.state.kind == RingKind.Test) "Test passed" else "Good morning",
-                style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold), color = Night,
-            )
-            Text(
-                if (result.state.kind == RingKind.Test) "Your alarms will ring like this, even when the phone is locked."
-                else "Up at ${time.formatClock()} ${time.formatMeridiem()}  ·  awake in ${formatDuration(result.secondsToWake)}",
-                style = MaterialTheme.typography.titleMedium, color = Night.copy(alpha = 0.8f),
-                textAlign = TextAlign.Center, modifier = Modifier.padding(top = Space.sm),
-            )
-            if (result.state.alarm.label.isNotBlank() && result.state.kind == RingKind.Alarm) {
-                Text(
-                    "Now: ${result.state.alarm.label}", style = MaterialTheme.typography.bodyLarge, color = Night,
-                    modifier = Modifier.padding(top = Space.xl),
-                )
-            }
-        }
-    }
-}
-
-private fun formatDuration(seconds: Int): String = if (seconds < 60) "${seconds}s" else "${seconds / 60} min ${seconds % 60}s"

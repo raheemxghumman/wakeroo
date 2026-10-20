@@ -7,6 +7,8 @@ import com.wakeroo.app.alarm.Notifications
 import com.wakeroo.app.billing.ProBilling
 import com.wakeroo.app.data.AlarmRepository
 import com.wakeroo.app.data.DirectBootStore
+import com.wakeroo.app.data.MorningRepository
+import com.wakeroo.app.weather.WeatherClient
 import com.wakeroo.app.data.SettingsStore
 import com.wakeroo.app.data.db.WakerooDatabase
 import com.wakeroo.app.reminders.Reminders
@@ -27,6 +29,8 @@ class AppContainer(context: Context) {
     val repository = AlarmRepository(context, database, directBoot, scheduler) { settings }
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     val billing by lazy { ProBilling(context, settings, appScope) }
+    val morning = MorningRepository(database)
+    val weather by lazy { WeatherClient(context) }
 }
 
 class WakerooApp : Application() {
