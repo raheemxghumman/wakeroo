@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
@@ -110,15 +111,24 @@ fun RingScreen(state: RingState, onStartMission: () -> Unit, onSnooze: () -> Uni
                     cameraDistance = 14f * density
                 },
             ) {
-                Text(time.formatMeridiem(), style = MaterialTheme.typography.titleMedium, color = DawnLavender)
-                Text(time.formatClock(), style = ClockType.ring, color = Paper, maxLines = 1)
+                Text(time.formatMeridiem(), style = MaterialTheme.typography.titleMedium.copy(shadow = TextGlow), color = DawnLavender)
+                Text(time.formatClock(), style = ClockType.ring.copy(shadow = TextGlow), color = Paper, maxLines = 1)
                 Spacer(Modifier.height(Space.md))
                 val label = when (state.kind) {
                     RingKind.Test -> tr("Test alarm: finish the mission to pass")
                     else -> state.alarm.label.ifBlank { tr("Time to get up") }
                 }
-                Text(label, style = MaterialTheme.typography.headlineMedium, color = Paper, textAlign = TextAlign.Center)
-                MissionSummary(state)
+                // A soft pill, so the name and missions stay readable over a bright sun or photo.
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(28.dp))
+                        .background(Night.copy(alpha = 0.34f))
+                        .padding(horizontal = Space.xl, vertical = Space.md),
+                ) {
+                    Text(label, style = MaterialTheme.typography.headlineMedium.copy(shadow = TextGlow), color = Paper, textAlign = TextAlign.Center)
+                    MissionSummary(state)
+                }
                 EscalationHint(state, now)
             }
             Spacer(Modifier.weight(1f))
@@ -190,11 +200,14 @@ private fun MissionSummary(state: RingState) {
     val names = remember(state.alarm) { state.alarm.missions.joinToString("  ·  ") { runnableMission(context, it).type.title } }
     if (names.isNotEmpty()) {
         Text(
-            names, style = MaterialTheme.typography.labelLarge, color = MorningGold,
-            modifier = Modifier.padding(top = Space.md),
+            names, style = MaterialTheme.typography.labelLarge.copy(shadow = TextGlow), color = MorningGold,
+            modifier = Modifier.padding(top = Space.sm),
         )
     }
 }
+
+// Keeps ring text readable where it crosses a bright part of the scene (a sun, the aurora, a photo).
+private val TextGlow = Shadow(color = Color.Black.copy(alpha = 0.55f), offset = Offset(0f, 2f), blurRadius = 18f)
 
 /** "Still up?": one huge button and a countdown ring. Ignore it and the full alarm returns. */
 @Composable

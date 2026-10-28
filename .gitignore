@@ -12,3 +12,6 @@
 *.keystore
 keystore.properties
 __pycache__/
+
+# Store mockup working files
+tools/store/

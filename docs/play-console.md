@@ -6,12 +6,14 @@ Everything needed to publish Wakeroo from the **Qubiq Studios** developer accoun
 
 ## 1. Before you start
 
+> **Status (28 October 2026):** the app is created (package `com.wakeroo.app`), every App content declaration is done, the store listing is complete (text, icon, feature graphic and 8 screenshots), and the closed test release `1 (1.0.0)` is saved on the **Closed testing - Alpha** track with all countries and the "Wakeroo testers" email list. **Not yet sent for review**: Publishing overview › *Submit changes for review* when the testers are ready.
+
 | Item | Status | Notes |
 |---|:---:|---|
-| Developer account "Qubiq Studios" | ⏳ | $25 one-time, plus identity verification |
+| Developer account "Qubiq Studios" | ✅ | Personal account, identity, phone and device verified |
 | Support email | ✅ | `qubiq.wakeroo@gmail.com`, set as `wakeroo.supportEmail` in `gradle.properties` |
 | Upload key | ✅ | `C:\Users\rahee\keystores\qubiq-wakeroo-upload.jks`, with its password in `qubiq-wakeroo-upload.properties` next to it. **Back up both** (cloud drive or USB). Play App Signing holds the real signing key |
-| Privacy policy URL | ⏳ | Required. The text is in [`privacy-policy.md`](privacy-policy.md). No website is needed: publish it as a public Google Doc or Google Sites page and paste the link |
+| Privacy policy URL | ✅ | https://raheemxghumman.github.io/qubiq-legal/wakeroo-privacy/ (public repo `qubiq-legal`, GitHub Pages). Update it there when [`privacy-policy.md`](privacy-policy.md) changes |
 | AdMob app and banner ID | ⏳ Later | The app ships with Google's test banner until you replace it |
 | Pro product | ⏳ | Create it after the first upload; see section 6 |
 
@@ -51,7 +53,10 @@ When you create the app in Play Console, choose **Use Play App Signing** (the de
 | **Data safety** | See section 4 |
 | **Government app** | No |
 | **Financial features** | None |
-| **Health** | No health features. A step count is used only as a mission, not stored |
+| **Health** | Health features: **Sleep management** (sleep sounds, bedtime) and **Activity and fitness** (Steps mission). Activity recognition is described as used only while the Steps mission is on screen; nothing stored, no Health Connect |
+| **Advertising ID** | Yes: Advertising or marketing, Analytics, Fraud prevention (AdMob) |
+| **Full-screen intent** | Core functionality: Alarm clock. Pre-grant at install: Yes |
+| **Exact alarms** | Core functionality: Alarm clock |
 
 ### Permission declarations
 
@@ -95,10 +100,10 @@ Play asks about these. Paste the justification for each.
 
 | Field | Text |
 |---|---|
-| **App name** (30) | Wakeroo: Mission Alarm Clock |
+| **App name** (30) | Wakeroo: Loud Alarm Clock ("loud alarm" is the bigger search term; see the market research) |
 | **Short description** (80) | The alarm that won't stop until you're up. Solve a mission to turn it off. |
 
-**Full description:**
+**Full description:** the live version is [`store/full-description-en.txt`](store/full-description-en.txt). The text below is the original draft.
 
 ```text
 Wakeroo is an alarm clock for heavy sleepers and serial snoozers. It won't stop ringing until you complete a wake-up mission, so you're actually out of bed, not back asleep.
@@ -133,7 +138,7 @@ Available in English, हिन्दी, اردو, Español, Português, Bahasa
 |---|---|
 | App icon (512×512) | `docs/brand/png/play-icon-512.png` |
 | Feature graphic (1024×500) | `docs/brand/png/feature-graphic-1024x500.png` |
-| Phone screenshots (2–8, 9:16) | Capture from the emulator: Home, ring screen, mission, mission picker, scenes, Morning, You |
+| Phone screenshots (2–8, 9:16) | ✅ [`store/screenshots/`](store/screenshots/): 8 mockups (1080×1920) built by `tools/store_mockups.py` from emulator captures |
 | Promo video (optional) | The brag video `brag-output/brag.mp4`, uploaded to YouTube |
 | Category | Tools (or Productivity) |
 | Contact email | qubiq.wakeroo@gmail.com |
